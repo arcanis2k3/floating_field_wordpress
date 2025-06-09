@@ -1,9 +1,8 @@
-
 <?php
 /*
 Plugin Name: A FleK90 Tool Floating Field
-Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 2.9.1
+Description: Adds a fixed-position floating field on the front-end with customizable content. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
+Version: 3.0
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -11,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.8.1
-Stable tag: 2.9.1
+Stable tag: 3.0
 */
 
 // Exit if accessed directly
@@ -24,7 +23,7 @@ class A_FleK90_Tool_Floating_Field {
     public function __construct() {
         // Debug logging
         $this->debug_log('Plugin initialized');
-        
+
         // Add admin menu page
         add_action('admin_menu', [$this, 'add_admin_menu']);
         // Enqueue front-end scripts and styles
@@ -68,6 +67,9 @@ class A_FleK90_Tool_Floating_Field {
         if (isset($_POST['flek90_save_settings']) && check_admin_referer('flek90_save_settings_action', 'flek90_save_settings_nonce')) {
             update_option('flek90_enable_field', isset($_POST['flek90_enable_field']) ? '1' : '0');
             update_option('flek90_mobile_only', isset($_POST['flek90_mobile_only']) ? '1' : '0');
+            if (isset($_POST['flek90_field_content'])) { // New setting
+                update_option('flek90_field_content', wp_kses_post($_POST['flek90_field_content']));
+            }
             update_option('flek90_background_color', sanitize_hex_color($_POST['flek90_background_color']));
             update_option('flek90_font_size', absint($_POST['flek90_font_size']));
             ?>
@@ -79,17 +81,18 @@ class A_FleK90_Tool_Floating_Field {
 
         // Get current settings
         $enable_field = get_option('flek90_enable_field', '1');
-        $mobile_only = get_option('flek90_mobile_only', '1'); // Default to mobile-only
+        $mobile_only = get_option('flek90_mobile_only', '1');
+        // Default value for the new textarea setting
+        $field_content = get_option('flek90_field_content', 'Default: %POST_TITLE% - %POST_URL%');
         $background_color = get_option('flek90_background_color', '#0073aa');
         $font_size = get_option('flek90_font_size', '24');
 
-        // Get plugin data for dynamic version display
-        $plugin_file_path = plugin_dir_path(__FILE__) . 'a-flek90-tool-floating-field.php';
+        $plugin_file_path = plugin_dir_path(__FILE__) . basename(__FILE__); // Corrected to use basename
         if (!function_exists('get_plugin_data')) {
             require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
         $plugin_data = get_plugin_data($plugin_file_path);
-        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '2.9.1'; // Fallback to literal
+        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '3.0';
         $plugin_name = isset($plugin_data['Name']) ? $plugin_data['Name'] : 'A FleK90 Tool Floating Field';
         $author_name = isset($plugin_data['AuthorName']) ? $plugin_data['AuthorName'] : 'FleK90';
         $author_uri = isset($plugin_data['AuthorURI']) ? $plugin_data['AuthorURI'] : 'https://flek90.aureusz.com';
@@ -115,9 +118,16 @@ class A_FleK90_Tool_Floating_Field {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">Field Content</th>
+                            <th scope="row"><label for="flek90_field_content">Floating Field Content</label></th>
                             <td>
-                                <p>The field content is hardcoded in <code>floating-field-content.php</code>. Edit this file to customize the content (e.g., modify the search form, add HTML).</p>
+                                <textarea id="flek90_field_content" name="flek90_field_content" rows="5" cols="50" class="large-text"><?php echo esc_textarea($field_content); ?></textarea>
+                                <p class="description">Enter the content for the floating field. You can use HTML and the following placeholders: <code>%POST_TITLE%</code>, <code>%POST_URL%</code>.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Old Field Content Method</th>
+                            <td>
+                                <p class="description">Previously, content was hardcoded. It is now managed via the 'Floating Field Content' textarea above. The <code>floating-field-content.php</code> file may be used as a fallback if the textarea is empty.</p>
                             </td>
                         </tr>
                         <tr>
@@ -146,12 +156,12 @@ class A_FleK90_Tool_Floating_Field {
                 <p><strong>Key Features:</strong></p>
                 <ul>
                     <li>Displays a customizable floating field.</li>
-                    <li>Content for the field is managed directly within the <code><?php echo esc_html(plugin_dir_path(__FILE__) . 'floating-field-content.php'); ?></code> file in the plugin's directory. You can edit this file to change what appears in the floating field (e.g., text, HTML, forms).</li>
+                    <li>Content for the field is managed via the <strong>Floating Field Content</strong> textarea in the settings above. You can use HTML and placeholders like <code>%POST_TITLE%</code> and <code>%POST_URL%</code>.</li>
+                    <li>If the "Floating Field Content" textarea is empty, the plugin may attempt to load content from <code>floating-field-content.php</code> in the plugin's directory as a fallback.</li>
                     <li>The main settings for the plugin, including enabling/disabling the field and appearance options, are available above on this page.</li>
                 </ul>
                 <p><strong>Admin Menu Location:</strong></p>
                 <p>You can always find these settings under <strong>Settings &gt; Floating Field Settings</strong> in your WordPress admin panel.</p>
-                <p>To customize the actual content shown in the floating field, please edit the <code>floating-field-content.php</code> file directly.</p>
 
                 <hr>
                 <h2>About This Plugin</h2>
@@ -164,7 +174,7 @@ class A_FleK90_Tool_Floating_Field {
                     <li>Email: <a href="mailto:flek90@aureusz.com">flek90@aureusz.com</a></li>
                     <li>Email: <a href="mailto:flek90@gmail.com">flek90@gmail.com</a></li>
                 </ul>
-                <p>This plugin creates an adjustable floating field. The content of this field is defined in the <code><?php echo esc_html(plugin_dir_path(__FILE__) . 'floating-field-content.php'); ?></code> file.</p>
+                <p>This plugin creates an adjustable floating field. The content of this field is primarily managed via the "Floating Field Content" textarea in the settings menu. The <code>floating-field-content.php</code> file is a fallback.</p>
         </div>
         <?php
     }
@@ -324,7 +334,6 @@ $css = '
 wp_add_inline_style('wp-block-library', $css);
     }
 
-    // Render the floating field
     public function render_floating_field() {
         $this->debug_log('Rendering floating field');
         if (!get_option('flek90_enable_field', '1')) {
@@ -332,80 +341,86 @@ wp_add_inline_style('wp-block-library', $css);
             return;
         }
 
-        // Check if the field should only be displayed on mobile devices
         $mobile_only = get_option('flek90_mobile_only', '1');
         if ($mobile_only && !wp_is_mobile()) {
             $this->debug_log('Mobile-only enabled, but not a mobile device, skipping render');
             return;
         }
 
-        // Load the hardcoded content from the separate file
-        $file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
-        if (!file_exists($file_path)) {
-            $this->debug_log('floating-field-content.php not found');
-            echo '<div id="flek90-floating-container"><p>Error: floating-field-content.php not found.</p></div>';
-            return;
+        $content = get_option('flek90_field_content', ''); // Default to empty string
+
+        if (empty(trim($content))) {
+            // Fallback to content from floating-field-content.php if the option is empty
+            $this->debug_log('Custom content is empty, attempting to load from floating-field-content.php');
+            $file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
+            if (file_exists($file_path)) {
+                ob_start();
+                include $file_path;
+                $content = ob_get_clean();
+                if(empty(trim($content))) {
+                    $this->debug_log('Fallback file is empty. Using default message.');
+                    $content = 'Please configure content in settings. Placeholders: %POST_TITLE%, %POST_URL%';
+                } else {
+                    $this->debug_log('Using fallback content from floating-field-content.php');
+                }
+            } else {
+                $content = 'Content not set. Placeholders: %POST_TITLE%, %POST_URL%';
+                $this->debug_log('floating-field-content.php not found and no custom content set.');
+            }
+        } else {
+            $this->debug_log('Using custom content from options');
         }
 
-        // Capture the content
-        ob_start();
-        include $file_path;
-        $content = ob_get_clean();
+        if (is_singular()) {
+            $post_title = get_the_title();
+            $post_url = get_permalink();
+            $content = str_replace('%POST_TITLE%', esc_html($post_title), $content);
+            $content = str_replace('%POST_URL%', esc_url($post_url), $content);
+        } else {
+            $content = str_replace('%POST_TITLE%', esc_html(get_bloginfo('name')), $content);
+            $content = str_replace('%POST_URL%', esc_url(home_url('/')), $content);
+        }
 
-        $this->debug_log('Captured content: ' . substr($content, 0, 100) . '...');
+        $this->debug_log('Raw content with placeholders replaced: ' . substr($content, 0, 100) . '...');
 
-        // Process shortcodes and blocks
-        $content = do_blocks($content);
-        $content = do_shortcode($content);
-        $content = $this->sanitize_content($content);
+        $content = do_blocks($content); // Process Gutenberg blocks if any
+        $content = do_shortcode($content); // Process shortcodes
+        $content = $this->sanitize_content($content); // Sanitize the final content
 
-        $this->debug_log('Processed content: ' . substr($content, 0, 100) . '...');
+        $this->debug_log('Processed content for display: ' . substr($content, 0, 100) . '...');
 
-        // Output the content
-        ?>
-        <div id="flek90-floating-container">
-            <div id="flek90-field-content"><?php echo $content; ?></div>
-        </div>
-        <?php
+        echo '<div id="flek90-floating-container"><div id="flek90-field-content">' . $content . '</div></div>';
     }
 
-    // Add plugin row meta
     public function add_plugin_row_meta($links, $file) {
         $this->debug_log('Adding plugin row meta');
         if (plugin_basename(__FILE__) !== $file) {
             return $links;
         }
 
-        $details = [
-            '<a href="#!" class="flek90-details-link" data-details="flek90-details">View Details</a>',
-            '<a href="https://example.com/support" target="_blank">Support</a>',
-        ];
+        $settings_link = '<a href="' . admin_url('options-general.php?page=flek90-floating-field-settings') . '">Settings</a>';
+        $support_link = '<a href="mailto:flek90@aureusz.com" target="_blank">Support</a>';
 
-        $details_content = '
-        <div id="flek90-details" style="display:none; margin-top:10px; padding:10px; background:#f9f9f9; border:1px solid #ddd;">
-            <h3>A FleK90 Tool Floating Field - Plugin Details</h3>
-            <p><strong>Thinking about installing?</strong> Add a floating field with a hardcoded search form (using a bold, black SVG search icon) defined in <code>floating-field-content.php</code>. Configure it to display only on mobile devices or on all devices via the admin settings. The form remains in one line on all screen sizes. Manage settings via Settings > Floating Field Settings, no plugins needed. Lightweight, works with older themes, mobile-friendly.</p>
-            <ul>
-                <li><strong>Key Features:</strong> Hardcoded search form with SVG icon, mobile-only option, admin menu management, responsive single-line layout.</li>
-                <li><strong>Compatibility:</strong> Works with any theme, including Twenty Ten.</li>
-                <li><strong>No Dependencies:</strong> Pure WordPress.</li>
-            </ul>
-            <p><strong>Already installed?</strong> Go to <a href="' . admin_url('options-general.php?page=flek90-floating-field-settings') . '">Settings > Floating Field Settings</a> to manage settings. Enable the field and configure mobile-only display! Edit <code>floating-field-content.php</code> to customize the content.</p>
-            <p><a href="https://example.com/docs" target="_blank">Documentation</a></p>
-        </div>';
+        $new_links = array(
+            'settings' => $settings_link,
+            'support'  => $support_link,
+        );
 
-        return array_merge($links, $details);
+        return array_merge($new_links, $links);
     }
 
-    // Display admin notice
     public function display_admin_notice() {
         $this->debug_log('Displaying admin notice');
         if (!get_option('flek90_notice_dismissed') && $this->is_plugin_activated()) {
+            $screen = get_current_screen();
+            if ($screen && $screen->id === 'settings_page_flek90-floating-field-settings') {
+                return;
+            }
             ?>
             <div class="notice notice-info is-dismissible flek90-notice">
                 <p><strong>Welcome to A FleK90 Tool Floating Field!</strong></p>
-                <p>Manage settings via <a href="<?php echo admin_url('options-general.php?page=flek90-floating-field-settings'); ?>">Settings > Floating Field Settings</a>. The field content is hardcoded in <code>floating-field-content.php</code>. Configure it to display only on mobile devices or on all devices.</p>
-                <p><a href="<?php echo admin_url('?flek90_dismiss_notice=1'); ?>" class="button">Got it, dismiss</a></p>
+                <p>Manage settings and content via <a href="<?php echo admin_url('options-general.php?page=flek90-floating-field-settings'); ?>">Settings > Floating Field Settings</a>. You can now customize the field's content directly in the settings, including page-specific placeholders like %POST_TITLE% and %POST_URL%.</p>
+                <p><a href="<?php echo esc_url(add_query_arg('flek90_dismiss_notice', '1', remove_query_arg('flek90_dismiss_notice'))); ?>" class="button">Got it, dismiss</a></p>
             </div>
             <?php
         }
@@ -427,31 +442,20 @@ wp_add_inline_style('wp-block-library', $css);
         return is_plugin_active(plugin_basename(__FILE__));
     }
 
-    // Enqueue admin scripts
     public function enqueue_admin_scripts($hook) {
         $this->debug_log('Enqueuing admin scripts for hook: ' . $hook);
         if ($hook === 'settings_page_flek90-floating-field-settings') {
-            // Enqueue color picker
             wp_enqueue_style('wp-color-picker');
             wp_enqueue_script('wp-color-picker');
+
             $admin_js = '
                 jQuery(document).ready(function($) {
-                    $(".flek90-color-picker").wpColorPicker();
+                    if(typeof $.fn.wpColorPicker === "function"){
+                        $(".flek90-color-picker").wpColorPicker();
+                    }
                 });
             ';
             wp_add_inline_script('wp-color-picker', $admin_js);
-        }
-        if ($hook === 'plugins.php') {
-            $admin_js = '
-                jQuery(document).ready(function($) {
-                    $(".flek90-details-link").on("click", function(e) {
-                        e.preventDefault();
-                        var $details = $("#flek90-details");
-                        $details.slideToggle();
-                    });
-                });
-            ';
-            wp_add_inline_script('jquery', $admin_js);
         }
     }
 }

@@ -1,5 +1,14 @@
 == Changelog ==
 
+= 3.0 - 2025-06-09 =
+* Added: Floating field content is now fully adjustable via a new textarea in the admin settings (Settings > Floating Field Settings).
+* Added: Implemented page-relative content using placeholders (e.g., %POST_TITLE%, %POST_URL%) in the custom content.
+* Removed: All mentions and functionalities related to "bestlinks.fun", including the hardcoded search form in `floating-field-content.php`.
+* Changed: `floating-field-content.php` now serves as a fallback and contains guidance comments.
+* Updated: Plugin version to 3.0.
+* Updated: Admin interface for better usability and clarity regarding content management.
+* Fixed: Corrected admin notice display and plugin row meta links.
+
 = 2.9.1 - 2024-07-29 =
 * Updated plugin author to FleK90 and author URI to https://flek90.aureusz.com.
 * Updated plugin version to 2.9.1.
@@ -15,7 +24,7 @@
 
 2.4: Fixed rendering of the search form’s text field by ensuring proper sanitization. Replaced genericon-search with text fallback ("Search").
 
-2.3: Replaced hardcoded content with a search form submitting to https://portal.bestlinks.fun/. Added styling for the search form.
+2.3: Updated field content to include a search form and added styling.
 
 2.2: Fixed rendering of hardcoded content in floating-field-content.php to ensure HTML is not displayed as raw text. Moved dropdown JavaScript to enqueue_scripts().
 
