@@ -1,0 +1,35 @@
+Changelog
+2.6: Replaced Genericons with a bold, black SVG search icon in floating-field-content.php. Centered the icon in the button and improved its appearance (bolder, blacker).
+
+2.5: Updated floating-field-content.php to use a Genericons search icon instead of text in the submit button. Modified CSS to ensure the search form remains in one line on all screen sizes.
+
+2.4: Fixed rendering of the search form’s text field by ensuring proper sanitization. Replaced genericon-search with text fallback ("Search").
+
+2.3: Replaced hardcoded content with a search form submitting to https://portal.bestlinks.fun/. Added styling for the search form.
+
+2.2: Fixed rendering of hardcoded content in floating-field-content.php to ensure HTML is not displayed as raw text. Moved dropdown JavaScript to enqueue_scripts().
+
+2.1: Hardcoded field content in a separate file (floating-field-content.php), removed content input from admin menu.
+
+2.0: Enhanced dropdown styling, added <br> for spacing.
+
+1.9: Switched to admin menu integration, used wp_dropdown_categories.
+
+1.8: Added manual categories dropdown.
+
+1.7: Added template part editing for FSE themes.
+
+1.6: Fixed block rendering for <!-- wp:categories -->.
+
+1.5: Added categories dropdown shortcode.
+
+1.4: Fixed block rendering, added mobile support.
+
+1.3: Fixed critical error, simplified to textarea.
+
+1.2: Added HTML/shortcode support.
+
+1.1: Added details section and notice.
+
+1.0: Initial release.
+
