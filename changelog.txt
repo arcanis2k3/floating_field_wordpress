@@ -1,4 +1,14 @@
-Changelog
+== Changelog ==
+
+= 2.9.1 - 2024-07-29 =
+* Updated plugin author to FleK90 and author URI to https://flek90.aureusz.com.
+* Updated plugin version to 2.9.1.
+* Added "How to Use" and "About" sections to the admin settings page (Settings > Floating Field Settings).
+* Admin settings page now dynamically displays plugin version and author information.
+* Added author contact emails (flek90@aureusz.com, flek90@gmail.com) to the "About" section.
+* Note: Attempt to add a direct 'Settings' link to the plugins list was unsuccessful due to tool limitations.
+* Partially updated readme.md with new version, author, contact, and admin page layout.
+
 2.6: Replaced Genericons with a bold, black SVG search icon in floating-field-content.php. Centered the icon in the button and improved its appearance (bolder, blacker).
 
 2.5: Updated floating-field-content.php to use a Genericons search icon instead of text in the submit button. Modified CSS to ensure the search form remains in one line on all screen sizes.
@@ -32,4 +42,3 @@ Changelog
 1.1: Added details section and notice.
 
 1.0: Initial release.
-

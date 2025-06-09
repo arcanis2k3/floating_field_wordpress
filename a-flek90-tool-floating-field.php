@@ -3,8 +3,9 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 2.9
-Author: Your Name
+Version: 2.9.1
+Author: FleK90
+Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
 */
 
@@ -76,51 +77,89 @@ class A_FleK90_Tool_Floating_Field {
         $mobile_only = get_option('flek90_mobile_only', '1'); // Default to mobile-only
         $background_color = get_option('flek90_background_color', '#0073aa');
         $font_size = get_option('flek90_font_size', '24');
+
+        // Get plugin data for dynamic version display
+        $plugin_file_path = plugin_dir_path(__FILE__) . 'a-flek90-tool-floating-field.php';
+        if (!function_exists('get_plugin_data')) {
+            require_once(ABSPATH . 'wp-admin/includes/plugin.php');
+        }
+        $plugin_data = get_plugin_data($plugin_file_path);
+        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '2.9.1'; // Fallback to literal
+        $plugin_name = isset($plugin_data['Name']) ? $plugin_data['Name'] : 'A FleK90 Tool Floating Field';
+        $author_name = isset($plugin_data['AuthorName']) ? $plugin_data['AuthorName'] : 'FleK90';
+        $author_uri = isset($plugin_data['AuthorURI']) ? $plugin_data['AuthorURI'] : 'https://flek90.aureusz.com';
         ?>
         <div class="wrap">
             <h1>Floating Field Settings</h1>
-            <form method="post" action="">
-                <?php wp_nonce_field('flek90_save_settings_action', 'flek90_save_settings_nonce'); ?>
-                <table class="form-table">
-                    <tr>
-                        <th scope="row"><label for="flek90_enable_field">Enable Floating Field</label></th>
-                        <td>
-                            <input type="checkbox" id="flek90_enable_field" name="flek90_enable_field" value="1" <?php checked($enable_field, '1'); ?>>
-                            <p class="description">Check to display the floating field on the front-end.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="flek90_mobile_only">Show Only on Mobile Devices</label></th>
-                        <td>
-                            <input type="checkbox" id="flek90_mobile_only" name="flek90_mobile_only" value="1" <?php checked($mobile_only, '1'); ?>>
-                            <p class="description">Check to display the field only on mobile devices (phones and tablets). Uncheck to display on all devices.</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Field Content</th>
-                        <td>
-                            <p>The field content is hardcoded in <code>floating-field-content.php</code>. Edit this file to customize the content (e.g., modify the search form, add HTML).</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="flek90_background_color">Background Color</label></th>
-                        <td>
-                            <input type="text" id="flek90_background_color" name="flek90_background_color" value="<?php echo esc_attr($background_color); ?>" class="flek90-color-picker">
-                            <p class="description">Select the background color for the floating field (default: blue).</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="flek90_font_size">Font Size (px)</label></th>
-                        <td>
-                            <input type="number" id="flek90_font_size" name="flek90_font_size" value="<?php echo esc_attr($font_size); ?>" min="12" max="48" step="1">
-                            <p class="description">Set the font size for the floating field (12–48px, default: 24px).</p>
-                        </td>
-                    </tr>
-                </table>
-                <p class="submit">
-                    <input type="submit" name="flek90_save_settings" class="button button-primary" value="Save Settings">
-                </p>
-            </form>
+
+                <form method="post" action="">
+                    <?php wp_nonce_field('flek90_save_settings_action', 'flek90_save_settings_nonce'); ?>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="flek90_enable_field">Enable Floating Field</label></th>
+                            <td>
+                                <input type="checkbox" id="flek90_enable_field" name="flek90_enable_field" value="1" <?php checked($enable_field, '1'); ?>>
+                                <p class="description">Check to display the floating field on the front-end.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="flek90_mobile_only">Show Only on Mobile Devices</label></th>
+                            <td>
+                                <input type="checkbox" id="flek90_mobile_only" name="flek90_mobile_only" value="1" <?php checked($mobile_only, '1'); ?>>
+                                <p class="description">Check to display the field only on mobile devices (phones and tablets). Uncheck to display on all devices.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Field Content</th>
+                            <td>
+                                <p>The field content is hardcoded in <code>floating-field-content.php</code>. Edit this file to customize the content (e.g., modify the search form, add HTML).</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="flek90_background_color">Background Color</label></th>
+                            <td>
+                                <input type="text" id="flek90_background_color" name="flek90_background_color" value="<?php echo esc_attr($background_color); ?>" class="flek90-color-picker">
+                                <p class="description">Select the background color for the floating field (default: blue).</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="flek90_font_size">Font Size (px)</label></th>
+                            <td>
+                                <input type="number" id="flek90_font_size" name="flek90_font_size" value="<?php echo esc_attr($font_size); ?>" min="12" max="48" step="1">
+                                <p class="description">Set the font size for the floating field (12–48px, default: 24px).</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <p class="submit">
+                        <input type="submit" name="flek90_save_settings" class="button button-primary" value="Save Settings">
+                    </p>
+                </form>
+
+                <hr>
+                <h2>How to Use A FleK90 Tool Floating Field</h2>
+                <p>This plugin creates an adjustable floating field that is displayed on the front-end of your website.</p>
+                <p><strong>Key Features:</strong></p>
+                <ul>
+                    <li>Displays a customizable floating field.</li>
+                    <li>Content for the field is managed directly within the <code><?php echo esc_html(plugin_dir_path(__FILE__) . 'floating-field-content.php'); ?></code> file in the plugin's directory. You can edit this file to change what appears in the floating field (e.g., text, HTML, forms).</li>
+                    <li>The main settings for the plugin, including enabling/disabling the field and appearance options, are available above on this page.</li>
+                </ul>
+                <p><strong>Admin Menu Location:</strong></p>
+                <p>You can always find these settings under <strong>Settings &gt; Floating Field Settings</strong> in your WordPress admin panel.</p>
+                <p>To customize the actual content shown in the floating field, please edit the <code>floating-field-content.php</code> file directly.</p>
+
+                <hr>
+                <h2>About This Plugin</h2>
+                <p><strong>Plugin Name:</strong> <?php echo esc_html($plugin_name); ?></p>
+                <p><strong>Version:</strong> <?php echo esc_html($plugin_version); ?></p>
+                <p><strong>Author:</strong> <?php echo esc_html($author_name); ?></p>
+                <p><strong>Website:</strong> <a href="<?php echo esc_url($author_uri); ?>" target="_blank"><?php echo esc_html($author_uri); ?></a></p>
+                <p><strong>Contact the Author:</strong></p>
+                <ul>
+                    <li>Email: <a href="mailto:flek90@aureusz.com">flek90@aureusz.com</a></li>
+                    <li>Email: <a href="mailto:flek90@gmail.com">flek90@gmail.com</a></li>
+                </ul>
+                <p>This plugin creates an adjustable floating field. The content of this field is defined in the <code><?php echo esc_html(plugin_dir_path(__FILE__) . 'floating-field-content.php'); ?></code> file.</p>
         </div>
         <?php
     }
