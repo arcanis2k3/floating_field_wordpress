@@ -1,16 +1,28 @@
 # A FleK90 Tool Floating Field
 
 Plugin Name: A FleK90 Tool Floating Field
+
 Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
+
 Version: 2.9.1
+
 Author: FleK90
+
 Author URI: https://flek90.aureusz.com
+
 License: GPL-2.0+
+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
 Requires at least: 5.0
+
 Requires PHP: 7.0
+
 Tested up to: 6.8.1
+
 Stable tag: 2.9.1
+
+
 
 **A FleK90 Tool Floating Field** is a lightweight WordPress plugin that adds a fixed-position floating field to your website's front-end. The field content is hardcoded in a separate file (`floating-field-content.php`) and includes a search form that submits to `https://portal.bestlinks.fun/`. The form features a text input and a submit button with a bold, black SVG search icon, centered in the button, and displayed in a single line on all screen sizes. Manage settings like enable/disable, background color, and font size via Settings > Floating Field Settings in the admin dashboard. The field supports mobile devices and is compatible with any theme—including older ones like Twenty Ten—without extra plugins.
 
