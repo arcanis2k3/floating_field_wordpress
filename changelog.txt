@@ -1,5 +1,17 @@
 == Changelog ==
 
+= 4.1.0 - 2025-06-09 =
+* Added: Position settings (Desktop/Mobile Position, Offsets X/Y) are now also available in the main plugin admin settings page (Settings > Floating Field Settings) in addition to the WordPress Customizer.
+* Updated: Plugin version to 4.1.0.
+* Updated: Admin settings page UI to include the new position controls.
+
+= 4.0.0 - 2025-06-09 =
+* Added: Integration with WordPress Customizer for position control. Users can now set desktop and mobile positions (e.g., top-left, bottom-center) and X/Y offsets for the floating field (Found under Appearance > Customize > Floating Field Display).
+* Added: Separate content fields for desktop and mobile devices in the plugin admin settings (Settings > Floating Field Settings). Mobile devices will use mobile-specific content; if empty, desktop content is used as a fallback.
+* Added: Dynamic CSS generation for field positioning based on Customizer settings.
+* Updated: Plugin version to 4.0.0.
+* Updated: Admin settings page to guide users to the Customizer for position settings and to include the new mobile content field.
+
 = 3.0 - 2025-06-09 =
 * Added: Floating field content is now fully adjustable via a new textarea in the admin settings (Settings > Floating Field Settings).
 * Added: Implemented page-relative content using placeholders (e.g., %POST_TITLE%, %POST_URL%) in the custom content.
