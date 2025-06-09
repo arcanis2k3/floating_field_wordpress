@@ -3,7 +3,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 2.9.1
+Version: 2.9.2
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -84,7 +84,7 @@ class A_FleK90_Tool_Floating_Field {
             require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
         $plugin_data = get_plugin_data($plugin_file_path);
-        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '2.9.1'; // Fallback to literal
+        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '2.9.2'; // Fallback to literal
         $plugin_name = isset($plugin_data['Name']) ? $plugin_data['Name'] : 'A FleK90 Tool Floating Field';
         $author_name = isset($plugin_data['AuthorName']) ? $plugin_data['AuthorName'] : 'FleK90';
         $author_uri = isset($plugin_data['AuthorURI']) ? $plugin_data['AuthorURI'] : 'https://flek90.aureusz.com';
@@ -372,8 +372,8 @@ wp_add_inline_style('wp-block-library', $css);
         }
 
         $details = [
-            '<a href="#!" class="flek90-details-link" data-details="flek90-details">View Details</a>',
-            '<a href="https://example.com/support" target="_blank">Support</a>',
+            '<a href="' . admin_url('options-general.php?page=flek90-floating-field-settings') . '" class="flek90-details-link" data-details="flek90-details">Settings</a>',
+            '<a href="https://flek90.aureusz.com" target="_blank">Support</a>',
         ];
 
         $details_content = '
@@ -386,7 +386,7 @@ wp_add_inline_style('wp-block-library', $css);
                 <li><strong>No Dependencies:</strong> Pure WordPress.</li>
             </ul>
             <p><strong>Already installed?</strong> Go to <a href="' . admin_url('options-general.php?page=flek90-floating-field-settings') . '">Settings > Floating Field Settings</a> to manage settings. Enable the field and configure mobile-only display! Edit <code>floating-field-content.php</code> to customize the content.</p>
-            <p><a href="https://example.com/docs" target="_blank">Documentation</a></p>
+            <p><a href="https://flek90.aureusz.com" target="_blank">Documentation</a></p>
         </div>';
 
         return array_merge($links, $details);
