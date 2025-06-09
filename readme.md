@@ -32,9 +32,11 @@
 - **Managing Settings**:
   - Go to **Settings > Floating Field Settings**.
   - **Enable Floating Field**: Check to display the field on the front-end.
+  - **Show Only on Mobile Devices**: Option to restrict display to mobile/tablets or show on all devices.
   - **Background Color**: Select a color (default: blue).
   - **Font Size**: Set the font size (12–48px, default: 24px).
   - Save changes.
+- Further "How to Use" and "About" information can be found on the same page, below these settings.
 - Visit the front-end to see the field on desktop and mobile.
 - **Customizing Content**:
   - The field content is hardcoded in `floating-field-content.php`. Edit this file to change the content (e.g., modify the search form, add HTML).
@@ -47,8 +49,8 @@
 
 ## Support
 - **Documentation**: [Placeholder - Add your docs link]
-- **Support**: [Placeholder - Add your support link]
-- **Issues**: Report bugs or request features via [Placeholder - Add your contact method].
+- **Support**: Report bugs or request features via email to flek90@aureusz.com or flek90@gmail.com.
+- **Issues**: Report bugs or request features via email to flek90@aureusz.com or flek90@gmail.com.
 
 ## Notes
 - **Compatibility**: Tested with WordPress 6.0+ and older themes.
@@ -67,8 +69,9 @@ The main plugin file.
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 2.6
-Author: Your Name
+Version: 2.9.1
+Author: FleK90
+Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
 */
 
