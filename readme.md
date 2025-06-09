@@ -56,3 +56,6 @@
 - **Performance**: Lightweight with minimal scripts/styles.
 - **Security**: Sanitizes HTML in the hardcoded file.
 - **Debugging**: Logs errors to `debug.log` if WP_DEBUG is enabled. Check the browser console and Elements tab for rendering issues.
+- License: GPLv 2.0
+- Stable Tag /main/
+- Tested up to: 6.8.1
