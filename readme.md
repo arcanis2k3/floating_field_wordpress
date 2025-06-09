@@ -1,28 +1,15 @@
-# A FleK90 Tool Floating Field
-
-Plugin Name: A FleK90 Tool Floating Field
-
-Description: Adds a fixed-position floating field on the front-end. The field's content is now customizable via a textarea in the plugin's admin settings (Settings > Floating Field Settings). It supports plain text, HTML, and special placeholders like `%POST_TITLE%` and `%POST_URL%` to display page-relative information. The `floating-field-content.php` file serves as a fallback if no custom content is set. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page. Compatible with older themes, no dependencies.
-
-Version: 3.0
-
-Author: FleK90
-
-Author URI: https://flek90.aureusz.com
-
-License: GPL-2.0+
-
+=== A FleK90 Tool Floating Field ===
+Contributors: FleK90
+Donate link: https://flek90.aureusz.com/
+Tags: floating field, fixed field, custom content, admin settings, shortcodes, page relative, placeholders, top banner, notification bar
+Requires at least: 5.0
+Tested up to: 6.8.1
+Stable tag: 3.0
+Requires PHP: 7.0
+License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Requires at least: 5.0
-
-Requires PHP: 7.0
-
-Tested up to: 6.8.1
-
-Stable tag: 3.0
-
-
+Adds a customizable, fixed-position floating field to your site. Manage content and appearance via admin settings. Supports HTML and page-specific placeholders.
 
 **A FleK90 Tool Floating Field** is a lightweight WordPress plugin that adds a fixed-position floating field to your website's front-end. The field's content is now customizable via a textarea in the plugin's admin settings (Settings > Floating Field Settings). It supports plain text, HTML, and special placeholders like `%POST_TITLE%` and `%POST_URL%` to display page-relative information. The `floating-field-content.php` file serves as a fallback if no custom content is set. Manage settings like enable/disable, background color, and font size via Settings > Floating Field Settings in the admin dashboard. The field supports mobile devices and is compatible with any theme—including older ones like Twenty Ten—without extra plugins.
 
@@ -83,6 +70,5 @@ Stable tag: 3.0
 - **Performance**: Lightweight with minimal scripts/styles.
 - **Security**: Uses `wp_kses_post` for sanitizing custom content from admin settings and `sanitize_content` method for fallback content.
 - **Debugging**: Logs errors to `debug.log` if WP_DEBUG is enabled. Check the browser console and Elements tab for rendering issues.
-- License: GPLv 2.0
-- Stable Tag /main/
+- License: GPLv2 or later
 - Tested up to: 6.8.1

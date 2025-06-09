@@ -67,11 +67,16 @@ class A_FleK90_Tool_Floating_Field {
         if (isset($_POST['flek90_save_settings']) && check_admin_referer('flek90_save_settings_action', 'flek90_save_settings_nonce')) {
             update_option('flek90_enable_field', isset($_POST['flek90_enable_field']) ? '1' : '0');
             update_option('flek90_mobile_only', isset($_POST['flek90_mobile_only']) ? '1' : '0');
-            if (isset($_POST['flek90_field_content'])) { // New setting
-                update_option('flek90_field_content', wp_kses_post($_POST['flek90_field_content']));
+
+            if (isset($_POST['flek90_field_content'])) {
+                update_option('flek90_field_content', wp_kses_post(wp_unslash($_POST['flek90_field_content'])));
             }
-            update_option('flek90_background_color', sanitize_hex_color($_POST['flek90_background_color']));
-            update_option('flek90_font_size', absint($_POST['flek90_font_size']));
+            if (isset($_POST['flek90_background_color'])) {
+                update_option('flek90_background_color', sanitize_hex_color(wp_unslash($_POST['flek90_background_color'])));
+            }
+            if (isset($_POST['flek90_font_size'])) {
+                update_option('flek90_font_size', absint(wp_unslash($_POST['flek90_font_size'])));
+            }
             ?>
             <div class="notice notice-success is-dismissible">
                 <p>Settings saved successfully!</p>
@@ -82,12 +87,11 @@ class A_FleK90_Tool_Floating_Field {
         // Get current settings
         $enable_field = get_option('flek90_enable_field', '1');
         $mobile_only = get_option('flek90_mobile_only', '1');
-        // Default value for the new textarea setting
         $field_content = get_option('flek90_field_content', 'Default: %POST_TITLE% - %POST_URL%');
         $background_color = get_option('flek90_background_color', '#0073aa');
         $font_size = get_option('flek90_font_size', '24');
 
-        $plugin_file_path = plugin_dir_path(__FILE__) . basename(__FILE__); // Corrected to use basename
+        $plugin_file_path = plugin_dir_path(__FILE__) . basename(__FILE__);
         if (!function_exists('get_plugin_data')) {
             require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
@@ -389,7 +393,7 @@ wp_add_inline_style('wp-block-library', $css);
 
         $this->debug_log('Processed content for display: ' . substr($content, 0, 100) . '...');
 
-        echo '<div id="flek90-floating-container"><div id="flek90-field-content">' . $content . '</div></div>';
+        echo '<div id="flek90-floating-container"><div id="flek90-field-content">' . wp_kses_post( $content ) . '</div></div>';
     }
 
     public function add_plugin_row_meta($links, $file) {
@@ -398,7 +402,7 @@ wp_add_inline_style('wp-block-library', $css);
             return $links;
         }
 
-        $settings_link = '<a href="' . admin_url('options-general.php?page=flek90-floating-field-settings') . '">Settings</a>';
+        $settings_link = '<a href="' . esc_url(admin_url('options-general.php?page=flek90-floating-field-settings')) . '">Settings</a>';
         $support_link = '<a href="mailto:flek90@aureusz.com" target="_blank">Support</a>';
 
         $new_links = array(
@@ -416,11 +420,12 @@ wp_add_inline_style('wp-block-library', $css);
             if ($screen && $screen->id === 'settings_page_flek90-floating-field-settings') {
                 return;
             }
+            $nonce = wp_create_nonce('flek90_dismiss_notice_nonce');
             ?>
             <div class="notice notice-info is-dismissible flek90-notice">
                 <p><strong>Welcome to A FleK90 Tool Floating Field!</strong></p>
-                <p>Manage settings and content via <a href="<?php echo admin_url('options-general.php?page=flek90-floating-field-settings'); ?>">Settings > Floating Field Settings</a>. You can now customize the field's content directly in the settings, including page-specific placeholders like %POST_TITLE% and %POST_URL%.</p>
-                <p><a href="<?php echo esc_url(add_query_arg('flek90_dismiss_notice', '1', remove_query_arg('flek90_dismiss_notice'))); ?>" class="button">Got it, dismiss</a></p>
+                <p>Manage settings and content via <a href="<?php echo esc_url(admin_url('options-general.php?page=flek90-floating-field-settings')); ?>">Settings > Floating Field Settings</a>. You can now customize the field's content directly in the settings, including page-specific placeholders like %POST_TITLE% and %POST_URL%.</p>
+                <p><a href="<?php echo esc_url(add_query_arg(['flek90_dismiss_notice' => '1', '_wpnonce' => $nonce])); ?>" class="button">Got it, dismiss</a></p>
             </div>
             <?php
         }
@@ -429,11 +434,30 @@ wp_add_inline_style('wp-block-library', $css);
     // Handle notice dismissal
     public function handle_notice_dismissal() {
         $this->debug_log('Handling notice dismissal');
-        if (isset($_GET['flek90_dismiss_notice']) && $_GET['flek90_dismiss_notice'] == '1') {
-            update_option('flek90_notice_dismissed', 1);
-            wp_safe_redirect(remove_query_arg('flek90_dismiss_notice'));
-            exit;
+        if (!(isset($_GET['flek90_dismiss_notice'], $_GET['_wpnonce']) &&
+              $_GET['flek90_dismiss_notice'] == '1' &&
+              wp_verify_nonce(sanitize_key($_GET['_wpnonce']), 'flek90_dismiss_notice_nonce'))) {
+            if ( WP_DEBUG ) {
+                // Nonce is not set, or notice parameter not set, or nonce verification failed
+                // error_log('Nonce verification failed for notice dismissal or invalid parameters.');
+                // The above error_log is commented out as direct error_log calls are discouraged.
+                // The debug_log helper already checks WP_DEBUG.
+                $this->debug_log('Nonce verification failed for notice dismissal or invalid parameters.');
+            }
+            return;
         }
+
+        update_option('flek90_notice_dismissed', 1);
+        // It's good practice to remove the query args from the URL after processing.
+        // However, wp_safe_redirect(remove_query_arg(['flek90_dismiss_notice', '_wpnonce'])) can be complex
+        // depending on the base URL. For AJAX handlers or admin_post actions, this is simpler.
+        // For now, let's assume the redirect to the same page without these args is acceptable if needed,
+        // but often just processing the action is enough and the args in URL are harmless for one load.
+        // The original code had wp_safe_redirect(remove_query_arg('flek90_dismiss_notice')).
+        // Let's try to preserve similar behavior but remove both.
+        $redirect_url = remove_query_arg(['flek90_dismiss_notice', '_wpnonce']);
+        wp_safe_redirect($redirect_url);
+        exit;
     }
 
     // Check if plugin is activated
@@ -464,7 +488,7 @@ try {
     new A_FleK90_Tool_Floating_Field();
 } catch (Exception $e) {
     if (defined('WP_DEBUG') && WP_DEBUG) {
-        error_log('[FleK90 Plugin Error] ' . $e->getMessage());
+        error_log('[FleK90 Plugin Error] ' . $e->getMessage()); // This direct error_log is acceptable for critical unhandled exceptions.
     }
 }
 ?>
