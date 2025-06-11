@@ -85,18 +85,40 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
 }
 .flek90-admin-page input[type="text"],
 .flek90-admin-page input[type="number"],
-.flek90-admin-page textarea,
-.flek90-admin-page select {
+.flek90-admin-page textarea {
     background-color: #333940; /* Darker input background */
     color: var(--flek90-light-text);
     border: 1px solid #555;
+    padding: 6px 10px; /* Consistent padding */
+    border-radius: 3px; /* Consistent border radius */
 }
 .flek90-admin-page input[type="text"]:focus,
 .flek90-admin-page input[type="number"]:focus,
-.flek90-admin-page textarea:focus {
+.flek90-admin-page textarea:focus,
+.flek90-admin-page select:focus { /* Added select:focus here */
     border-color: var(--flek90-gold);
     box-shadow: 0 0 0 1px var(--flek90-gold);
 }
+
+/* Ensure select elements are clearly styled within the dark theme */
+.flek90-admin-page select {
+    background-color: #2E3338; /* Slightly different dark shade for select background */
+    color: var(--flek90-light-text);
+    border: 1px solid #555;
+    padding: 6px 10px; /* Adequate padding */
+    border-radius: 3px; /* Consistent with other inputs */
+    height: auto; /* Ensure height is not overly constrained by other WP styles */
+    line-height: normal; /* Default line height */
+    /* Note: Custom dropdown arrow styling is complex and browser-dependent, omitted for now. */
+}
+
+/* Styling for options within the select dropdown (browser dependent) */
+/* This is often not very customizable with CSS alone for all browsers */
+.flek90-admin-page select option {
+    background-color: #333940; /* Background for dropdown options */
+    color: var(--flek90-light-text); /* Text color for dropdown options */
+}
+
 .flek90-admin-page hr {
     border-color: #444; /* Darker hr */
 }
@@ -183,3 +205,31 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
     padding-top: 20px;
 }
 */
+
+/* Styling for Code Example in Admin Settings Page */
+.flek90-admin-page pre {
+    background-color: #1E1E1E; /* A common dark IDE background color, slightly different from page bg */
+    color: #D4D4D4; /* Light gray text, common for dark themes */
+    padding: 15px;
+    border: 1px solid #555; /* A border to define the pre block */
+    border-radius: 4px;
+    overflow-x: auto; /* Add horizontal scroll if content is too wide */
+    white-space: pre; /* Preserve whitespace and newlines */
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Monospaced font stack */
+    font-size: 13px; /* Slightly smaller for code */
+    line-height: 1.5;
+    margin-top: 5px; /* Space above the pre block */
+    margin-bottom: 15px; /* Space below the pre block */
+    display: block; /* Ensure it takes block-level for overflow-x to work as expected */
+}
+
+.flek90-admin-page pre code {
+    /* Most styling is on the <pre> tag.
+       The <code> tag itself might not need much if <pre> handles font and color.
+       However, you can ensure font family inheritance or specific color if needed. */
+    font-family: inherit; /* Inherit monospace font from pre */
+    background: none; /* Ensure no conflicting background from other generic code styles */
+    padding: 0; /* Reset padding if any from generic code styles */
+    color: inherit; /* Inherit text color from pre */
+    display: inline; /* Code tag should be inline within pre */
+}

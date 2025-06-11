@@ -332,11 +332,14 @@ class A_FleK90_Tool_Floating_Field {
         $mobile_pos_css = $this->generate_position_css_v5($mobile_position_v5);
         $this->debug_log(['V5 Mobile Position CSS' => $mobile_pos_css]);
 
-        $background_color_v5 = get_option('flek90_background_color_v5', '#0073aa');
+        $background_color_option = get_option('flek90_background_color_v5', '#0073aa');
+        // Ensure that if the color option somehow becomes empty or invalid leading to an empty string after sanitization,
+        // we use 'transparent' to avoid CSS errors or unexpected inherited backgrounds.
+        $css_background_color = !empty($background_color_option) ? esc_attr($background_color_option) : 'transparent';
         $font_size_v5 = get_option('flek90_font_size_v5', '24');
         $css = "
     #flek90-floating-container {
-        position: fixed !important; {$desktop_pos_css} z-index: 9999; background: " . esc_attr($background_color_v5) . "; color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-width: 280px; width: auto; text-align: center; font-size: " . esc_attr($font_size_v5) . "px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        position: fixed !important; {$desktop_pos_css} z-index: 9999; background: " . $css_background_color . "; color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-width: 280px; width: auto; text-align: center; font-size: " . esc_attr($font_size_v5) . "px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
     #flek90-floating-container * { color: inherit; line-height: 1.5; }
     #flek90-floating-container a { color: #fff; text-decoration: underline; }
