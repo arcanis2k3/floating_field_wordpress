@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 5.2
+Version: 5.3
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class A_FleK90_Tool_Floating_Field {
-    private $plugin_version = '5.2';
+    private $plugin_version = '5.3';
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
 
     public function __construct() {
@@ -157,6 +157,15 @@ class A_FleK90_Tool_Floating_Field {
             if (isset($_POST['flek90_background_color_v5'])) { update_option('flek90_background_color_v5', sanitize_hex_color(wp_unslash($_POST['flek90_background_color_v5'])));}
             if (isset($_POST['flek90_font_size_v5'])) { update_option('flek90_font_size_v5', absint(wp_unslash($_POST['flek90_font_size_v5'])));}
             if (isset($_POST['flek90_field_width_v5'])) { update_option('flek90_field_width_v5', absint(wp_unslash($_POST['flek90_field_width_v5'])));}
+            if (isset($_POST['flek90_field_width_unit_v5'])) {
+                $allowed_units = ['px', '%', 'rem', 'em', 'vw'];
+                $submitted_unit = sanitize_text_field(wp_unslash($_POST['flek90_field_width_unit_v5']));
+                if (in_array($submitted_unit, $allowed_units, true)) {
+                    update_option('flek90_field_width_unit_v5', $submitted_unit);
+                } else {
+                    update_option('flek90_field_width_unit_v5', 'px'); // Default to px if invalid
+                }
+            }
             if (isset($_POST['flek90_custom_css_v5'])) { update_option('flek90_custom_css_v5', wp_strip_all_tags(wp_unslash($_POST['flek90_custom_css_v5']))); }
 
             // Old option deletion logic
@@ -195,6 +204,7 @@ class A_FleK90_Tool_Floating_Field {
                     $background_color_v5 = get_option('flek90_background_color_v5', '#0073aa');
                     $font_size_v5 = get_option('flek90_font_size_v5', '24');
                     $field_width_v5 = get_option('flek90_field_width_v5', '280'); // Default to 280px
+                    $field_width_unit_v5 = get_option('flek90_field_width_unit_v5', 'px'); // Default to 'px'
                     $custom_css_v5 = get_option('flek90_custom_css_v5', '');
                     $pos_choices = self::get_position_choices();
                     ?>
@@ -238,10 +248,18 @@ class A_FleK90_Tool_Floating_Field {
                             <tr><th scope="row"><label for="flek90_background_color_v5"><?php esc_html_e('Background Color', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="text" id="flek90_background_color_v5" name="flek90_background_color_v5" value="<?php echo esc_attr($background_color_v5); ?>" class="flek90-color-picker-field"><p class="description"><?php esc_html_e('Select background color (default: blue).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
                             <tr><th scope="row"><label for="flek90_font_size_v5"><?php esc_html_e('Font Size (px)', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="number" id="flek90_font_size_v5" name="flek90_font_size_v5" value="<?php echo esc_attr($font_size_v5); ?>" min="12" max="48" step="1"><p class="description"><?php esc_html_e('Set font size (12–48px, default: 24px).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
                             <tr>
-                                <th scope="row"><label for="flek90_field_width_v5"><?php esc_html_e('Field Width (px)', 'a-flek90-tool-floating-field'); ?></label></th>
-                                <td>
-                                    <input type="number" id="flek90_field_width_v5" name="flek90_field_width_v5" value="<?php echo esc_attr($field_width_v5); ?>" min="100" max="1000" step="10">
-                                    <p class="description"><?php esc_html_e('Set field width (100–1000px, default: 280px). This will be the max-width for mobile.', 'a-flek90-tool-floating-field'); ?></p>
+                                <th scope="row"><label for="flek90_field_width_v5"><?php esc_html_e('Field Width', 'a-flek90-tool-floating-field'); ?></label></th>
+                                <td style="display: flex; align-items: center; gap: 10px;">
+                                    <input type="number" id="flek90_field_width_v5" name="flek90_field_width_v5" value="<?php echo esc_attr($field_width_v5); ?>" min="10" max="1000" step="1" style="width: 80px;">
+                                    <select id="flek90_field_width_unit_v5" name="flek90_field_width_unit_v5" style="flex-shrink: 0;">
+                                        <?php
+                                        $units = ['px', '%', 'rem', 'em', 'vw'];
+                                        foreach ($units as $unit) {
+                                            echo '<option value="' . esc_attr($unit) . '" ' . selected($field_width_unit_v5, $unit, false) . '>' . esc_html($unit) . '</option>';
+                                        }
+                                        ?>
+                                    </select>
+                                    <p class="description" style="margin-left: 10px;"><?php esc_html_e('Set field width and unit (e.g., 280px, 50%, 15rem). Note: % and vw are relative to viewport width.', 'a-flek90-tool-floating-field'); ?></p>
                                 </td>
                             </tr>
 
@@ -358,14 +376,33 @@ class A_FleK90_Tool_Floating_Field {
 
         // Retrieve and prepare field width CSS
         $field_width_v5 = get_option('flek90_field_width_v5', '280');
-        $css_field_width = esc_attr($field_width_v5) . 'px';
-        // For mobile, max-width should not exceed original 220px OR the custom width if it's smaller than 220px.
-        $css_mobile_max_width = esc_attr(min((int)$field_width_v5, 220)) . 'px';
+        $field_width_unit_v5 = get_option('flek90_field_width_unit_v5', 'px');
 
+        // Validate or sanitize the unit again, just in case
+        $allowed_units = ['px', '%', 'rem', 'em', 'vw'];
+        if (!in_array($field_width_unit_v5, $allowed_units, true)) {
+            $field_width_unit_v5 = 'px'; // Default to px if invalid stored value
+        }
+
+        $css_field_width_value = esc_attr($field_width_v5);
+        $css_field_width_unit = esc_attr($field_width_unit_v5);
+        $css_field_full_width = $css_field_width_value . $css_field_width_unit; // Combined value and unit
+
+        // For mobile, max-width should not exceed original 220px OR the custom width if it's smaller than 220px, ONLY if unit is px.
+        // $css_mobile_max_width = esc_attr(min((int)$field_width_v5, 220)) . 'px'; // Old logic
+
+        $css_mobile_max_width_final = '';
+        if ($css_field_width_unit === 'px') {
+            $css_mobile_max_width_final = esc_attr(min((int)$css_field_width_value, 220)) . 'px';
+        } elseif ($css_field_width_unit === 'rem' || $css_field_width_unit === 'em' || $css_field_width_unit === '%' || $css_field_width_unit === 'vw') {
+            $css_mobile_max_width_final = $css_field_full_width; // Use the user-defined value and unit
+        } else { // Fallback, should not happen
+            $css_mobile_max_width_final = '220px';
+        }
 
         $css = "
     #flek90-floating-container {
-        position: fixed !important; {$desktop_pos_css} z-index: 9999; background: " . $css_background_color . "; color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: " . $css_field_width . "; max-width: " . $css_field_width . "; text-align: center; font-size: " . esc_attr($font_size_v5) . "px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        position: fixed !important; {$desktop_pos_css} z-index: 9999; background: " . $css_background_color . "; color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: " . $css_field_full_width . "; max-width: " . $css_field_full_width . "; text-align: center; font-size: " . esc_attr($font_size_v5) . "px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
     #flek90-floating-container * { color: inherit; line-height: 1.5; }
     #flek90-floating-container a { color: #fff; text-decoration: underline; }
@@ -377,7 +414,7 @@ class A_FleK90_Tool_Floating_Field {
     #flek90-floating-container button.search-submit:hover { background: #f5f5f5; }
     #flek90-floating-container button.search-submit svg { width: 16px; height: 16px; stroke: #000; stroke-width: 3; }
     @media (max-width: 768px) {
-        #flek90-floating-container { {$mobile_pos_css} padding: 2px 2px; width: auto; max-width: " . $css_mobile_max_width . "; font-size: " . esc_attr(max(12, (int)$font_size_v5 - 4)) . "px; }
+        #flek90-floating-container { {$mobile_pos_css} padding: 2px 2px; width: auto; max-width: " . $css_mobile_max_width_final . "; font-size: " . esc_attr(max(12, (int)$font_size_v5 - 4)) . "px; }
         #flek90-floating-container form#searchform { gap: 5px; }
         #flek90-floating-container input.search-input { width: 150px; font-size: 13px; padding: 6px 10px; }
         #flek90-floating-container button.search-submit { width: 28px; height: 28px; }
