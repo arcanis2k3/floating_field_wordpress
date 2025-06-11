@@ -1,5 +1,13 @@
 == Changelog ==
 
+= 5.0.1 - 2025-06-11 =
+* Fixed: Addressed PHP warning by adding version to `wp_register_style` in `enqueue_scripts()`.
+* Fixed: Corrected `readme.md` "Tested up to" value to use major version (e.g., "6.8").
+* Fixed: Reduced tag count in `readme.md` to meet plugin directory guidelines (max 5 tags).
+* Changed: Centralized plugin version retrieval within the main PHP class for consistency (v5.0.1).
+* Note: This version includes enhanced debug logging for field visibility logic (from V5.0.0 work) to help diagnose issues if the field is not showing. The core functionality remains the same as V5.0.0.
+* Updated: Plugin version to 5.0.1.
+
 = 5.0.0 - 2025-06-11 =
 * MAJOR REBUILD: Simplified plugin for core functionality and reliability.
 * Changed: All plugin options now use a `_v5` suffix (e.g., `flek90_enable_on_desktop_v5`). Old options are no longer used and are deleted upon saving new settings.

@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-Version: 5.0.0
+Version: 5.0.1
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.8.1
-Stable tag: 5.0.0
+Stable tag: 5.0.1
 */
 
 // Exit if accessed directly
@@ -20,6 +20,8 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class A_FleK90_Tool_Floating_Field {
+    private $plugin_version = '5.0.1';
+
     public function __construct() {
         $this->debug_log('Plugin initialized');
         add_action('admin_menu', [$this, 'add_admin_menu']);
@@ -35,9 +37,9 @@ class A_FleK90_Tool_Floating_Field {
     private function debug_log($message) {
         if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
             if (is_array($message) || is_object($message)) {
-                error_log('[FleK90 Plugin V5.0.0] ' . print_r($message, true));
+                error_log('[FleK90 Plugin V' . $this->plugin_version . '] ' . print_r($message, true));
             } else {
-                error_log('[FleK90 Plugin V5.0.0] ' . $message);
+                error_log('[FleK90 Plugin V' . $this->plugin_version . '] ' . $message);
             }
         }
     }
@@ -85,7 +87,8 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function render_admin_page() {
-        $this->debug_log('Rendering admin page V5');
+        $this->debug_log('Rendering admin page V5'); // Version will be updated by class property
+        $plugin_version_display = $this->plugin_version;
 
         if (isset($_POST['flek90_save_settings']) && check_admin_referer('flek90_save_settings_action', 'flek90_save_settings_nonce')) {
             update_option('flek90_enable_on_desktop_v5', isset($_POST['flek90_enable_on_desktop_v5']) ? '1' : '0');
@@ -121,13 +124,14 @@ class A_FleK90_Tool_Floating_Field {
 
         $pos_choices = self::get_position_choices();
 
-        $plugin_file_path = __FILE__;
-        if (!function_exists('get_plugin_data')) { require_once(ABSPATH . 'wp-admin/includes/plugin.php'); }
-        $plugin_data = get_plugin_data($plugin_file_path);
-        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '5.0.0';
-        $plugin_name = isset($plugin_data['Name']) ? $plugin_data['Name'] : 'A FleK90 Tool Floating Field';
+        // Get plugin name for display, but use class property for version.
+        $plugin_name = 'A FleK90 Tool Floating Field'; // Default
+        if (function_exists('get_plugin_data')) {
+            $plugin_data = get_plugin_data(__FILE__);
+            $plugin_name = isset($plugin_data['Name']) ? $plugin_data['Name'] : $plugin_name;
+        }
         ?>
-        <div class="wrap"><h1>Floating Field Settings - v<?php echo esc_html($plugin_version); ?></h1>
+        <div class="wrap"><h1><?php echo esc_html($plugin_name); ?> Settings - v<?php echo esc_html($plugin_version_display); ?></h1>
             <form method="post" action="">
                 <?php wp_nonce_field('flek90_save_settings_action', 'flek90_save_settings_nonce'); ?>
                 <table class="form-table">
@@ -159,11 +163,33 @@ class A_FleK90_Tool_Floating_Field {
         <?php
     }
 
-    public function sanitize_content($input) { /* ... */ return $input; }
-    public function enqueue_scripts() {
-        $this->debug_log('Enqueuing front-end scripts for floating field - V5');
+    public function sanitize_content($input) {
+        // Sanitize content using WordPress VIP standards for outputting HTML
+        // Allows common HTML tags and attributes for formatting.
+        $allowed_html = [
+            'a'      => ['href' => true, 'title' => true, 'target' => true, 'rel' => true],
+            'br'     => [],
+            'em'     => [],
+            'strong' => [],
+            'p'      => ['class' => true, 'style' => true],
+            'ul'     => ['class' => true, 'style' => true],
+            'ol'     => ['class' => true, 'style' => true],
+            'li'     => ['class' => true, 'style' => true],
+            'span'   => ['class' => true, 'style' => true],
+            'div'    => ['class' => true, 'style' => true],
+            'img'    => ['src' => true, 'alt' => true, 'width' => true, 'height' => true, 'class' => true, 'style' => true],
+            // Add other tags as needed, e.g., h1-h6, blockquote, etc.
+            // Be restrictive by default.
+        ];
+        // For attributes like 'style', consider more specific sanitization if possible,
+        // or ensure that the input source is trusted. wp_kses_post is generally safer.
+        return wp_kses_post($input); // wp_kses_post is a good general sanitizer for post content.
+    }
 
-        wp_register_style('flek90-floating-field-inline', false);
+    public function enqueue_scripts() {
+        $this->debug_log('Enqueuing front-end scripts for floating field - V5'); // Version will be updated by class property
+
+        wp_register_style('flek90-floating-field-inline', false, [], $this->plugin_version);
         wp_enqueue_style('flek90-floating-field-inline');
 
         $desktop_position_v5 = get_option('flek90_desktop_position_v5', 'top-center');
@@ -218,5 +244,5 @@ class A_FleK90_Tool_Floating_Field {
     private function is_plugin_activated() { /* ... */ return true;}
     public function enqueue_admin_scripts($hook) { /* ... */ }
 }
-try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) { if (defined('WP_DEBUG') && WP_DEBUG) { error_log('[FleK90 Plugin V5.0.0] ' . $e->getMessage()); }}
+try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) { if (defined('WP_DEBUG') && WP_DEBUG) { error_log('[FleK90 Plugin V' . $this->plugin_version . '] ' . $e->getMessage()); }} // Updated to use class property
 ?>

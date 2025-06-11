@@ -1,10 +1,10 @@
 === A FleK90 Tool Floating Field ===
 Contributors: FleK90
 Donate link: https://flek90.aureusz.com/
-Tags: floating field, fixed field, custom content, admin settings, shortcodes, page relative, placeholders, top banner, notification bar, custom css
+Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
-Tested up to: 6.8.1
-Stable tag: 5.0.0
+Tested up to: 6.8
+Stable tag: 5.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
