@@ -97,7 +97,7 @@ class A_FleK90_Tool_Floating_Field {
         return $css_rules;
     }
 
-    public function setup_customizer($wp_customize) {
+    public function setup_customizer($wp_customize) { /* ... same as before ... */
         $this->debug_log('Setting up Customizer');
         $defaults = $this->get_customizer_defaults();
         $option_name = 'flek90_ff_customizer_settings';
@@ -119,13 +119,11 @@ class A_FleK90_Tool_Floating_Field {
             $wp_customize->add_control($option_name . '[' . $key . ']', $control_args);
         }
     }
-
-    public function add_admin_menu() {
+    public function add_admin_menu() { /* ... same as before ... */
         $this->debug_log('Adding admin menu page');
         add_options_page('Floating Field Settings', 'Floating Field Settings', 'manage_options', 'flek90-floating-field-settings', [$this, 'render_admin_page']);
     }
-
-    public function render_admin_page() {
+    public function render_admin_page() { /* ... same as before ... */
         $this->debug_log('Rendering admin page');
         $option_name_customizer = 'flek90_ff_customizer_settings';
 
@@ -257,10 +255,12 @@ class A_FleK90_Tool_Floating_Field {
         $custom_css_option = get_option('flek90_custom_css', '');
         $trimmed_custom_css = trim($custom_css_option);
         if (!empty($trimmed_custom_css)) {
-            $css .= "\n\n/* Custom CSS from Plugin Settings */\n" . $trimmed_custom_css; // Use trimmed version
-            $this->debug_log('Appended custom CSS from settings.');
+            $css .= "\n\n/* Custom CSS from Plugin Settings */\n" . $trimmed_custom_css; // Line re-enabled
+            $this->debug_log('Appended custom CSS from settings. Snippet: ' . substr($trimmed_custom_css, 0, 100));
+        } else {
+            $this->debug_log('No custom CSS from settings to append.');
         }
-        $this->debug_log("Final CSS to be added: \n" . $css);
+        $this->debug_log("Final CSS to be added: \n" . substr($css, 0, 500) . (strlen($css) > 500 ? "..." : ""));
         wp_add_inline_style('flek90-floating-field-inline', $css);
     }
 
@@ -271,5 +271,5 @@ class A_FleK90_Tool_Floating_Field {
     private function is_plugin_activated() { /* ... */ return true;}
     public function enqueue_admin_scripts($hook) { /* ... */ }
 }
-try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) { if (defined('WP_DEBUG') && WP_DEBUG) { error_log('[FleK90 Plugin V4.1.0] ' . $e->getMessage()); }}
+try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) { if (defined('WP_DEBUG') && WP_DEBUG) { error_log('[FleK90 Plugin V4.2.0] ' . $e->getMessage()); }}
 ?>

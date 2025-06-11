@@ -1,5 +1,10 @@
 == Changelog ==
 
+= 4.2.1 - 2025-06-11 =
+* Fixed: Enhanced debug logging for field visibility logic in `render_floating_field()` to help diagnose cases where the field might not be showing.
+* Fixed: Ensured Custom CSS feature is active and included additional debug logging for CSS generation in `enqueue_scripts()`.
+* Updated: Plugin version to 4.2.1.
+
 = 4.2.0 - 2025-06-09 =
 * Refactored: Enable/disable logic changed to separate "Enable on Desktop" and "Enable on Mobile" options, removing the previous global enable and "mobile only" toggle.
 * Added: "Custom CSS" section in the admin settings page, allowing users to add their own CSS rules for the floating field.
