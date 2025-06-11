@@ -24,6 +24,7 @@ class A_FleK90_Tool_Floating_Field {
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
 
     public function __construct() {
+        add_action('plugins_loaded', [$this, 'load_textdomain']); // Added for localization
         $this->debug_log('Plugin initialized');
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
@@ -38,6 +39,14 @@ class A_FleK90_Tool_Floating_Field {
         // Add settings link to plugin list
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), [$this, 'add_settings_link_to_plugin_list']);
         // Customizer hooks removed
+    }
+
+    public function load_textdomain() { // Added for localization
+        load_plugin_textdomain(
+            'a-flek90-tool-floating-field',
+            false,
+            dirname(plugin_basename(__FILE__)) . '/languages/'
+        );
     }
 
     private function debug_log($message) {
@@ -116,6 +125,9 @@ class A_FleK90_Tool_Floating_Field {
 
     // Placeholder callback for the main menu page
     public function flek90_main_menu_page_html_callback() {
+        if (!current_user_can('manage_options')) {
+            wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'a-flek90-tool-floating-field'));
+        }
         // Added flek90-admin-page class for styling
         echo '<div class="wrap flek90-admin-page"><h1>' . esc_html__( 'FleK90 Tools Dashboard', 'a-flek90-tool-floating-field' ) . '</h1>';
         echo '<p>' . esc_html__( 'Welcome to the FleK90 Tools main dashboard. Please select a tool from the submenu.', 'a-flek90-tool-floating-field' ) . '</p></div>';
@@ -188,7 +200,29 @@ class A_FleK90_Tool_Floating_Field {
                             <tr><th scope="row"><label for="flek90_enable_on_mobile_v5"><?php esc_html_e('Enable on Mobile', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="flek90_enable_on_mobile_v5" name="flek90_enable_on_mobile_v5" value="1" <?php checked($enable_on_mobile_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on mobile devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
 
                             <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Content Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr valign="top"><td colspan="2" style="padding-top: 0;"><p class="description"><?php esc_html_e('Content for the floating field is now managed by editing PHP files directly within the plugin\'s directory:', 'a-flek90-tool-floating-field'); ?></p><ul style="list-style: disc; margin-left: 20px;"><li><strong><?php esc_html_e('Desktop Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file', 'a-flek90-tool-floating-field'); ?> <code>content-desktop.php</code>.</li><li><strong><?php esc_html_e('Mobile Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file', 'a-flek90-tool-floating-field'); ?> <code>content-mobile.php</code>.</li><li><strong><?php esc_html_e('Fallback Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file', 'a-flek90-tool-floating-field'); ?> <code>floating-field-content.php</code>.</li></ul></td></tr>
+                            <tr valign="top"><td colspan="2" style="padding-top: 0;">
+                                <p class="description"><?php esc_html_e('Content for the floating field is managed by directly editing specific PHP files within the plugin\'s directory. This allows for flexible use of HTML, CSS, WordPress shortcodes, and basic PHP.', 'a-flek90-tool-floating-field'); ?></p>
+                                <ul style="list-style: disc; margin-left: 20px;">
+                                    <li><strong><?php esc_html_e('Desktop Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>content-desktop.php</code>.</li>
+                                    <li><strong><?php esc_html_e('Mobile Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>content-mobile.php</code>.</li>
+                                    <li><strong><?php esc_html_e('Fallback Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>floating-field-content.php</code> <?php esc_html_e('(used if the device-specific file is empty or not found).', 'a-flek90-tool-floating-field'); ?></li>
+                                </ul>
+                                <p class="description"><strong><?php esc_html_e('How to use these files:', 'a-flek90-tool-floating-field'); ?></strong></p>
+                                <ul style="list-style: disc; margin-left: 20px;">
+                                    <li><?php esc_html_e('You can include any HTML markup directly.', 'a-flek90-tool-floating-field'); ?></li>
+                                    <li><?php esc_html_e('To use WordPress shortcodes, use the `do_shortcode()` PHP function. Example:', 'a-flek90-tool-floating-field'); ?> <code>&lt;?php echo do_shortcode("[your_shortcode]"); ?&gt;</code></li>
+                                    <li><?php esc_html_e('You can use basic PHP, for instance, to display the current year:', 'a-flek90-tool-floating-field'); ?> <code>&lt;?php echo date('Y'); ?&gt;</code></li>
+                                    <li><?php esc_html_e('For dynamic post-related information (like post title or URL), you can use WordPress functions like `get_the_title()` or `get_permalink()` within the PHP tags.', 'a-flek90-tool-floating-field'); ?></li>
+                                    <li><?php esc_html_e('If you add PHP code, be careful to ensure it is correct and secure, as errors could affect your site.', 'a-flek90-tool-floating-field'); ?></li>
+                                     <li><?php esc_html_e('The content from these files will be processed by `do_blocks()` and `do_shortcode()` again by the plugin before output, and then sanitized using `wp_kses_post`.', 'a-flek90-tool-floating-field'); ?></li>
+                                </ul>
+                                <p class="description"><em><?php esc_html_e('Example for <code>content-desktop.php</code>:', 'a-flek90-tool-floating-field'); ?></em></p>
+                                <pre style="background-color: #f7f7f7; padding: 10px; border: 1px solid #ccc; display: inline-block; border-radius: 4px;"><code>&lt;div style="text-align: center;"&gt;
+  &lt;h3&gt;Hello Desktop Users!&lt;/h3&gt;
+  &lt;p&gt;Today is &lt;?php echo date('F j, Y'); ?&gt;.&lt;/p&gt;
+  &lt;p&gt;&lt;?php echo do_shortcode("[my_example_shortcode]"); ?&gt;&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+                            </td></tr>
 
                             <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Position Settings (Simplified)', 'a-flek90-tool-floating-field'); ?></h3><p class="description"><?php esc_html_e('Select a general position. Offsets are no longer configured on this page.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
                             <tr><th scope="row"><label for="flek90_desktop_position_v5"><?php esc_html_e('Desktop Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="flek90_desktop_position_v5" name="flek90_desktop_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($desktop_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>

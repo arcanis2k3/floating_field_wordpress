@@ -55,10 +55,7 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - **Managing Settings (via Admin Page - FleK90 > Floating Field Settings):**
   - **Enable on Desktop**: Show the field on desktop devices.
   - **Enable on Mobile**: Show the field on mobile devices.
-  - **Content Management**: Content is managed by editing PHP files directly within the plugin's directory:
-    - `content-desktop.php`: For content displayed on desktop devices.
-    - `content-mobile.php`: For content displayed on mobile devices. If this file is empty or not found, `content-desktop.php` (if available) or `floating-field-content.php` will be used.
-    - `floating-field-content.php`: Fallback content if the device-specific file is not found or is empty.
+  - **Content Management**: See detailed explanation below under "Customizing Content (Details)". The short version is: edit `content-desktop.php` for desktop, `content-mobile.php` for mobile, and `floating-field-content.php` as a fallback.
   - **Position Settings**: Configure "Desktop Position" and "Mobile Position" using the dropdowns. Each offers 9 predefined screen locations.
   - **Background Color**: Select a color using the WordPress color picker (default: blue).
   - **Font Size**: Set the font size (12–48px, default: 24px).
@@ -67,11 +64,29 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - The "About" tab on the settings page provides more information about the plugin's features and usage.
 - Visit the front-end to see the field on desktop and mobile.
 - **Customizing Content (Details):**
-  - Edit the PHP content files (`content-desktop.php`, `content-mobile.php`, `floating-field-content.php`) to include any HTML, shortcodes, or PHP necessary to display your desired content.
+  - Content for the floating field is managed by directly editing specific PHP files within the plugin's directory. This allows for flexible use of HTML, CSS (via `<style>` tags or inline styles), WordPress shortcodes, and basic PHP.
+    - **Desktop Content:** Edit the file: `content-desktop.php`.
+    - **Mobile Content:** Edit the file: `content-mobile.php`.
+    - **Fallback Content:** Edit the file: `floating-field-content.php` (used if the device-specific file is empty or not found).
+  - **How to use these files:**
+    - You can include any HTML markup directly.
+    - To use WordPress shortcodes, use the `do_shortcode()` PHP function. Example: `<?php echo do_shortcode("[your_shortcode]"); ?>`
+    - You can use basic PHP, for instance, to display the current year: `<?php echo date('Y'); ?>`
+    - For dynamic post-related information (like post title or URL), you can use WordPress functions like `get_the_title()` or `get_permalink()` within the PHP tags.
+    - If you add PHP code, be careful to ensure it is correct and secure, as errors could affect your site.
+    - The content from these files will be processed by `do_blocks()` and `do_shortcode()` again by the plugin before output, and then sanitized using `wp_kses_post`.
+  - **Example for `content-desktop.php`:**
+    ```html
+    <div style="text-align: center;">
+      <h3>Hello Desktop Users!</h3>
+      <p>Today is <?php echo date('F j, Y'); ?>.</p>
+      <p><?php echo do_shortcode("[my_example_shortcode]"); ?></p>
+    </div>
+    ```
 
 ## Configuration
 - **Global Field**: Applies to all pages.
-- **Content**: Managed by editing the PHP files: `content-desktop.php`, `content-mobile.php`, and `floating-field-content.php`. These files allow for flexible HTML, shortcodes, and PHP.
+- **Content**: Managed by editing the PHP files: `content-desktop.php`, `content-mobile.php`, and `floating-field-content.php`. These files allow for flexible HTML, CSS, shortcodes (using `do_shortcode()`), and basic PHP. See the "Usage" section for more details and an example.
 - **Styling**: Customize color and font size via the admin settings page (**FleK90 > Floating Field Settings**). Further customization can be achieved using the "Custom CSS" field.
 - **Positioning**: Configured on the plugin admin settings page using a 9-point selection system for both desktop and mobile.
 

@@ -1,0 +1,274 @@
+# Copyright (C) 2024 FleK90
+# This file is distributed under the same license as the a-flek90-tool-floating-field package.
+# FleK90 <flek90@aureusz.com>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: a-flek90-tool-floating-field 5.1\n"
+"Report-Msgid-Bugs-To: flek90@aureusz.com\n"
+"POT-Creation-Date: 2024-03-15 10:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: a-flek90-tool-floating-field.php
+msgid "Top Left"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Top Center"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Top Right"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Center Left"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Center Center"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Center Right"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Bottom Left"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Bottom Center"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Bottom Right"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "FleK90 Tools"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "FleK90"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Floating Field Settings"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Floating Field"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "FleK90 Tools Dashboard"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Welcome to the FleK90 Tools main dashboard. Please select a tool from the submenu."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Settings saved successfully!"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "A FleK90 Tool Floating Field"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Settings"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "About"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Display Control"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Enable on Desktop"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Show the floating field on desktop devices."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Enable on Mobile"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Show the floating field on mobile devices."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Content Settings"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Content for the floating field is now managed by editing PHP files directly within the plugin\\'s directory:"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Desktop Content:"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Edit the file"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Mobile Content:"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Fallback Content:"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Position Settings (Simplified)"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Select a general position. Offsets are no longer configured on this page."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Desktop Position"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Mobile Position"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Appearance Settings"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Background Color"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Select background color (default: blue)."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Font Size (px)"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Set font size (12–48px, default: 24px)."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Custom CSS"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Custom CSS Rules"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Add your own CSS rules here. Example: #flek90-floating-container { border: 2px solid red !important; }"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Save Settings"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "About This Plugin"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "This plugin gives the option to create a customizable responsive floating field. Different for desktop and mobile."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Key Features"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Easy content customization via PHP files (content-desktop.php, content-mobile.php, floating-field-content.php)."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Display different content on desktop and mobile devices."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Choose from multiple field positions (e.g., top-center, bottom-right)."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Customize background color (with a color picker) and font size."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Enable or disable the floating field separately for desktop and mobile views."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Option to add custom CSS for further styling tweaks."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Settings link conveniently available in the plugin list."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Modern black and gold themed admin interface for all FleK90 tools."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Screenshots"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Note: Screenshot images (screenshot-1.png, screenshot-2.png, screenshot-3.png) need to be placed in the plugin\\'s assets/images/ directory."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Screenshot 1: Floating Field Example"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Example: Floating field shown on a desktop view."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Screenshot 2: Mobile View Example"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Example: Floating field shown on a mobile view."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "Screenshot 3: Settings Page Example"
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "The admin settings panel for configuring the Floating Field."
+msgstr ""
+
+#: a-flek90-tool-floating-field.php
+msgid "This plugin is developed and maintained by <a href=\"%s\" target=\"_blank\">FleK90</a>."
+msgstr ""
