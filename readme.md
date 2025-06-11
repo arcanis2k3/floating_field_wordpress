@@ -4,7 +4,7 @@ Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
 Tested up to: 6.8.1
-Stable tag: 5.1
+Stable tag: 5.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -103,6 +103,14 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - Tested up to: 6.8.1
 
 == Changelog ==
+
+= 5.2 =
+* Enhancement: Removed blue border from default desktop content block in `content-desktop.php`.
+* Feature: Added option to customize the width of the floating field via admin settings.
+* Enhancement: Improved readability of the example HTML code block in admin settings for dark theme.
+* Enhancement: Improved readability of position dropdowns in admin settings for dark theme.
+* Update: Version number increased to 5.2. Readme and About section updated.
+* Media: Added screenshot of the admin menu structure to the About tab.
 
 = 5.1 =
 * Refactor: Admin settings page now uses a tabbed interface ("Settings" and "About").

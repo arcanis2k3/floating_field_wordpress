@@ -102,21 +102,21 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
 
 /* Ensure select elements are clearly styled within the dark theme */
 .flek90-admin-page select {
-    background-color: #2E3338; /* Slightly different dark shade for select background */
-    color: var(--flek90-light-text);
+    background-color: #333940; /* Was #2E3338 */
+    color: #FFFFFF; /* Was var(--flek90-light-text) */
     border: 1px solid #555;
-    padding: 6px 10px; /* Adequate padding */
-    border-radius: 3px; /* Consistent with other inputs */
-    height: auto; /* Ensure height is not overly constrained by other WP styles */
-    line-height: normal; /* Default line height */
-    /* Note: Custom dropdown arrow styling is complex and browser-dependent, omitted for now. */
+    padding: 8px 12px; /* Slightly increased padding */
+    border-radius: 3px;
+    height: auto;
+    line-height: normal;
 }
 
 /* Styling for options within the select dropdown (browser dependent) */
 /* This is often not very customizable with CSS alone for all browsers */
 .flek90-admin-page select option {
-    background-color: #333940; /* Background for dropdown options */
-    color: var(--flek90-light-text); /* Text color for dropdown options */
+    background-color: #2A2F34; /* Darker than the select box background */
+    color: #FFFFFF; /* Was var(--flek90-light-text) */
+    padding: 4px 8px; /* Add some padding to options if possible (browser dependent) */
 }
 
 .flek90-admin-page hr {
