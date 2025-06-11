@@ -1,5 +1,19 @@
 == Changelog ==
 
+= 5.0.0 - 2025-06-11 =
+* MAJOR REBUILD: Simplified plugin for core functionality and reliability.
+* Changed: All plugin options now use a `_v5` suffix (e.g., `flek90_enable_on_desktop_v5`). Old options are no longer used and are deleted upon saving new settings.
+* Removed: WordPress Customizer integration for position settings. All settings are now exclusively on the plugin's admin page.
+* Removed: X/Y offset controls for positioning from admin page. Positioning is now based on a set of 9 predefined locations (Top/Center/Bottom Left/Center/Right) with default internal offsets.
+* Changed: `generate_position_css()` method renamed to `generate_position_css_v5()` and simplified to work without direct X/Y offset parameters from options.
+* Kept & Verified: Separate "Enable on Desktop" and "Enable on Mobile" controls (using new `_v5` options).
+* Kept & Verified: Separate "Desktop Content" and "Mobile Content" fields (using new `_v5` options).
+* Kept & Verified: Basic positioning options (9 points) for desktop and mobile, managed on the admin page (using new `_v5` options).
+* Kept & Verified: "Custom CSS" textarea for user-defined styles (using new `_v5` option).
+* Kept & Verified: Placeholder support (e.g., %POST_TITLE%).
+* Updated: Plugin version to 5.0.0.
+* Note: The `assets/js/customize-preview.js` file is no longer needed and has been removed from plugin codebase (manual deletion from repo required).
+
 = 4.2.1 - 2025-06-11 =
 * Fixed: Enhanced debug logging for field visibility logic in `render_floating_field()` to help diagnose cases where the field might not be showing.
 * Fixed: Ensured Custom CSS feature is active and included additional debug logging for CSS generation in `enqueue_scripts()`.

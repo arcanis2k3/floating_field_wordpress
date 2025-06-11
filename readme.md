@@ -1,43 +1,44 @@
 === A FleK90 Tool Floating Field ===
 Contributors: FleK90
 Donate link: https://flek90.aureusz.com/
-Tags: floating field, fixed field, custom content, admin settings, shortcodes, page relative, placeholders, top banner, notification bar, customizer, custom css
+Tags: floating field, fixed field, custom content, admin settings, shortcodes, page relative, placeholders, top banner, notification bar, custom css
 Requires at least: 5.0
 Tested up to: 6.8.1
-Stable tag: 4.2.1
+Stable tag: 5.0.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Customizable floating field with separate desktop/mobile content and positions via Admin & Customizer.
+Simplified floating field with admin-page settings for content, 9-point positioning, and custom CSS.
 
-**A FleK90 Tool Floating Field** is a lightweight WordPress plugin that adds a fixed-position floating field to your website's front-end. The field's content is now customizable via a textarea in the plugin's admin settings (Settings > Floating Field Settings), with separate inputs for desktop and mobile devices. It supports plain text, HTML, and special placeholders like `%POST_TITLE%` and `%POST_URL%` to display page-relative information. Positioning (including offsets) for both desktop and mobile can be managed via the WordPress Customizer or the plugin's admin page. Users can also add custom CSS rules for further styling. The `floating-field-content.php` file serves as a fallback if no custom content is set. Manage general settings like enable/disable options for desktop/mobile, background color, and font size via Settings > Floating Field Settings in the admin dashboard. The field supports mobile devices and is compatible with any theme—including older ones like Twenty Ten—without extra plugins.
+**A FleK90 Tool Floating Field (Version 5.0.0)** is a lightweight WordPress plugin, rebuilt for simplicity and core functionality. It adds a fixed-position floating field to your website's front-end. All settings, including content, appearance, and positioning, are now exclusively managed on the plugin's admin page (**Settings > Floating Field Settings**).
+
+The field's content is customizable via textareas, with separate inputs for desktop and mobile devices. It supports plain text, HTML, and special placeholders like `%POST_TITLE%` and `%POST_URL%` to display page-relative information. Positioning is based on a 9-point system (e.g., top-left, bottom-center) for both desktop and mobile views. Users can also add custom CSS rules for further styling. The `floating-field-content.php` file serves as a fallback if no custom content is set.
+
+This version removes the WordPress Customizer integration and X/Y offset controls to streamline configuration.
 
 ## Features
 - **Customizable Floating Field**: The field content is managed via textareas in the admin settings, supporting HTML and placeholders.
 - **Separate Desktop & Mobile Content**: Define different content for desktop and mobile views via the plugin's admin settings page.
-- **Positioning via Customizer & Admin Page**: Control desktop and mobile positions (9 options like top-left, bottom-center) and X/Y offsets through Appearance > Customize > Floating Field Display (with live preview) or directly on the plugin's admin settings page.
+- **Simplified 9-Point Positioning (Admin Page)**: Control desktop and mobile positions using a selection of 9 predefined locations.
 - **Separate Enable/Disable Controls**: Separate 'Enable on Desktop' and 'Enable on Mobile' controls for precise visibility.
 - **Custom CSS Input**: Add custom CSS rules directly via the admin settings page for advanced styling.
-- **Admin Menu Management**: Manage settings (enable/disable, content, background color, font size, positions, custom CSS) via Settings > Floating Field Settings.
+- **Admin Menu Management**: All settings (enable/disable, content, background color, font size, positions, custom CSS) are managed via Settings > Floating Field Settings.
 - **Placeholder Support**: Use `%POST_TITLE%` and `%POST_URL%` in the content textarea for dynamic, page-specific information.
 - **Fallback Content**: `floating-field-content.php` can be used to define fallback content if the admin textarea is empty.
 - **Mobile Support**: Displays correctly on mobile devices with responsive styling and content.
 - **No Dependencies**: Uses core WordPress APIs—no additional plugins required.
-- **Theme Compatibility**: Works with classic and block themes, including Twenty Ten.
+- **Theme Compatibility**: Works with classic and block themes.
 - **User Guidance**: Includes a welcome notice and descriptive settings.
 
 ## Installation
 1. Create a plugin folder named `a-flek90-tool-floating-field` in `wp-content/plugins/`.
 2. Add the following files to the folder:
    - `a-flek90-tool-floating-field.php`
-   - `assets/js/customize-preview.js`
    - `floating-field-content.php` (optional, for fallback content)
 3. Upload the folder to your WordPress site via FTP or zip it and upload via **Plugins > Add New > Upload Plugin**.
 4. Activate the plugin via **Plugins > Installed Plugins**.
-5. After activation, a welcome notice guides you to configure settings:
-   - Go to **Settings > Floating Field Settings** to enable/disable the field, set content, customize styling, set positions, and add custom CSS.
-   - Alternatively, go to **Appearance > Customize > Floating Field Display** to set field positions and offsets with a live preview.
+5. After activation, a welcome notice guides you to configure settings under **Settings > Floating Field Settings**.
 
 ## Usage
 ### For New Users
@@ -51,19 +52,11 @@ Customizable floating field with separate desktop/mobile content and positions v
   - **Enable on Mobile**: Show the field on mobile devices.
   - **Desktop Content**: Enter your desired content for desktop displays (text, HTML). Use `%POST_TITLE%` for the current post/page title and `%POST_URL%` for its URL. This content is also used for mobile if "Mobile Content" is empty.
   - **Mobile Content**: Enter your desired content specifically for mobile displays. If left empty, "Desktop Content" will be used.
-  - **Position Settings**: Configure Desktop Position, Desktop Offset X/Y, Mobile Position, and Mobile Offset X/Y directly on this page. These settings are synchronized with the Customizer.
+  - **Position Settings**: Configure "Desktop Position" and "Mobile Position" using the dropdowns. Each offers 9 predefined screen locations. Offsets are no longer manually configurable.
   - **Background Color**: Select a color (default: blue).
   - **Font Size**: Set the font size (12–48px, default: 24px).
   - **Custom CSS**: Add custom CSS rules for fine-grained style adjustments to the floating field container.
   - Save changes.
-- **Positioning Settings (Alternative - via Customizer):**
-  - Positioning of the floating field can be adjusted via the WordPress Customizer (**Appearance > Customize > Floating Field Display**) which offers a live preview, or directly on the plugin's admin settings page (**Settings > Floating Field Settings**).
-  - In the Customizer:
-    - **Desktop Position**: Choose from 9 screen positions (e.g., Top Center, Bottom Left).
-    - **Desktop Offset X/Y**: Fine-tune the position with X and Y offsets (e.g., `10px`, `5%`).
-    - **Mobile Position**: Choose from 9 screen positions for mobile views.
-    - **Mobile Offset X/Y**: Fine-tune the mobile position with X and Y offsets.
-  - Changes in the Customizer are previewed live and saved by publishing.
 - Further "How to Use" and "About" information can be found on the plugin's admin settings page.
 - Visit the front-end to see the field on desktop and mobile.
 - **Customizing Content (Details):**
@@ -74,7 +67,7 @@ Customizable floating field with separate desktop/mobile content and positions v
 - **Global Field**: Applies to all pages.
 - **Content**: Managed via "Desktop Content" and "Mobile Content" textareas in **Settings > Floating Field Settings**. Supports HTML and page-specific placeholders (`%POST_TITLE%`, `%POST_URL%`). The `floating-field-content.php` file is used as a final fallback if both relevant custom content fields are empty.
 - **Styling**: Customize color and font size via the admin settings page. Further customization can be achieved using the "Custom CSS" field.
-- **Positioning**: Configured via the WordPress Customizer under **Appearance > Customize > Floating Field Display** (recommended for live preview) or on the main plugin admin settings page. Allows separate position and offset settings for desktop and mobile views. For advanced styling, modify the inline CSS within `a-flek90-tool-floating-field.php`.
+- **Positioning**: Configured on the main plugin admin settings page using a 9-point selection system for both desktop and mobile. X/Y offsets are no longer user-configurable.
 
 ## Support
 - **Support**: Report bugs or request features via email to flek90@aureusz.com or flek90@gmail.com.
@@ -83,7 +76,7 @@ Customizable floating field with separate desktop/mobile content and positions v
 ## Notes
 - **Compatibility**: Tested with WordPress 6.0+ and older themes.
 - **Performance**: Lightweight with minimal scripts/styles.
-- **Security**: Uses `wp_kses_post` for sanitizing custom content from admin settings, `sanitize_key` and custom sanitizers for Customizer settings, `wp_strip_all_tags` for the Custom CSS field, and `sanitize_content` method for fallback content.
+- **Security**: Uses `wp_kses_post` for sanitizing custom content from admin settings, `wp_strip_all_tags` for the Custom CSS field, and relevant sanitizers for other settings.
 - **Debugging**: Logs errors to `debug.log` if WP_DEBUG is enabled. Check the browser console and Elements tab for rendering issues.
 - License: GPLv2 or later
 - Tested up to: 6.8.1
