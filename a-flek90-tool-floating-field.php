@@ -83,7 +83,34 @@ class A_FleK90_Tool_Floating_Field {
 
     public function add_admin_menu() {
         $this->debug_log('Adding admin menu page');
-        add_options_page('Floating Field Settings', 'Floating Field Settings', 'manage_options', 'flek90-floating-field-settings', [$this, 'render_admin_page']);
+        // add_options_page('Floating Field Settings', 'Floating Field Settings', 'manage_options', 'flek90-floating-field-settings', [$this, 'render_admin_page']);
+
+        // Add the new top-level "FleK90" menu
+        add_menu_page(
+            __( 'FleK90 Tools', 'a-flek90-tool-floating-field' ), // Page title
+            __( 'FleK90', 'a-flek90-tool-floating-field' ),       // Menu title
+            'manage_options',                                 // Capability
+            'flek90_main_menu_slug',                          // Menu slug (this will be the parent slug)
+            [$this, 'flek90_main_menu_page_html_callback'],   // Callback function for the top-level page content
+            'dashicons-admin-generic',                        // Icon
+            75                                                // Position
+        );
+
+        // Add the "Floating Field Settings" page as a submenu
+        add_submenu_page(
+            'flek90_main_menu_slug',                          // Parent slug
+            __( 'Floating Field Settings', 'a-flek90-tool-floating-field' ), // Page title
+            __( 'Floating Field', 'a-flek90-tool-floating-field' ),          // Menu title for submenu item
+            'manage_options',                                 // Capability
+            'flek90_floating_field_settings_slug',            // Menu slug for this submenu page
+            [$this, 'render_admin_page']                      // Existing callback function to render the settings page
+        );
+    }
+
+    // Placeholder callback for the main menu page
+    public function flek90_main_menu_page_html_callback() {
+        echo '<div class="wrap"><h1>' . esc_html__( 'FleK90 Tools Dashboard', 'a-flek90-tool-floating-field' ) . '</h1>';
+        echo '<p>' . esc_html__( 'Welcome to the FleK90 Tools main dashboard. Please select a tool from the submenu.', 'a-flek90-tool-floating-field' ) . '</p></div>';
     }
 
     public function render_admin_page() {
