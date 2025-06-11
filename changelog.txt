@@ -1,5 +1,60 @@
 == Changelog ==
 
+= 5.0.1 - 2025-06-11 =
+* Fixed: Addressed PHP warning by adding version to `wp_register_style` in `enqueue_scripts()`.
+* Fixed: Corrected `readme.md` "Tested up to" value to use major version (e.g., "6.8").
+* Fixed: Reduced tag count in `readme.md` to meet plugin directory guidelines (max 5 tags).
+* Changed: Centralized plugin version retrieval within the main PHP class for consistency (v5.0.1).
+* Note: This version includes enhanced debug logging for field visibility logic (from V5.0.0 work) to help diagnose issues if the field is not showing. The core functionality remains the same as V5.0.0.
+* Updated: Plugin version to 5.0.1.
+
+= 5.0.0 - 2025-06-11 =
+* MAJOR REBUILD: Simplified plugin for core functionality and reliability.
+* Changed: All plugin options now use a `_v5` suffix (e.g., `flek90_enable_on_desktop_v5`). Old options are no longer used and are deleted upon saving new settings.
+* Removed: WordPress Customizer integration for position settings. All settings are now exclusively on the plugin's admin page.
+* Removed: X/Y offset controls for positioning from admin page. Positioning is now based on a set of 9 predefined locations (Top/Center/Bottom Left/Center/Right) with default internal offsets.
+* Changed: `generate_position_css()` method renamed to `generate_position_css_v5()` and simplified to work without direct X/Y offset parameters from options.
+* Kept & Verified: Separate "Enable on Desktop" and "Enable on Mobile" controls (using new `_v5` options).
+* Kept & Verified: Separate "Desktop Content" and "Mobile Content" fields (using new `_v5` options).
+* Kept & Verified: Basic positioning options (9 points) for desktop and mobile, managed on the admin page (using new `_v5` options).
+* Kept & Verified: "Custom CSS" textarea for user-defined styles (using new `_v5` option).
+* Kept & Verified: Placeholder support (e.g., %POST_TITLE%).
+* Updated: Plugin version to 5.0.0.
+* Note: The `assets/js/customize-preview.js` file is no longer needed and has been removed from plugin codebase (manual deletion from repo required).
+
+= 4.2.1 - 2025-06-11 =
+* Fixed: Enhanced debug logging for field visibility logic in `render_floating_field()` to help diagnose cases where the field might not be showing.
+* Fixed: Ensured Custom CSS feature is active and included additional debug logging for CSS generation in `enqueue_scripts()`.
+* Updated: Plugin version to 4.2.1.
+
+= 4.2.0 - 2025-06-09 =
+* Refactored: Enable/disable logic changed to separate "Enable on Desktop" and "Enable on Mobile" options, removing the previous global enable and "mobile only" toggle.
+* Added: "Custom CSS" section in the admin settings page, allowing users to add their own CSS rules for the floating field.
+* Fixed: Addressed potential field visibility issues by making CSS enqueuing more robust and enhancing debug logs.
+* Verified: Color picker functionality.
+* Updated: Plugin version to 4.2.0.
+
+= 4.1.0 - 2025-06-09 =
+* Added: Position settings (Desktop/Mobile Position, Offsets X/Y) are now also available in the main plugin admin settings page (Settings > Floating Field Settings) in addition to the WordPress Customizer.
+* Updated: Plugin version to 4.1.0.
+* Updated: Admin settings page UI to include the new position controls.
+
+= 4.0.0 - 2025-06-09 =
+* Added: Integration with WordPress Customizer for position control. Users can now set desktop and mobile positions (e.g., top-left, bottom-center) and X/Y offsets for the floating field (Found under Appearance > Customize > Floating Field Display).
+* Added: Separate content fields for desktop and mobile devices in the plugin admin settings (Settings > Floating Field Settings). Mobile devices will use mobile-specific content; if empty, desktop content is used as a fallback.
+* Added: Dynamic CSS generation for field positioning based on Customizer settings.
+* Updated: Plugin version to 4.0.0.
+* Updated: Admin settings page to guide users to the Customizer for position settings and to include the new mobile content field.
+
+= 3.0 - 2025-06-09 =
+* Added: Floating field content is now fully adjustable via a new textarea in the admin settings (Settings > Floating Field Settings).
+* Added: Implemented page-relative content using placeholders (e.g., %POST_TITLE%, %POST_URL%) in the custom content.
+* Removed: All mentions and functionalities related to "bestlinks.fun", including the hardcoded search form in `floating-field-content.php`.
+* Changed: `floating-field-content.php` now serves as a fallback and contains guidance comments.
+* Updated: Plugin version to 3.0.
+* Updated: Admin interface for better usability and clarity regarding content management.
+* Fixed: Corrected admin notice display and plugin row meta links.
+
 = 2.9.1 - 2024-07-29 =
 * Updated plugin author to FleK90 and author URI to https://flek90.aureusz.com.
 * Updated plugin version to 2.9.1.
@@ -15,7 +70,7 @@
 
 2.4: Fixed rendering of the search form’s text field by ensuring proper sanitization. Replaced genericon-search with text fallback ("Search").
 
-2.3: Replaced hardcoded content with a search form submitting to https://portal.bestlinks.fun/. Added styling for the search form.
+2.3: Updated field content to include a search form and added styling.
 
 2.2: Fixed rendering of hardcoded content in floating-field-content.php to ensure HTML is not displayed as raw text. Moved dropdown JavaScript to enqueue_scripts().
 

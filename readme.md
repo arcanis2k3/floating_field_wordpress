@@ -1,75 +1,73 @@
-# A FleK90 Tool Floating Field
-
-Plugin Name: A FleK90 Tool Floating Field
-
-Description: Adds a fixed-position floating field on the front-end with a hardcoded search form (using a bold, black SVG search icon) defined in floating-field-content.php. The form remains in one line on all screen sizes. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
-
-Version: 2.9.1
-
-Author: FleK90
-
-Author URI: https://flek90.aureusz.com
-
-License: GPL-2.0+
-
+=== A FleK90 Tool Floating Field ===
+Contributors: FleK90
+Donate link: https://flek90.aureusz.com/
+Tags: floating field, fixed field, custom content, notification bar, admin settings
+Requires at least: 5.0
+Tested up to: 6.8
+Stable tag: 5.0.1
+Requires PHP: 7.0
+License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Requires at least: 5.0
+Simplified floating field with admin-page settings for content, 9-point positioning, and custom CSS.
 
-Requires PHP: 7.0
+**A FleK90 Tool Floating Field (Version 5.0.0)** is a lightweight WordPress plugin, rebuilt for simplicity and core functionality. It adds a fixed-position floating field to your website's front-end. All settings, including content, appearance, and positioning, are now exclusively managed on the plugin's admin page (**Settings > Floating Field Settings**).
 
-Tested up to: 6.8.1
+The field's content is customizable via textareas, with separate inputs for desktop and mobile devices. It supports plain text, HTML, and special placeholders like `%POST_TITLE%` and `%POST_URL%` to display page-relative information. Positioning is based on a 9-point system (e.g., top-left, bottom-center) for both desktop and mobile views. Users can also add custom CSS rules for further styling. The `floating-field-content.php` file serves as a fallback if no custom content is set.
 
-Stable tag: 2.9.1
-
-
-
-**A FleK90 Tool Floating Field** is a lightweight WordPress plugin that adds a fixed-position floating field to your website's front-end. The field content is hardcoded in a separate file (`floating-field-content.php`) and includes a search form that submits to `https://portal.bestlinks.fun/`. The form features a text input and a submit button with a bold, black SVG search icon, centered in the button, and displayed in a single line on all screen sizes. Manage settings like enable/disable, background color, and font size via Settings > Floating Field Settings in the admin dashboard. The field supports mobile devices and is compatible with any theme—including older ones like Twenty Ten—without extra plugins.
+This version removes the WordPress Customizer integration and X/Y offset controls to streamline configuration.
 
 ## Features
-- **Floating Field with Hardcoded Content**: The field content is defined in `floating-field-content.php`, featuring a search form.
-- **Admin Menu Management**: Manage settings (enable/disable, background color, font size) via Settings > Floating Field Settings.
-- **Search Form**: Includes a search form with a text input and a submit button using a bold, black SVG search icon, centered in the button, always displayed in one line.
-- **Mobile Support**: Displays correctly on mobile devices with responsive styling.
+- **Customizable Floating Field**: The field content is managed via textareas in the admin settings, supporting HTML and placeholders.
+- **Separate Desktop & Mobile Content**: Define different content for desktop and mobile views via the plugin's admin settings page.
+- **Simplified 9-Point Positioning (Admin Page)**: Control desktop and mobile positions using a selection of 9 predefined locations.
+- **Separate Enable/Disable Controls**: Separate 'Enable on Desktop' and 'Enable on Mobile' controls for precise visibility.
+- **Custom CSS Input**: Add custom CSS rules directly via the admin settings page for advanced styling.
+- **Admin Menu Management**: All settings (enable/disable, content, background color, font size, positions, custom CSS) are managed via Settings > Floating Field Settings.
+- **Placeholder Support**: Use `%POST_TITLE%` and `%POST_URL%` in the content textarea for dynamic, page-specific information.
+- **Fallback Content**: `floating-field-content.php` can be used to define fallback content if the admin textarea is empty.
+- **Mobile Support**: Displays correctly on mobile devices with responsive styling and content.
 - **No Dependencies**: Uses core WordPress APIs—no additional plugins required.
-- **Theme Compatibility**: Works with classic and block themes, including Twenty Ten.
-- **User Guidance**: Includes a "View Details" section and a welcome notice.
+- **Theme Compatibility**: Works with classic and block themes.
+- **User Guidance**: Includes a welcome notice and descriptive settings.
 
 ## Installation
 1. Create a plugin folder named `a-flek90-tool-floating-field` in `wp-content/plugins/`.
 2. Add the following files to the folder:
    - `a-flek90-tool-floating-field.php`
-   - `floating-field-content.php`
+   - `floating-field-content.php` (optional, for fallback content)
 3. Upload the folder to your WordPress site via FTP or zip it and upload via **Plugins > Add New > Upload Plugin**.
 4. Activate the plugin via **Plugins > Installed Plugins**.
-5. After activation, a welcome notice guides you to configure settings:
-   - Go to **Settings > Floating Field Settings** to enable/disable the field and customize styling.
+5. After activation, a welcome notice guides you to configure settings under **Settings > Floating Field Settings**.
 
 ## Usage
 ### For New Users
-- On the **Plugins** page, find **A FleK90 Tool Floating Field** and click **View Details** (next to **Activate**).
-- Learn about the plugin: a fixed-position field with a hardcoded search form, managed via an admin menu page, compatible with any theme.
-- Activate to start—no extra setup needed.
+- Activate the plugin.
+- A welcome notice will guide you to the settings page.
 
 ### For Installed Users
 - After activation, a welcome notice links to the settings page.
-- **Managing Settings**:
-  - Go to **Settings > Floating Field Settings**.
-  - **Enable Floating Field**: Check to display the field on the front-end.
-  - **Show Only on Mobile Devices**: Option to restrict display to mobile/tablets or show on all devices.
+- **Managing Settings (via Admin Page - Settings > Floating Field Settings):**
+  - **Enable on Desktop**: Show the field on desktop devices.
+  - **Enable on Mobile**: Show the field on mobile devices.
+  - **Desktop Content**: Enter your desired content for desktop displays (text, HTML). Use `%POST_TITLE%` for the current post/page title and `%POST_URL%` for its URL. This content is also used for mobile if "Mobile Content" is empty.
+  - **Mobile Content**: Enter your desired content specifically for mobile displays. If left empty, "Desktop Content" will be used.
+  - **Position Settings**: Configure "Desktop Position" and "Mobile Position" using the dropdowns. Each offers 9 predefined screen locations. Offsets are no longer manually configurable.
   - **Background Color**: Select a color (default: blue).
   - **Font Size**: Set the font size (12–48px, default: 24px).
+  - **Custom CSS**: Add custom CSS rules for fine-grained style adjustments to the floating field container.
   - Save changes.
-- Further "How to Use" and "About" information can be found on the same page, below these settings.
+- Further "How to Use" and "About" information can be found on the plugin's admin settings page.
 - Visit the front-end to see the field on desktop and mobile.
-- **Customizing Content**:
-  - The field content is hardcoded in `floating-field-content.php`. Edit this file to change the content (e.g., modify the search form, add HTML).
+- **Customizing Content (Details):**
+  - The primary way to set the field content is via the **Desktop Content** and **Mobile Content** textareas found under **Settings > Floating Field Settings**. This allows for dynamic text, HTML, and page-specific placeholders.
+  - The `floating-field-content.php` file can still be edited to change the fallback content if both the admin settings for "Desktop Content" and "Mobile Content" (for the respective view) are left empty.
 
 ## Configuration
-- **Global Field**: Applies to all pages. For page-specific fields, contact support.
-- **Content**: Hardcoded in `floating-field-content.php`. Includes a search form submitting to `https://portal.bestlinks.fun/`. Edit the file to customize.
-- **Styling**: Customize color and font size via the admin settings page. The search form is styled to match the block editor aesthetic, with a bold, black SVG search icon. For advanced styling, modify the inline CSS (see code).
-- **Positioning**: Fixed position at the top center of the page.
+- **Global Field**: Applies to all pages.
+- **Content**: Managed via "Desktop Content" and "Mobile Content" textareas in **Settings > Floating Field Settings**. Supports HTML and page-specific placeholders (`%POST_TITLE%`, `%POST_URL%`). The `floating-field-content.php` file is used as a final fallback if both relevant custom content fields are empty.
+- **Styling**: Customize color and font size via the admin settings page. Further customization can be achieved using the "Custom CSS" field.
+- **Positioning**: Configured on the main plugin admin settings page using a 9-point selection system for both desktop and mobile. X/Y offsets are no longer user-configurable.
 
 ## Support
 - **Support**: Report bugs or request features via email to flek90@aureusz.com or flek90@gmail.com.
@@ -78,8 +76,7 @@ Stable tag: 2.9.1
 ## Notes
 - **Compatibility**: Tested with WordPress 6.0+ and older themes.
 - **Performance**: Lightweight with minimal scripts/styles.
-- **Security**: Sanitizes HTML in the hardcoded file.
+- **Security**: Uses `wp_kses_post` for sanitizing custom content from admin settings, `wp_strip_all_tags` for the Custom CSS field, and relevant sanitizers for other settings.
 - **Debugging**: Logs errors to `debug.log` if WP_DEBUG is enabled. Check the browser console and Elements tab for rendering issues.
-- License: GPLv 2.0
-- Stable Tag /main/
+- License: GPLv2 or later
 - Tested up to: 6.8.1
