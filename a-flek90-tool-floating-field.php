@@ -93,8 +93,8 @@ class A_FleK90_Tool_Floating_Field {
         if (isset($_POST['flek90_save_settings']) && check_admin_referer('flek90_save_settings_action', 'flek90_save_settings_nonce')) {
             update_option('flek90_enable_on_desktop_v5', isset($_POST['flek90_enable_on_desktop_v5']) ? '1' : '0');
             update_option('flek90_enable_on_mobile_v5', isset($_POST['flek90_enable_on_mobile_v5']) ? '1' : '0');
-            if (isset($_POST['flek90_desktop_content_v5'])) { update_option('flek90_desktop_content_v5', wp_kses_post(wp_unslash($_POST['flek90_desktop_content_v5']))); }
-            if (isset($_POST['flek90_mobile_content_v5'])) { update_option('flek90_mobile_content_v5', wp_kses_post(wp_unslash($_POST['flek90_mobile_content_v5']))); }
+            // if (isset($_POST['flek90_desktop_content_v5'])) { update_option('flek90_desktop_content_v5', wp_kses_post(wp_unslash($_POST['flek90_desktop_content_v5']))); }
+            // if (isset($_POST['flek90_mobile_content_v5'])) { update_option('flek90_mobile_content_v5', wp_kses_post(wp_unslash($_POST['flek90_mobile_content_v5']))); }
             if (isset($_POST['flek90_desktop_position_v5'])) { update_option('flek90_desktop_position_v5', self::sanitize_position_setting(wp_unslash($_POST['flek90_desktop_position_v5']))); }
             if (isset($_POST['flek90_mobile_position_v5'])) { update_option('flek90_mobile_position_v5', self::sanitize_position_setting(wp_unslash($_POST['flek90_mobile_position_v5']))); }
             if (isset($_POST['flek90_background_color_v5'])) { update_option('flek90_background_color_v5', sanitize_hex_color(wp_unslash($_POST['flek90_background_color_v5'])));}
@@ -114,8 +114,8 @@ class A_FleK90_Tool_Floating_Field {
 
         $enable_on_desktop_v5 = get_option('flek90_enable_on_desktop_v5', '1');
         $enable_on_mobile_v5 = get_option('flek90_enable_on_mobile_v5', '1');
-        $desktop_content_v5 = get_option('flek90_desktop_content_v5', 'Desktop Content V5: %POST_TITLE%');
-        $mobile_content_v5 = get_option('flek90_mobile_content_v5', 'Mobile Content V5: %POST_TITLE%');
+        // $desktop_content_v5 = get_option('flek90_desktop_content_v5', 'Desktop Content V5: %POST_TITLE%');
+        // $mobile_content_v5 = get_option('flek90_mobile_content_v5', 'Mobile Content V5: %POST_TITLE%');
         $desktop_position_v5 = get_option('flek90_desktop_position_v5', 'top-center');
         $mobile_position_v5 = get_option('flek90_mobile_position_v5', 'top-center');
         $background_color_v5 = get_option('flek90_background_color_v5', '#0073aa');
@@ -140,8 +140,25 @@ class A_FleK90_Tool_Floating_Field {
                     <tr><th scope="row"><label for="flek90_enable_on_mobile_v5">Enable on Mobile</label></th><td><input type="checkbox" id="flek90_enable_on_mobile_v5" name="flek90_enable_on_mobile_v5" value="1" <?php checked($enable_on_mobile_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on mobile devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
 
                     <tr valign="top"><td colspan="2"><hr><h3>Content Settings</h3></td></tr>
+                    <tr valign="top">
+                        <td colspan="2" style="padding-top: 0;">
+                            <p class="description">
+                                Content for the floating field is now managed by editing PHP files directly within the plugin's directory:
+                            </p>
+                            <ul style="list-style: disc; margin-left: 20px;">
+                                <li><strong>Desktop Content:</strong> Edit the file <code>content-desktop.php</code>.</li>
+                                <li><strong>Mobile Content:</strong> Edit the file <code>content-mobile.php</code>.</li>
+                                <li><strong>Fallback Content:</strong> Edit the file <code>floating-field-content.php</code>. This file is used if the device-specific file (desktop or mobile) is not found or is empty.</li>
+                            </ul>
+                            <p class="description">
+                                You can include any HTML, shortcodes, or plain text in these files. Remember that PHP execution is not recommended directly within these content files for security reasons, beyond simple includes or template tags if absolutely necessary and understood.
+                            </p>
+                        </td>
+                    </tr>
+                    <?php /* ?>
                     <tr><th scope="row"><label for="flek90_desktop_content_v5">Desktop Content</label></th><td><textarea id="flek90_desktop_content_v5" name="flek90_desktop_content_v5" rows="5" cols="50" class="large-text"><?php echo esc_textarea($desktop_content_v5); ?></textarea><p class="description">Enter content for desktop. If mobile content below is empty, this will also be used for mobile. Placeholders: <code>%POST_TITLE%</code>, <code>%POST_URL%</code>.</p></td></tr>
                     <tr><th scope="row"><label for="flek90_mobile_content_v5">Mobile Content</label></th><td><textarea id="flek90_mobile_content_v5" name="flek90_mobile_content_v5" rows="5" cols="50" class="large-text"><?php echo esc_textarea($mobile_content_v5); ?></textarea><p class="description">Enter content for mobile devices. If empty, desktop content will be used. Supports HTML and placeholders: <code>%POST_TITLE%</code>, <code>%POST_URL%</code>.</p></td></tr>
+                    <?php */ ?>
 
                     <tr valign="top"><td colspan="2"><hr><h3>Position Settings (Simplified)</h3><p class="description">Select a general position. Offsets are no longer configured on this page.</p></td></tr>
                     <tr><th scope="row"><label for="flek90_desktop_position_v5">Desktop Position</label></th><td><select id="flek90_desktop_position_v5" name="flek90_desktop_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($desktop_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
@@ -237,7 +254,105 @@ class A_FleK90_Tool_Floating_Field {
         wp_add_inline_style('flek90-floating-field-inline', $css);
     }
 
-    public function render_floating_field() { /* ... same as previous correct version ... */ }
+public function render_floating_field() {
+    \$this->debug_log('Rendering floating field (V5.1 - Device Specific Content)');
+
+    \$is_mobile = wp_is_mobile();
+    \$enabled_on_desktop = get_option('flek90_enable_on_desktop_v5', '1');
+    \$enabled_on_mobile = get_option('flek90_enable_on_mobile_v5', '1');
+
+    if ((\$is_mobile && \$enabled_on_mobile !== '1') || (!\$is_mobile && \$enabled_on_desktop !== '1')) {
+        \$this->debug_log('Floating field display check: Condition not met for current device. Mobile: ' . (\$is_mobile ? 'Yes' : 'No') . ', Desktop Enabled: ' . \$enabled_on_desktop . ', Mobile Enabled: ' . \$enabled_on_mobile . '. Field will NOT render.');
+        return;
+    }
+
+    if (\$enabled_on_desktop !== '1' && \$enabled_on_mobile !== '1') {
+         \$this->debug_log('Floating field display check: Globally disabled (both desktop and mobile are OFF). Field will NOT render.');
+         return;
+    }
+
+    \$this->debug_log('Floating field display check: Conditions met. Proceeding to render.');
+
+    \$content = '';
+    \$loaded_file_path = '';
+
+    if (\$is_mobile) {
+        \$specific_file_path = plugin_dir_path(__FILE__) . 'content-mobile.php';
+        if (file_exists(\$specific_file_path)) {
+            \$this->debug_log('Attempting to load mobile content from: ' . \$specific_file_path);
+            ob_start();
+            include \$specific_file_path;
+            \$content = ob_get_clean();
+            \$loaded_file_path = 'content-mobile.php';
+            if (empty(trim(\$content))) {
+                \$this->debug_log('Mobile content file (' . \$loaded_file_path . ') is empty. Clearing content to trigger fallback.');
+                \$content = ''; // Ensure fallback if file is empty
+            }
+        } else {
+            \$this->debug_log('Mobile content file not found: ' . \$specific_file_path);
+        }
+    } else {
+        \$specific_file_path = plugin_dir_path(__FILE__) . 'content-desktop.php';
+        if (file_exists(\$specific_file_path)) {
+            \$this->debug_log('Attempting to load desktop content from: ' . \$specific_file_path);
+            ob_start();
+            include \$specific_file_path;
+            \$content = ob_get_clean();
+            \$loaded_file_path = 'content-desktop.php';
+            if (empty(trim(\$content))) {
+                \$this->debug_log('Desktop content file (' . \$loaded_file_path . ') is empty. Clearing content to trigger fallback.');
+                \$content = ''; // Ensure fallback if file is empty
+            }
+        } else {
+            \$this->debug_log('Desktop content file not found: ' . \$specific_file_path);
+        }
+    }
+
+    // Fallback to floating-field-content.php if specific content is empty or file not found
+    if (empty(trim(\$content))) {
+        \$this->debug_log('Specific content not loaded or empty. Attempting fallback to floating-field-content.php.');
+        \$fallback_file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
+        if (file_exists(\$fallback_file_path)) {
+            ob_start();
+            include \$fallback_file_path;
+            \$content = ob_get_clean();
+            \$loaded_file_path = 'floating-field-content.php (fallback)';
+            if (empty(trim(\$content))) {
+                \$this->debug_log('Fallback content file (floating-field-content.php) is also empty.');
+                \$content = ''; // Still empty
+            }
+        } else {
+            \$this->debug_log('Fallback content file (floating-field-content.php) not found.');
+        }
+    }
+
+    if (!empty(trim(\$content))) {
+         \$this->debug_log('Captured content from ' . \$loaded_file_path . '. Raw length: ' . strlen(\$content));
+    } else {
+        \$this->debug_log('All content sources (specific, fallback) are empty or not found. Using default error/empty message.');
+        // Check if the initial specific file was supposed to exist but was empty, or just not found
+        \$main_content_file_to_check = \$is_mobile ? 'content-mobile.php' : 'content-desktop.php';
+        if (!file_exists(plugin_dir_path(__FILE__) . \$main_content_file_to_check) && !file_exists(plugin_dir_path(__FILE__) . 'floating-field-content.php')) {
+            echo '<div id="flek90-floating-container" style="display:block !important; visibility:visible !important; opacity:1 !important; position:fixed !important; top: 10px; left: 10px; background:red !important; color:white !important; z-index: 100000 !important; padding: 10px !important;"><p>Error: Content files (e.g., ' . esc_html(\$main_content_file_to_check) . ' or floating-field-content.php) not found.</p></div>';
+            return;
+        } else {
+            \$content = '<p style="margin:0; padding:5px;">Floating field content is empty. Please edit the relevant content file (e.g., ' . esc_html(\$main_content_file_to_check) . ' or floating-field-content.php) to add your desired HTML.</p>';
+             \$this->debug_log('Using placeholder message for empty content.');
+        }
+    }
+
+    \$content = do_blocks(\$content);
+    \$content = do_shortcode(\$content);
+    \$content = \$this->sanitize_content(\$content);
+
+    \$this->debug_log('Processed and sanitized content. Final length: ' . strlen(\$content));
+
+    ?>
+    <div id="flek90-floating-container">
+        <div id="flek90-field-content"><?php echo \$content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is sanitized by \$this->sanitize_content ?></div>
+    </div>
+    <?php
+}
     public function add_plugin_row_meta($links, $file) { /* ... */ return $links;}
     public function display_admin_notice() { /* ... */ }
     public function handle_notice_dismissal() { /* ... */ }
