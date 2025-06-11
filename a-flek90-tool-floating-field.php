@@ -255,101 +255,101 @@ class A_FleK90_Tool_Floating_Field {
     }
 
 public function render_floating_field() {
-    \$this->debug_log('Rendering floating field (V5.1 - Device Specific Content)');
+    $this->debug_log('Rendering floating field (V5.1 - Device Specific Content)');
 
-    \$is_mobile = wp_is_mobile();
-    \$enabled_on_desktop = get_option('flek90_enable_on_desktop_v5', '1');
-    \$enabled_on_mobile = get_option('flek90_enable_on_mobile_v5', '1');
+    $is_mobile = wp_is_mobile();
+    $enabled_on_desktop = get_option('flek90_enable_on_desktop_v5', '1');
+    $enabled_on_mobile = get_option('flek90_enable_on_mobile_v5', '1');
 
-    if ((\$is_mobile && \$enabled_on_mobile !== '1') || (!\$is_mobile && \$enabled_on_desktop !== '1')) {
-        \$this->debug_log('Floating field display check: Condition not met for current device. Mobile: ' . (\$is_mobile ? 'Yes' : 'No') . ', Desktop Enabled: ' . \$enabled_on_desktop . ', Mobile Enabled: ' . \$enabled_on_mobile . '. Field will NOT render.');
+    if (($is_mobile && $enabled_on_mobile !== '1') || (!$is_mobile && $enabled_on_desktop !== '1')) {
+        $this->debug_log('Floating field display check: Condition not met for current device. Mobile: ' . ($is_mobile ? 'Yes' : 'No') . ', Desktop Enabled: ' . $enabled_on_desktop . ', Mobile Enabled: ' . $enabled_on_mobile . '. Field will NOT render.');
         return;
     }
 
-    if (\$enabled_on_desktop !== '1' && \$enabled_on_mobile !== '1') {
-         \$this->debug_log('Floating field display check: Globally disabled (both desktop and mobile are OFF). Field will NOT render.');
+    if ($enabled_on_desktop !== '1' && $enabled_on_mobile !== '1') {
+         $this->debug_log('Floating field display check: Globally disabled (both desktop and mobile are OFF). Field will NOT render.');
          return;
     }
 
-    \$this->debug_log('Floating field display check: Conditions met. Proceeding to render.');
+    $this->debug_log('Floating field display check: Conditions met. Proceeding to render.');
 
-    \$content = '';
-    \$loaded_file_path = '';
+    $content = '';
+    $loaded_file_path = '';
 
-    if (\$is_mobile) {
-        \$specific_file_path = plugin_dir_path(__FILE__) . 'content-mobile.php';
-        if (file_exists(\$specific_file_path)) {
-            \$this->debug_log('Attempting to load mobile content from: ' . \$specific_file_path);
+    if ($is_mobile) {
+        $specific_file_path = plugin_dir_path(__FILE__) . 'content-mobile.php';
+        if (file_exists($specific_file_path)) {
+            $this->debug_log('Attempting to load mobile content from: ' . $specific_file_path);
             ob_start();
-            include \$specific_file_path;
-            \$content = ob_get_clean();
-            \$loaded_file_path = 'content-mobile.php';
-            if (empty(trim(\$content))) {
-                \$this->debug_log('Mobile content file (' . \$loaded_file_path . ') is empty. Clearing content to trigger fallback.');
-                \$content = ''; // Ensure fallback if file is empty
+            include $specific_file_path;
+            $content = ob_get_clean();
+            $loaded_file_path = 'content-mobile.php';
+            if (empty(trim($content))) {
+                $this->debug_log('Mobile content file (' . $loaded_file_path . ') is empty. Clearing content to trigger fallback.');
+                $content = ''; // Ensure fallback if file is empty
             }
         } else {
-            \$this->debug_log('Mobile content file not found: ' . \$specific_file_path);
+            $this->debug_log('Mobile content file not found: ' . $specific_file_path);
         }
     } else {
-        \$specific_file_path = plugin_dir_path(__FILE__) . 'content-desktop.php';
-        if (file_exists(\$specific_file_path)) {
-            \$this->debug_log('Attempting to load desktop content from: ' . \$specific_file_path);
+        $specific_file_path = plugin_dir_path(__FILE__) . 'content-desktop.php';
+        if (file_exists($specific_file_path)) {
+            $this->debug_log('Attempting to load desktop content from: ' . $specific_file_path);
             ob_start();
-            include \$specific_file_path;
-            \$content = ob_get_clean();
-            \$loaded_file_path = 'content-desktop.php';
-            if (empty(trim(\$content))) {
-                \$this->debug_log('Desktop content file (' . \$loaded_file_path . ') is empty. Clearing content to trigger fallback.');
-                \$content = ''; // Ensure fallback if file is empty
+            include $specific_file_path;
+            $content = ob_get_clean();
+            $loaded_file_path = 'content-desktop.php';
+            if (empty(trim($content))) {
+                $this->debug_log('Desktop content file (' . $loaded_file_path . ') is empty. Clearing content to trigger fallback.');
+                $content = ''; // Ensure fallback if file is empty
             }
         } else {
-            \$this->debug_log('Desktop content file not found: ' . \$specific_file_path);
+            $this->debug_log('Desktop content file not found: ' . $specific_file_path);
         }
     }
 
     // Fallback to floating-field-content.php if specific content is empty or file not found
-    if (empty(trim(\$content))) {
-        \$this->debug_log('Specific content not loaded or empty. Attempting fallback to floating-field-content.php.');
-        \$fallback_file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
-        if (file_exists(\$fallback_file_path)) {
+    if (empty(trim($content))) {
+        $this->debug_log('Specific content not loaded or empty. Attempting fallback to floating-field-content.php.');
+        $fallback_file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
+        if (file_exists($fallback_file_path)) {
             ob_start();
-            include \$fallback_file_path;
-            \$content = ob_get_clean();
-            \$loaded_file_path = 'floating-field-content.php (fallback)';
-            if (empty(trim(\$content))) {
-                \$this->debug_log('Fallback content file (floating-field-content.php) is also empty.');
-                \$content = ''; // Still empty
+            include $fallback_file_path;
+            $content = ob_get_clean();
+            $loaded_file_path = 'floating-field-content.php (fallback)';
+            if (empty(trim($content))) {
+                $this->debug_log('Fallback content file (floating-field-content.php) is also empty.');
+                $content = ''; // Still empty
             }
         } else {
-            \$this->debug_log('Fallback content file (floating-field-content.php) not found.');
+            $this->debug_log('Fallback content file (floating-field-content.php) not found.');
         }
     }
 
-    if (!empty(trim(\$content))) {
-         \$this->debug_log('Captured content from ' . \$loaded_file_path . '. Raw length: ' . strlen(\$content));
+    if (!empty(trim($content))) {
+         $this->debug_log('Captured content from ' . $loaded_file_path . '. Raw length: ' . strlen($content));
     } else {
-        \$this->debug_log('All content sources (specific, fallback) are empty or not found. Using default error/empty message.');
+        $this->debug_log('All content sources (specific, fallback) are empty or not found. Using default error/empty message.');
         // Check if the initial specific file was supposed to exist but was empty, or just not found
-        \$main_content_file_to_check = \$is_mobile ? 'content-mobile.php' : 'content-desktop.php';
-        if (!file_exists(plugin_dir_path(__FILE__) . \$main_content_file_to_check) && !file_exists(plugin_dir_path(__FILE__) . 'floating-field-content.php')) {
-            echo '<div id="flek90-floating-container" style="display:block !important; visibility:visible !important; opacity:1 !important; position:fixed !important; top: 10px; left: 10px; background:red !important; color:white !important; z-index: 100000 !important; padding: 10px !important;"><p>Error: Content files (e.g., ' . esc_html(\$main_content_file_to_check) . ' or floating-field-content.php) not found.</p></div>';
+        $main_content_file_to_check = $is_mobile ? 'content-mobile.php' : 'content-desktop.php';
+        if (!file_exists(plugin_dir_path(__FILE__) . $main_content_file_to_check) && !file_exists(plugin_dir_path(__FILE__) . 'floating-field-content.php')) {
+            echo '<div id="flek90-floating-container" style="display:block !important; visibility:visible !important; opacity:1 !important; position:fixed !important; top: 10px; left: 10px; background:red !important; color:white !important; z-index: 100000 !important; padding: 10px !important;"><p>Error: Content files (e.g., ' . esc_html($main_content_file_to_check) . ' or floating-field-content.php) not found.</p></div>';
             return;
         } else {
-            \$content = '<p style="margin:0; padding:5px;">Floating field content is empty. Please edit the relevant content file (e.g., ' . esc_html(\$main_content_file_to_check) . ' or floating-field-content.php) to add your desired HTML.</p>';
-             \$this->debug_log('Using placeholder message for empty content.');
+            $content = '<p style="margin:0; padding:5px;">Floating field content is empty. Please edit the relevant content file (e.g., ' . esc_html($main_content_file_to_check) . ' or floating-field-content.php) to add your desired HTML.</p>';
+             $this->debug_log('Using placeholder message for empty content.');
         }
     }
 
-    \$content = do_blocks(\$content);
-    \$content = do_shortcode(\$content);
-    \$content = \$this->sanitize_content(\$content);
+    $content = do_blocks($content);
+    $content = do_shortcode($content);
+    $content = $this->sanitize_content($content);
 
-    \$this->debug_log('Processed and sanitized content. Final length: ' . strlen(\$content));
+    $this->debug_log('Processed and sanitized content. Final length: ' . strlen($content));
 
     ?>
     <div id="flek90-floating-container">
-        <div id="flek90-field-content"><?php echo \$content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is sanitized by \$this->sanitize_content ?></div>
+        <div id="flek90-field-content"><?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is sanitized by $this->sanitize_content ?></div>
     </div>
     <?php
 }
