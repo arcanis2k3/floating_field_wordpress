@@ -128,9 +128,12 @@ class A_FleK90_Tool_Floating_Field {
         if (!current_user_can('manage_options')) {
             wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'a-flek90-tool-floating-field'));
         }
-        // Added flek90-admin-page class for styling
-        echo '<div class="wrap flek90-admin-page"><h1>' . esc_html__( 'FleK90 Tools Dashboard', 'a-flek90-tool-floating-field' ) . '</h1>';
-        echo '<p>' . esc_html__( 'Welcome to the FleK90 Tools main dashboard. Please select a tool from the submenu.', 'a-flek90-tool-floating-field' ) . '</p></div>';
+        // Structure changed for precise theme scoping
+        echo '<div class="wrap"><h1>' . esc_html__( 'FleK90 Tools Dashboard', 'a-flek90-tool-floating-field' ) . '</h1>';
+        echo '<div class="flek90-admin-page">'; // Open themed div
+        echo '<p>' . esc_html__( 'Welcome to the FleK90 Tools main dashboard. Please select a tool from the submenu.', 'a-flek90-tool-floating-field' ) . '</p>';
+        echo '</div>'; // Close .flek90-admin-page
+        echo '</div>'; // Close .wrap
     }
 
     public function render_admin_page() {
@@ -167,7 +170,7 @@ class A_FleK90_Tool_Floating_Field {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'a-flek90-tool-floating-field') . '</p></div>';
         }
         ?>
-        <div class="wrap flek90-admin-page">
+        <div class="wrap"> <!-- Removed flek90-admin-page class from here -->
             <h1><?php esc_html_e('A FleK90 Tool Floating Field', 'a-flek90-tool-floating-field'); ?> - v<?php echo esc_html($plugin_version_display); ?></h1>
 
             <h2 class="nav-tab-wrapper">
@@ -179,10 +182,11 @@ class A_FleK90_Tool_Floating_Field {
                 </a>
             </h2>
 
-            <div class="tab-content" style="padding-top: 20px;"> <!-- Added padding-top for spacing after tabs -->
-                <?php if ($active_tab === 'settings') : ?>
-                    <?php
-                    // Retrieve settings for the form
+            <div class="flek90-admin-page"> <!-- Added flek90-admin-page wrapper here -->
+                <div class="tab-content" style="padding-top: 20px;">
+                    <?php if ($active_tab === 'settings') : ?>
+                        <?php
+                        // Retrieve settings for the form
                     $enable_on_desktop_v5 = get_option('flek90_enable_on_desktop_v5', '1');
                     $enable_on_mobile_v5 = get_option('flek90_enable_on_mobile_v5', '1');
                     $desktop_position_v5 = get_option('flek90_desktop_position_v5', 'top-center');
@@ -288,7 +292,8 @@ class A_FleK90_Tool_Floating_Field {
                     ?></p>
 
                 <?php endif; ?>
-            </div> <!-- end .tab-content -->
+                </div> <!-- end .tab-content -->
+            </div> <!-- end .flek90-admin-page -->
         </div> <!-- end .wrap -->
         <?php
     }
