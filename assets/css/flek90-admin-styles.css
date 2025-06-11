@@ -1,0 +1,127 @@
+/* FleK90 Admin Theme - Black and Gold */
+:root {
+    --flek90-gold: #FFD700;
+    --flek90-dark-bg: #23282D;
+    --flek90-light-text: #E0E0E0;
+    --flek90-dark-text: #1A1A1A;
+}
+
+/* FleK90 Menu Styling (Ensure correct admin menu body classes or IDs are used if available) */
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-image::before {
+    color: var(--flek90-light-text);
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp-menu-image::before {
+    color: var(--flek90-gold);
+}
+
+/* Current/Active Top Level Menu Item */
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu,
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current { /* For when top level itself is current */
+    background-color: var(--flek90-gold);
+    color: var(--flek90-dark-text);
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image::before,
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current .wp-menu-image::before {
+    color: var(--flek90-dark-text);
+}
+
+/* Submenu Items */
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu a {
+    color: var(--flek90-light-text);
+}
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu a:hover {
+    color: var(--flek90-gold);
+}
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu li.current a,
+body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu li.current a:hover {
+    color: var(--flek90-gold);
+    font-weight: bold;
+}
+
+/* Apply dark background to FleK90 Admin Pages */
+.flek90-admin-page {
+    background-color: var(--flek90-dark-bg);
+    color: var(--flek90-light-text);
+    padding: 10px 20px; /* Add some padding */
+    border-radius: 4px; /* Optional: rounded corners for the content area */
+}
+.flek90-admin-page h1,
+.flek90-admin-page h2,
+.flek90-admin-page h3,
+.flek90-admin-page h4,
+.flek90-admin-page h5,
+.flek90-admin-page h6 {
+    color: var(--flek90-gold);
+}
+.flek90-admin-page p,
+.flek90-admin-page .description,
+.flek90-admin-page label {
+    color: var(--flek90-light-text);
+}
+.flek90-admin-page .form-table th {
+    color: var(--flek90-light-text);
+}
+.flek90-admin-page .button-primary {
+    background: var(--flek90-gold) !important;
+    border-color: var(--flek90-gold) !important;
+    color: var(--flek90-dark-text) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+.flek90-admin-page .button-primary:hover,
+.flek90-admin-page .button-primary:focus {
+    background: #e6c300 !important; /* Darker gold */
+    border-color: #cca700 !important; /* Slightly darker border */
+    color: var(--flek90-dark-text) !important;
+}
+.flek90-admin-page input[type="text"],
+.flek90-admin-page input[type="number"],
+.flek90-admin-page textarea,
+.flek90-admin-page select {
+    background-color: #333940; /* Darker input background */
+    color: var(--flek90-light-text);
+    border: 1px solid #555;
+}
+.flek90-admin-page input[type="text"]:focus,
+.flek90-admin-page input[type="number"]:focus,
+.flek90-admin-page textarea:focus {
+    border-color: var(--flek90-gold);
+    box-shadow: 0 0 0 1px var(--flek90-gold);
+}
+.flek90-admin-page hr {
+    border-color: #444; /* Darker hr */
+}
+
+/* Styles for Screenshot Gallery on Plugin Details Page */
+.flek90-admin-page .flek90-screenshots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between screenshot items */
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.flek90-admin-page .flek90-screenshot {
+    flex: 1 1 300px; /* Allows items to grow/shrink, with a base width around 300px */
+    border: 1px solid #444; /* Darker border, fitting the dark theme */
+    padding: 15px;
+    background-color: #333940; /* Background for the screenshot box, slightly lighter than page bg */
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.flek90-admin-page .flek90-screenshot img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #555; /* Border around the image itself */
+    margin-bottom: 10px;
+}
+.flek90-admin-page .flek90-screenshot p { /* Caption style */
+    font-size: 0.9em;
+    color: var(--flek90-light-text); /* Uses the light text color from the theme */
+    margin-top: 5px;
+    margin-bottom: 0;
+}
