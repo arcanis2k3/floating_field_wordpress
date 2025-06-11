@@ -7,6 +7,7 @@
 }
 
 /* FleK90 Menu Styling (Ensure correct admin menu body classes or IDs are used if available) */
+/*
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-name,
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-image::before {
     color: var(--flek90-light-text);
@@ -16,10 +17,12 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp-menu-image::before {
     color: var(--flek90-gold);
 }
-
+*/
 /* Current/Active Top Level Menu Item */
+/*
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu,
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current { /* For when top level itself is current */
+/*
     background-color: var(--flek90-gold);
     color: var(--flek90-dark-text);
 }
@@ -28,8 +31,9 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-cu
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current .wp-menu-image::before {
     color: var(--flek90-dark-text);
 }
-
+*/
 /* Submenu Items */
+/*
 body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu a {
     color: var(--flek90-light-text);
 }
@@ -41,6 +45,7 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
     color: var(--flek90-gold);
     font-weight: bold;
 }
+*/
 
 /* Apply dark background to FleK90 Admin Pages */
 .flek90-admin-page {
