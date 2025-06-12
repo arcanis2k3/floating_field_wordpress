@@ -3,7 +3,7 @@ Contributors: FleK90
 Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
-Tested up to: 6.8.1
+Tested up to: 6.8
 Stable tag: 5.5
 Requires PHP: 7.0
 License: GPLv2 or later
