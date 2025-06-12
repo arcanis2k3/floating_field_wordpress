@@ -11,7 +11,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Simplified floating field with admin-page settings for content, 9-point positioning, and custom CSS. Content is managed by directly editing PHP files within the plugin.
 
-**A FleK90 Tool Floating Field (Version 5.1)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including appearance and positioning, are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
+**A FleK90 Tool Floating Field (Version 5.5)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including appearance and positioning, are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
 
 Content for the floating field is managed by editing PHP files (`content-desktop.php`, `content-mobile.php`, and `floating-field-content.php`) directly within the plugin's directory, offering flexibility for HTML, shortcodes, and basic PHP. Positioning is based on a 9-point system (e.g., top-left, bottom-center) for both desktop and mobile views. Users can also add custom CSS rules for further styling.
 
