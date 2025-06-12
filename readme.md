@@ -4,7 +4,7 @@ Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
 Tested up to: 6.8.1
-Stable tag: 5.3
+Stable tag: 5.4
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -105,6 +105,12 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - Tested up to: 6.8.1
 
 == Changelog ==
+
+= 5.4 =
+* Enhancement: Updated the 'About' tab in the admin settings page with new example images.
+* Enhancement: Removed an unnecessary image placeholder from the 'About' tab.
+* Enhancement: Reduced text in the admin menu's 'About' tab using shorter bullet points.
+* Update: Version number increased to 5.4.
 
 = 5.3 =
 * Feature: Added unit selection (px, %, rem, em, vw) for the floating field width setting.
