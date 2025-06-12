@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content.
-Version: 5.4
+Version: 5.5
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class A_FleK90_Tool_Floating_Field {
-    private $plugin_version = '5.4';
+    private $plugin_version = '5.5';
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
 
     public function __construct() {
@@ -273,23 +273,6 @@ class A_FleK90_Tool_Floating_Field {
                         <li><?php esc_html_e('Quick settings link in plugin list.', 'a-flek90-tool-floating-field'); ?></li>
                         <li><?php esc_html_e('Themed admin interface for FleK90 tools.', 'a-flek90-tool-floating-field'); ?></li>
                     </ul>
-
-                    <h3><?php esc_html_e('Screenshots', 'a-flek90-tool-floating-field'); ?></h3>
-                    <p><em><?php esc_html_e('Note: Screenshot images (floating_field_example.jpg, floating_field_example2.jpg, Floating_field_admin_menu.jpg) need to be placed in the plugin\'s assets/images/ directory.', 'a-flek90-tool-floating-field'); ?></em></p>
-                    <div class="flek90-screenshots">
-                        <div class="flek90-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/floating_field_example.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 1', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('Example 1: Floating field in action.', 'a-flek90-tool-floating-field'); ?></em></p>
-                        </div>
-                        <div class="flek90-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/floating_field_example2.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 2', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('Example 2: Another view of the floating field.', 'a-flek90-tool-floating-field'); ?></em></p>
-                        </div>
-                        <div class="flek90-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/Floating_field_admin_menu.jpg'); ?>" alt="<?php esc_attr_e('Screenshot 4: Admin Menu Structure', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('The FleK90 Tools admin menu and Floating Field submenu.', 'a-flek90-tool-floating-field'); ?></em></p>
-                        </div>
-                    </div>
 
                     <hr style="margin-top: 30px; margin-bottom: 20px;">
                     <p><?php

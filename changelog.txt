@@ -1,5 +1,9 @@
 == Changelog ==
 
+= 5.5 - 2025-06-12 =
+* Enhancement: Removed screenshots section and image files from the admin 'About' page for production readiness.
+* Update: Version number increased to 5.5.
+
 = 5.4 - 2025-06-12 =
 * Enhancement: Updated the 'About' tab in the admin settings page with new example images.
 * Enhancement: Removed an unnecessary image placeholder from the 'About' tab.
