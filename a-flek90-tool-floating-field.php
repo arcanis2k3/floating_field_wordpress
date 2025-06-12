@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: A FleK90 Tool Floating Field
-Description: Adds a fixed-position floating field on the front-end with customizable content. Includes an admin option to display only on mobile devices or on all devices. Managed via an admin menu page (Settings > Floating Field Settings). Compatible with older themes, no dependencies.
+Description: Adds a fixed-position floating field on the front-end with customizable content.
 Version: 5.3
 Author: FleK90
 Author URI: https://flek90.aureusz.com
@@ -9,7 +9,7 @@ License: GPL-2.0+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
 Requires PHP: 7.0
-Tested up to: 6.8.1
+Tested up to: 6.8
 Stable tag: 5.0.1
 */
 
