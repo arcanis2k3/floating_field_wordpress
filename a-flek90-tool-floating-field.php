@@ -25,7 +25,6 @@ class A_FleK90_Tool_Floating_Field {
 
     public function __construct() {
         add_action('plugins_loaded', [$this, 'load_textdomain']); // Added for localization
-        $this->debug_log('Plugin initialized');
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
         add_action('wp_footer', [$this, 'render_floating_field']);
@@ -47,16 +46,6 @@ class A_FleK90_Tool_Floating_Field {
             false,
             dirname(plugin_basename(__FILE__)) . '/languages/'
         );
-    }
-
-    private function debug_log($message) {
-        if (defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
-            if (is_array($message) || is_object($message)) {
-                error_log('[FleK90 Plugin V' . $this->plugin_version . '] ' . print_r($message, true));
-            } else {
-                error_log('[FleK90 Plugin V' . $this->plugin_version . '] ' . $message);
-            }
-        }
     }
 
     private static function get_position_choices() {
@@ -97,7 +86,6 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function add_admin_menu() {
-        $this->debug_log('Adding admin menu page');
         // add_options_page('Floating Field Settings', 'Floating Field Settings', 'manage_options', 'flek90-floating-field-settings', [$this, 'render_admin_page']);
 
         // Add the new top-level "FleK90" menu
@@ -144,12 +132,10 @@ class A_FleK90_Tool_Floating_Field {
         $plugin_version_display = $this->plugin_version;
         // Determine active tab, default to 'settings'
         $active_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'settings';
-        $this->debug_log('Rendering admin page for Floating Field. Active tab: ' . $active_tab);
 
 
         // Settings saving logic - only if on settings tab and form submitted
         if ($active_tab === 'settings' && isset($_POST['flek90_save_settings']) && check_admin_referer('flek90_save_settings_action', 'flek90_save_settings_nonce')) {
-            $this->debug_log('Saving settings for Floating Field.');
             update_option('flek90_enable_on_desktop_v5', isset($_POST['flek90_enable_on_desktop_v5']) ? '1' : '0');
             update_option('flek90_enable_on_mobile_v5', isset($_POST['flek90_enable_on_mobile_v5']) ? '1' : '0');
             if (isset($_POST['flek90_desktop_position_v5'])) { update_option('flek90_desktop_position_v5', self::sanitize_position_setting(wp_unslash($_POST['flek90_desktop_position_v5']))); }
@@ -171,11 +157,10 @@ class A_FleK90_Tool_Floating_Field {
             // Old option deletion logic
             if (get_option('flek90_ff_customizer_settings') !== false) {
                 delete_option('flek90_ff_customizer_settings');
-                $this->debug_log('Old option flek90_ff_customizer_settings deleted.');
             }
             $old_options = ['flek90_enable_field', 'flek90_mobile_only', 'flek90_field_content', 'flek90_background_color', 'flek90_font_size', 'flek90_custom_css'];
             foreach ($old_options as $old_opt) {
-                if (get_option($old_opt) !== false) { delete_option($old_opt); $this->debug_log("Old option {$old_opt} deleted.");}
+                if (get_option($old_opt) !== false) { delete_option($old_opt); }
             }
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'a-flek90-tool-floating-field') . '</p></div>';
         }
@@ -353,20 +338,16 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function enqueue_scripts() {
-        $this->debug_log('Enqueuing front-end scripts for floating field - V5'); // Version will be updated by class property
 
         wp_register_style('flek90-floating-field-inline', false, [], $this->plugin_version);
         wp_enqueue_style('flek90-floating-field-inline');
 
         $desktop_position_v5 = get_option('flek90_desktop_position_v5', 'top-center');
         $mobile_position_v5 = get_option('flek90_mobile_position_v5', 'top-center');
-        $this->debug_log(['V5 Position Settings Loaded for CSS' => ['desktop' => $desktop_position_v5, 'mobile' => $mobile_position_v5]]);
 
         $desktop_pos_css = $this->generate_position_css_v5($desktop_position_v5);
-        $this->debug_log(['V5 Desktop Position CSS' => $desktop_pos_css]);
 
         $mobile_pos_css = $this->generate_position_css_v5($mobile_position_v5);
-        $this->debug_log(['V5 Mobile Position CSS' => $mobile_pos_css]);
 
         $background_color_option = get_option('flek90_background_color_v5', '#0073aa');
         // Ensure that if the color option somehow becomes empty or invalid leading to an empty string after sanitization,
@@ -425,32 +406,24 @@ class A_FleK90_Tool_Floating_Field {
         $trimmed_custom_css = trim($custom_css_v5);
         if (!empty($trimmed_custom_css)) {
             $css .= "\n\n/* Custom CSS from Plugin Settings */\n" . $trimmed_custom_css;
-            $this->debug_log('Appended custom CSS from settings (V5). Snippet: ' . substr($trimmed_custom_css, 0, 100));
         } else {
-            $this->debug_log('No custom CSS from settings to append (V5).');
         }
-        $this->debug_log("Final V5 CSS to be added: \n" . substr($css, 0, 500) . (strlen($css) > 500 ? "..." : ""));
         wp_add_inline_style('flek90-floating-field-inline', $css);
     }
 
 public function render_floating_field() {
-    $this->debug_log('Rendering floating field (V5.1 - Device Specific Content)');
 
     $is_mobile = wp_is_mobile();
     $enabled_on_desktop = get_option('flek90_enable_on_desktop_v5', '1');
     $enabled_on_mobile = get_option('flek90_enable_on_mobile_v5', '1');
 
     if (($is_mobile && $enabled_on_mobile !== '1') || (!$is_mobile && $enabled_on_desktop !== '1')) {
-        $this->debug_log('Floating field display check: Condition not met for current device. Mobile: ' . ($is_mobile ? 'Yes' : 'No') . ', Desktop Enabled: ' . $enabled_on_desktop . ', Mobile Enabled: ' . $enabled_on_mobile . '. Field will NOT render.');
         return;
     }
 
     if ($enabled_on_desktop !== '1' && $enabled_on_mobile !== '1') {
-         $this->debug_log('Floating field display check: Globally disabled (both desktop and mobile are OFF). Field will NOT render.');
          return;
     }
-
-    $this->debug_log('Floating field display check: Conditions met. Proceeding to render.');
 
     $content = '';
     $loaded_file_path = '';
@@ -458,38 +431,31 @@ public function render_floating_field() {
     if ($is_mobile) {
         $specific_file_path = plugin_dir_path(__FILE__) . 'content-mobile.php';
         if (file_exists($specific_file_path)) {
-            $this->debug_log('Attempting to load mobile content from: ' . $specific_file_path);
             ob_start();
             include $specific_file_path;
             $content = ob_get_clean();
             $loaded_file_path = 'content-mobile.php';
             if (empty(trim($content))) {
-                $this->debug_log('Mobile content file (' . $loaded_file_path . ') is empty. Clearing content to trigger fallback.');
                 $content = ''; // Ensure fallback if file is empty
             }
         } else {
-            $this->debug_log('Mobile content file not found: ' . $specific_file_path);
         }
     } else {
         $specific_file_path = plugin_dir_path(__FILE__) . 'content-desktop.php';
         if (file_exists($specific_file_path)) {
-            $this->debug_log('Attempting to load desktop content from: ' . $specific_file_path);
             ob_start();
             include $specific_file_path;
             $content = ob_get_clean();
             $loaded_file_path = 'content-desktop.php';
             if (empty(trim($content))) {
-                $this->debug_log('Desktop content file (' . $loaded_file_path . ') is empty. Clearing content to trigger fallback.');
                 $content = ''; // Ensure fallback if file is empty
             }
         } else {
-            $this->debug_log('Desktop content file not found: ' . $specific_file_path);
         }
     }
 
     // Fallback to floating-field-content.php if specific content is empty or file not found
     if (empty(trim($content))) {
-        $this->debug_log('Specific content not loaded or empty. Attempting fallback to floating-field-content.php.');
         $fallback_file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
         if (file_exists($fallback_file_path)) {
             ob_start();
@@ -497,18 +463,14 @@ public function render_floating_field() {
             $content = ob_get_clean();
             $loaded_file_path = 'floating-field-content.php (fallback)';
             if (empty(trim($content))) {
-                $this->debug_log('Fallback content file (floating-field-content.php) is also empty.');
                 $content = ''; // Still empty
             }
         } else {
-            $this->debug_log('Fallback content file (floating-field-content.php) not found.');
         }
     }
 
     if (!empty(trim($content))) {
-         $this->debug_log('Captured content from ' . $loaded_file_path . '. Raw length: ' . strlen($content));
     } else {
-        $this->debug_log('All content sources (specific, fallback) are empty or not found. Using default error/empty message.');
         // Check if the initial specific file was supposed to exist but was empty, or just not found
         $main_content_file_to_check = $is_mobile ? 'content-mobile.php' : 'content-desktop.php';
         if (!file_exists(plugin_dir_path(__FILE__) . $main_content_file_to_check) && !file_exists(plugin_dir_path(__FILE__) . 'floating-field-content.php')) {
@@ -516,7 +478,6 @@ public function render_floating_field() {
             return;
         } else {
             $content = '<p style="margin:0; padding:5px;">Floating field content is empty. Please edit the relevant content file (e.g., ' . esc_html($main_content_file_to_check) . ' or floating-field-content.php) to add your desired HTML.</p>';
-             $this->debug_log('Using placeholder message for empty content.');
         }
     }
 
@@ -524,7 +485,6 @@ public function render_floating_field() {
     $content = do_shortcode($content);
     $content = $this->sanitize_content($content);
 
-    $this->debug_log('Processed and sanitized content. Final length: ' . strlen($content));
 
     ?>
     <div id="flek90-floating-container">
@@ -539,7 +499,6 @@ public function render_floating_field() {
 
     // Combined admin assets enqueuing
     public function enqueue_admin_assets($hook_suffix) {
-        // $this->debug_log('enqueue_admin_assets called with hook_suffix: ' . $hook_suffix . ' | Settings page hook: ' . $this->settings_page_hook_suffix );
 
         $is_flek90_admin_page = false;
         // Check for the main FleK90 Tools dashboard page or the unified Settings/About page.
@@ -549,7 +508,6 @@ public function render_floating_field() {
         }
 
         if ($is_flek90_admin_page) {
-            $this->debug_log('On a FleK90 admin page (' . $hook_suffix . '), enqueuing FleK90 admin styles.');
             wp_enqueue_style(
                 'flek90-admin-styles',
                 plugin_dir_url(__FILE__) . 'assets/css/flek90-admin-styles.css',
@@ -559,7 +517,6 @@ public function render_floating_field() {
 
             // Conditionally enqueue color picker scripts only on the settings page
             if ($this->settings_page_hook_suffix == $hook_suffix) {
-                $this->debug_log('On Floating Field settings page (' . $hook_suffix . '), enqueuing color picker scripts.');
                 wp_enqueue_style('wp-color-picker'); // Already enqueued by WordPress if needed by other plugins, but good practice.
                 wp_enqueue_script(
                     'flek90-color-picker-init',
@@ -570,7 +527,6 @@ public function render_floating_field() {
                 );
             }
         } else {
-            // $this->debug_log('Not a FleK90 admin page (' . $hook_suffix . '), FleK90 admin assets not enqueued.');
         }
     }
 
@@ -592,6 +548,5 @@ public function render_floating_field() {
 try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) {
     // Note: $this->plugin_version is not available in this static context if class instantiation fails.
     // Consider logging a generic version or fetching it differently if needed here.
-    if (defined('WP_DEBUG') && WP_DEBUG) { error_log('[FleK90 Plugin Init Error] ' . $e->getMessage()); }
 }
 ?>
