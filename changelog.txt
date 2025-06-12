@@ -1,5 +1,11 @@
 == Changelog ==
 
+= 5.4 - 2025-06-12 =
+* Enhancement: Updated the 'About' tab in the admin settings page with new example images.
+* Enhancement: Removed an unnecessary image placeholder from the 'About' tab.
+* Enhancement: Reduced text in the admin menu's 'About' tab using shorter bullet points.
+* Update: Version number increased to 5.4.
+
 = 5.0.1 - 2025-06-11 =
 * Fixed: Addressed PHP warning by adding version to `wp_register_style` in `enqueue_scripts()`.
 * Fixed: Corrected `readme.md` "Tested up to" value to use major version (e.g., "6.8").
