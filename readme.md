@@ -4,7 +4,7 @@ Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
 Tested up to: 6.8.1
-Stable tag: 5.1
+Stable tag: 5.3
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,7 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - **Separate Desktop & Mobile Content**: Achieved by using distinct PHP files: `content-desktop.php` and `content-mobile.php`.
 - **Simplified 9-Point Positioning (Admin Page)**: Control desktop and mobile positions using a selection of 9 predefined locations.
 - **Separate Enable/Disable Controls**: Separate 'Enable on Desktop' and 'Enable on Mobile' controls for precise visibility.
+- **Customizable Field Width with Unit Selection**: Set the field width and choose units (`px`, `%`, `rem`, `em`, `vw`) via admin settings.
 - **Custom CSS Input**: Add custom CSS rules directly via the admin settings page for advanced styling.
 - **Admin Menu Management**: All settings (enable/disable, appearance, positions, custom CSS) are managed via **FleK90 > Floating Field Settings**.
 - **WordPress Color Picker**: Background color selection now uses the native WordPress color picker.
@@ -59,6 +60,7 @@ Content for the floating field is managed by editing PHP files (`content-desktop
   - **Position Settings**: Configure "Desktop Position" and "Mobile Position" using the dropdowns. Each offers 9 predefined screen locations.
   - **Background Color**: Select a color using the WordPress color picker (default: blue).
   - **Font Size**: Set the font size (12–48px, default: 24px).
+  - **Field Width**: Configure "Field Width" by setting a numeric value and selecting the desired unit (`px`, `%`, `rem`, `em`, `vw`).
   - **Custom CSS**: Add custom CSS rules for fine-grained style adjustments to the floating field container.
   - Save changes.
 - The "About" tab on the settings page provides more information about the plugin's features and usage.
@@ -103,6 +105,19 @@ Content for the floating field is managed by editing PHP files (`content-desktop
 - Tested up to: 6.8.1
 
 == Changelog ==
+
+= 5.3 =
+* Feature: Added unit selection (px, %, rem, em, vw) for the floating field width setting.
+* Enhancement: CSS generation now supports different units for field width on desktop and mobile.
+* Enhancement: Mobile responsiveness for width setting improved to correctly interpret relative units.
+
+= 5.2 =
+* Enhancement: Removed blue border from default desktop content block in `content-desktop.php`.
+* Feature: Added option to customize the width of the floating field via admin settings.
+* Enhancement: Improved readability of the example HTML code block in admin settings for dark theme.
+* Enhancement: Improved readability of position dropdowns in admin settings for dark theme.
+* Update: Version number increased to 5.2. Readme and About section updated.
+* Media: Added screenshot of the admin menu structure to the About tab.
 
 = 5.1 =
 * Refactor: Admin settings page now uses a tabbed interface ("Settings" and "About").
