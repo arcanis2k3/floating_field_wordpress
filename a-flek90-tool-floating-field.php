@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content.
-Version: 5.4
+Version: 5.6
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class A_FleK90_Tool_Floating_Field {
-    private $plugin_version = '5.4';
+    private $plugin_version = '5.6';
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
 
     public function __construct() {
@@ -152,6 +152,8 @@ class A_FleK90_Tool_Floating_Field {
                     update_option('flek90_field_width_unit_v5', 'px'); // Default to px if invalid
                 }
             }
+            if (isset($_POST['flek90_content_desktop_v5'])) { update_option('flek90_content_desktop_v5', wp_kses_post(wp_unslash($_POST['flek90_content_desktop_v5']))); }
+            if (isset($_POST['flek90_content_mobile_v5'])) { update_option('flek90_content_mobile_v5', wp_kses_post(wp_unslash($_POST['flek90_content_mobile_v5']))); }
             if (isset($_POST['flek90_custom_css_v5'])) { update_option('flek90_custom_css_v5', wp_strip_all_tags(wp_unslash($_POST['flek90_custom_css_v5']))); }
 
             // Old option deletion logic
@@ -192,6 +194,21 @@ class A_FleK90_Tool_Floating_Field {
                     $field_width_unit_v5 = get_option('flek90_field_width_unit_v5', 'px'); // Default to 'px'
                     $custom_css_v5 = get_option('flek90_custom_css_v5', '');
                     $pos_choices = self::get_position_choices();
+
+                    // Define default content examples
+                    $default_desktop_content_example = '<div style="padding: 10px; text-align: center;">' . "\n" .
+                                                       '  <h2>Page: %page_title%</h2>' . "\n" .
+                                                       '  <p>This is an example of desktop content.</p>' . "\n" .
+                                                       '  <p>Current year via shortcode: [current_year_example_shortcode]</p>' . "\n" .
+                                                       '  <p>Try another shortcode: [my_contact_form_shortcode]</p>' . "\n" .
+                                                       '  <p><a href="#">Learn More</a></p>' . "\n" .
+                                                       '</div>';
+
+                    $default_mobile_content_example = '<div style="padding: 8px; text-align: center; border: 1px solid lightblue;">' . "\n" .
+                                                      '  <h3>Mobile: %page_title%</h3>' . "\n" .
+                                                      '  <p>Mobile content example.</p>' . "\n" .
+                                                      '  <p>Shortcode: [my_contact_form_shortcode]</p>' . "\n" .
+                                                      '</div>';
                     ?>
                     <form method="post" action="?page=flek90_floating_field_settings_slug&tab=settings">
                         <?php wp_nonce_field('flek90_save_settings_action', 'flek90_save_settings_nonce'); ?>
@@ -201,29 +218,26 @@ class A_FleK90_Tool_Floating_Field {
                             <tr><th scope="row"><label for="flek90_enable_on_mobile_v5"><?php esc_html_e('Enable on Mobile', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="flek90_enable_on_mobile_v5" name="flek90_enable_on_mobile_v5" value="1" <?php checked($enable_on_mobile_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on mobile devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
 
                             <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Content Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr valign="top"><td colspan="2" style="padding-top: 0;">
-                                <p class="description"><?php esc_html_e('Content for the floating field is managed by directly editing specific PHP files within the plugin\'s directory. This allows for flexible use of HTML, CSS, WordPress shortcodes, and basic PHP.', 'a-flek90-tool-floating-field'); ?></p>
-                                <ul style="list-style: disc; margin-left: 20px;">
-                                    <li><strong><?php esc_html_e('Desktop Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>content-desktop.php</code>.</li>
-                                    <li><strong><?php esc_html_e('Mobile Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>content-mobile.php</code>.</li>
-                                    <li><strong><?php esc_html_e('Fallback Content:', 'a-flek90-tool-floating-field'); ?></strong> <?php esc_html_e('Edit the file:', 'a-flek90-tool-floating-field'); ?> <code>floating-field-content.php</code> <?php esc_html_e('(used if the device-specific file is empty or not found).', 'a-flek90-tool-floating-field'); ?></li>
-                                </ul>
-                                <p class="description"><strong><?php esc_html_e('How to use these files:', 'a-flek90-tool-floating-field'); ?></strong></p>
-                                <ul style="list-style: disc; margin-left: 20px;">
-                                    <li><?php esc_html_e('You can include any HTML markup directly.', 'a-flek90-tool-floating-field'); ?></li>
-                                    <li><?php esc_html_e('To use WordPress shortcodes, use the `do_shortcode()` PHP function. Example:', 'a-flek90-tool-floating-field'); ?> <code>&lt;?php echo do_shortcode("[your_shortcode]"); ?&gt;</code></li>
-                                    <li><?php esc_html_e('You can use basic PHP, for instance, to display the current year:', 'a-flek90-tool-floating-field'); ?> <code>&lt;?php echo date('Y'); ?&gt;</code></li>
-                                    <li><?php esc_html_e('For dynamic post-related information (like post title or URL), you can use WordPress functions like `get_the_title()` or `get_permalink()` within the PHP tags.', 'a-flek90-tool-floating-field'); ?></li>
-                                    <li><?php esc_html_e('If you add PHP code, be careful to ensure it is correct and secure, as errors could affect your site.', 'a-flek90-tool-floating-field'); ?></li>
-                                     <li><?php esc_html_e('The content from these files will be processed by `do_blocks()` and `do_shortcode()` again by the plugin before output, and then sanitized using `wp_kses_post`.', 'a-flek90-tool-floating-field'); ?></li>
-                                </ul>
-                                <p class="description"><em><?php esc_html_e('Example for <code>content-desktop.php</code>:', 'a-flek90-tool-floating-field'); ?></em></p>
-                                <pre><code>&lt;div style="text-align: center;"&gt;
-  &lt;h3&gt;Hello Desktop Users!&lt;/h3&gt;
-  &lt;p&gt;Today is &lt;?php echo date('F j, Y'); ?&gt;.&lt;/p&gt;
-  &lt;p&gt;&lt;?php echo do_shortcode("[my_example_shortcode]"); ?&gt;&lt;/p&gt;
-&lt;/div&gt;</code></pre>
-                            </td></tr>
+                            <tr valign="top">
+                                <th scope="row">
+                                    <label for="flek90_content_desktop_v5"><?php esc_html_e('Desktop Content', 'a-flek90-tool-floating-field'); ?></label>
+                                </th>
+                                <td>
+                                    <textarea id="flek90_content_desktop_v5" name="flek90_content_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option('flek90_content_desktop_v5', $default_desktop_content_example)); ?></textarea>
+                                    <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [current_year_example_shortcode] or [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row">
+                                    <label for="flek90_content_mobile_v5"><?php esc_html_e('Mobile Content', 'a-flek90-tool-floating-field'); ?></label>
+                                </th>
+                                <td>
+                                    <textarea id="flek90_content_mobile_v5" name="flek90_content_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option('flek90_content_mobile_v5', $default_mobile_content_example)); ?></textarea>
+                                    <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
+                                </td>
+                            </tr>
+                            <?php // The tr below was intentionally left empty after removing the outdated instructions ?>
+                            <tr valign="top"><td colspan="2" style="padding-top: 0;"></td></tr>
 
                             <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Position Settings (Simplified)', 'a-flek90-tool-floating-field'); ?></h3><p class="description"><?php esc_html_e('Select a general position. Offsets are no longer configured on this page.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
                             <tr><th scope="row"><label for="flek90_desktop_position_v5"><?php esc_html_e('Desktop Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="flek90_desktop_position_v5" name="flek90_desktop_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($desktop_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
@@ -248,8 +262,29 @@ class A_FleK90_Tool_Floating_Field {
                                 </td>
                             </tr>
 
-                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Custom CSS', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr valign="top"><th scope="row"><label for="flek90_custom_css_v5"><?php esc_html_e('Custom CSS Rules', 'a-flek90-tool-floating-field'); ?></label></th><td><textarea id="flek90_custom_css_v5" name="flek90_custom_css_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea($custom_css_v5); ?></textarea><p class="description"><?php esc_html_e('Add your own CSS rules here. Example: #flek90-floating-container { border: 2px solid red !important; }', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Custom CSS Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
+                            <tr valign="top">
+                                <th scope="row"><label for="flek90_custom_css_desktop_v5"><?php esc_html_e('Custom CSS for Desktop', 'a-flek90-tool-floating-field'); ?></label></th>
+                                <td>
+                                    <textarea id="flek90_custom_css_desktop_v5" name="flek90_custom_css_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option('flek90_custom_css_desktop_v5', '')); ?></textarea>
+                                    <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for desktop views. Example: #flek90-floating-container { border: 2px solid blue !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row"><label for="flek90_custom_css_mobile_v5"><?php esc_html_e('Custom CSS for Mobile', 'a-flek90-tool-floating-field'); ?></label></th>
+                                <td>
+                                    <textarea id="flek90_custom_css_mobile_v5" name="flek90_custom_css_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option('flek90_custom_css_mobile_v5', '')); ?></textarea>
+                                    <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for mobile views (typically within a max-width: 768px media query). Example: #flek90-floating-container { font-size: 12px !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                </td>
+                            </tr>
+                            <tr valign="top">
+                                <th scope="row"><?php esc_html_e('CSS Override', 'a-flek90-tool-floating-field'); ?></th>
+                                <td>
+                                    <input type="checkbox" id="flek90_prioritize_custom_css_v5" name="flek90_prioritize_custom_css_v5" value="1" <?php checked(get_option('flek90_prioritize_custom_css_v5', '0'), '1'); ?> />
+                                    <label for="flek90_prioritize_custom_css_v5"><?php esc_html_e('Prioritize Custom CSS for Styles', 'a-flek90-tool-floating-field'); ?></label>
+                                    <p class="description"><?php esc_html_e('If checked, your Custom CSS for Desktop/Mobile will take full control over appearance (background, font size, width). The plugin\'s specific settings for these will be ignored, allowing your CSS to prevail.', 'a-flek90-tool-floating-field'); ?></p>
+                                </td>
+                            </tr>
                         </table>
                         <p class="submit"><input type="submit" name="flek90_save_settings" class="button button-primary" value="<?php esc_attr_e('Save Settings', 'a-flek90-tool-floating-field'); ?>"></p>
                     </form>
@@ -334,6 +369,7 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function enqueue_scripts() {
+        $prioritize_custom_css = get_option('flek90_prioritize_custom_css_v5', '0') === '1';
 
         wp_register_style('flek90-floating-field-inline', false, [], $this->plugin_version);
         wp_enqueue_style('flek90-floating-field-inline');
@@ -342,44 +378,44 @@ class A_FleK90_Tool_Floating_Field {
         $mobile_position_v5 = get_option('flek90_mobile_position_v5', 'top-center');
 
         $desktop_pos_css = $this->generate_position_css_v5($desktop_position_v5);
-
         $mobile_pos_css = $this->generate_position_css_v5($mobile_position_v5);
 
-        $background_color_option = get_option('flek90_background_color_v5', '#0073aa');
-        // Ensure that if the color option somehow becomes empty or invalid leading to an empty string after sanitization,
-        // we use 'transparent' to avoid CSS errors or unexpected inherited backgrounds.
-        $css_background_color = !empty($background_color_option) ? esc_attr($background_color_option) : 'transparent';
-        $font_size_v5 = get_option('flek90_font_size_v5', '24');
+        $dynamic_styles = "";
+        $mobile_dynamic_styles = "";
 
-        // Retrieve and prepare field width CSS
-        $field_width_v5 = get_option('flek90_field_width_v5', '280');
-        $field_width_unit_v5 = get_option('flek90_field_width_unit_v5', 'px');
+        if (!$prioritize_custom_css) {
+            $background_color_option = get_option('flek90_background_color_v5', '#0073aa');
+            $css_background_color = !empty($background_color_option) ? esc_attr($background_color_option) : 'transparent';
+            $font_size_v5 = get_option('flek90_font_size_v5', '24');
+            $field_width_v5 = get_option('flek90_field_width_v5', '280');
+            $field_width_unit_v5 = get_option('flek90_field_width_unit_v5', 'px');
+            $allowed_units = ['px', '%', 'rem', 'em', 'vw'];
+            if (!in_array($field_width_unit_v5, $allowed_units, true)) {
+                $field_width_unit_v5 = 'px';
+            }
+            $css_field_width_value = esc_attr($field_width_v5);
+            $css_field_width_unit = esc_attr($field_width_unit_v5);
+            $css_field_full_width = $css_field_width_value . $css_field_width_unit;
 
-        // Validate or sanitize the unit again, just in case
-        $allowed_units = ['px', '%', 'rem', 'em', 'vw'];
-        if (!in_array($field_width_unit_v5, $allowed_units, true)) {
-            $field_width_unit_v5 = 'px'; // Default to px if invalid stored value
-        }
+            $dynamic_styles .= "background: " . $css_background_color . "; ";
+            $dynamic_styles .= "font-size: " . esc_attr($font_size_v5) . "px; ";
+            $dynamic_styles .= "width: " . $css_field_full_width . "; max-width: " . $css_field_full_width . "; ";
 
-        $css_field_width_value = esc_attr($field_width_v5);
-        $css_field_width_unit = esc_attr($field_width_unit_v5);
-        $css_field_full_width = $css_field_width_value . $css_field_width_unit; // Combined value and unit
-
-        // For mobile, max-width should not exceed original 220px OR the custom width if it's smaller than 220px, ONLY if unit is px.
-        // $css_mobile_max_width = esc_attr(min((int)$field_width_v5, 220)) . 'px'; // Old logic
-
-        $css_mobile_max_width_final = '';
-        if ($css_field_width_unit === 'px') {
-            $css_mobile_max_width_final = esc_attr(min((int)$css_field_width_value, 220)) . 'px';
-        } elseif ($css_field_width_unit === 'rem' || $css_field_width_unit === 'em' || $css_field_width_unit === '%' || $css_field_width_unit === 'vw') {
-            $css_mobile_max_width_final = $css_field_full_width; // Use the user-defined value and unit
-        } else { // Fallback, should not happen
-            $css_mobile_max_width_final = '220px';
+            $css_mobile_max_width_final = '';
+            if ($css_field_width_unit === 'px') {
+                $css_mobile_max_width_final = esc_attr(min((int)$css_field_width_value, 220)) . 'px';
+            } elseif ($css_field_width_unit === 'rem' || $css_field_width_unit === 'em' || $css_field_width_unit === '%' || $css_field_width_unit === 'vw') {
+                $css_mobile_max_width_final = $css_field_full_width;
+            } else {
+                $css_mobile_max_width_final = '220px';
+            }
+            $mobile_dynamic_styles .= "max-width: " . $css_mobile_max_width_final . "; ";
+            $mobile_dynamic_styles .= "font-size: " . esc_attr(max(12, (int)$font_size_v5 - 4)) . "px; ";
         }
 
         $css = "
     #flek90-floating-container {
-        position: fixed !important; {$desktop_pos_css} z-index: 9999; background: " . $css_background_color . "; color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); width: " . $css_field_full_width . "; max-width: " . $css_field_full_width . "; text-align: center; font-size: " . esc_attr($font_size_v5) . "px; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        position: fixed !important; {$desktop_pos_css} z-index: 9999; {$dynamic_styles} color: #fff; padding: 1px 1px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); text-align: center; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     }
     #flek90-floating-container * { color: inherit; line-height: 1.5; }
     #flek90-floating-container a { color: #fff; text-decoration: underline; }
@@ -391,18 +427,66 @@ class A_FleK90_Tool_Floating_Field {
     #flek90-floating-container button.search-submit:hover { background: #f5f5f5; }
     #flek90-floating-container button.search-submit svg { width: 16px; height: 16px; stroke: #000; stroke-width: 3; }
     @media (max-width: 768px) {
-        #flek90-floating-container { {$mobile_pos_css} padding: 2px 2px; width: auto; max-width: " . $css_mobile_max_width_final . "; font-size: " . esc_attr(max(12, (int)$font_size_v5 - 4)) . "px; }
+        #flek90-floating-container { {$mobile_pos_css} {$mobile_dynamic_styles} padding: 2px 2px; width: auto; }
         #flek90-floating-container form#searchform { gap: 5px; }
         #flek90-floating-container input.search-input { width: 150px; font-size: 13px; padding: 6px 10px; }
         #flek90-floating-container button.search-submit { width: 28px; height: 28px; }
         #flek90-floating-container button.search-submit svg { width: 14px; height: 14px; }
     }";
 
-        $custom_css_v5 = get_option('flek90_custom_css_v5', '');
-        $trimmed_custom_css = trim($custom_css_v5);
-        if (!empty($trimmed_custom_css)) {
-            $css .= "\n\n/* Custom CSS from Plugin Settings */\n" . $trimmed_custom_css;
-        } else {
+        // Add Desktop Custom CSS
+        $custom_css_desktop_v5 = get_option('flek90_custom_css_desktop_v5', '');
+        $trimmed_custom_css_desktop = trim($custom_css_desktop_v5);
+        if (!empty($trimmed_custom_css_desktop)) {
+            $css .= "
+
+/* Custom CSS for Desktop from Plugin Settings */
+" . $trimmed_custom_css_desktop;
+        }
+
+        // Add Mobile Custom CSS (within the media query)
+        $custom_css_mobile_v5 = get_option('flek90_custom_css_mobile_v5', '');
+        $trimmed_custom_css_mobile = trim($custom_css_mobile_v5);
+        if (!empty($trimmed_custom_css_mobile)) {
+            // Check if the media query part is already in $css, if not, add it.
+            // This is a simplified check; robustly parsing CSS is complex.
+            // For this plugin, we assume the media query structure is consistent.
+            $media_query_start = "@media (max-width: 768px) {";
+            if (strpos($css, $media_query_start) !== false) {
+                // Inject mobile CSS before the last closing brace of the media query
+                // This is a bit fragile. A more robust solution might involve structured CSS management.
+                $css_parts = explode($media_query_start, $css, 2);
+                if (isset($css_parts[1])) {
+                    $main_css_part = $css_parts[0];
+                    $media_query_content_part = $css_parts[1];
+
+                    // Find the last '}' in the media query content
+                    $last_brace_pos = strrpos($media_query_content_part, '}');
+                    if ($last_brace_pos !== false) {
+                        $before_last_brace = substr($media_query_content_part, 0, $last_brace_pos);
+                        $after_last_brace = substr($media_query_content_part, $last_brace_pos); // should be '}'
+
+                        $css = $main_css_part . $media_query_start . $before_last_brace . "
+
+/* Custom CSS for Mobile from Plugin Settings */
+" . $trimmed_custom_css_mobile . $after_last_brace;
+                    } else {
+                         // Fallback: append if structure is unexpected
+                         $css .= "
+@media (max-width: 768px) {
+/* Custom CSS for Mobile from Plugin Settings (fallback append) */
+" . $trimmed_custom_css_mobile . "
+}";
+                    }
+                }
+            } else {
+                // If the base media query wasn't there for some reason, add it with the mobile CSS
+                $css .= "
+@media (max-width: 768px) {
+/* Custom CSS for Mobile from Plugin Settings */
+" . $trimmed_custom_css_mobile . "
+}";
+            }
         }
         wp_add_inline_style('flek90-floating-field-inline', $css);
     }
@@ -422,59 +506,46 @@ public function render_floating_field() {
     }
 
     $content = '';
-    $loaded_file_path = '';
 
     if ($is_mobile) {
-        $specific_file_path = plugin_dir_path(__FILE__) . 'content-mobile.php';
-        if (file_exists($specific_file_path)) {
-            ob_start();
-            include $specific_file_path;
-            $content = ob_get_clean();
-            $loaded_file_path = 'content-mobile.php';
-            if (empty(trim($content))) {
-                $content = ''; // Ensure fallback if file is empty
-            }
-        } else {
-        }
+        $content = get_option('flek90_content_mobile_v5', '');
     } else {
-        $specific_file_path = plugin_dir_path(__FILE__) . 'content-desktop.php';
-        if (file_exists($specific_file_path)) {
-            ob_start();
-            include $specific_file_path;
-            $content = ob_get_clean();
-            $loaded_file_path = 'content-desktop.php';
-            if (empty(trim($content))) {
-                $content = ''; // Ensure fallback if file is empty
-            }
-        } else {
-        }
+        $content = get_option('flek90_content_desktop_v5', '');
     }
 
-    // Fallback to floating-field-content.php if specific content is empty or file not found
+    // If device-specific content is empty, try to fall back to the other device's content.
+    // This is a change from direct file editing, where a specific fallback file was used.
+    // Now, if mobile content is empty, it might use desktop content if available, and vice-versa.
+    // This behavior might need further refinement based on desired plugin logic.
     if (empty(trim($content))) {
-        $fallback_file_path = plugin_dir_path(__FILE__) . 'floating-field-content.php';
-        if (file_exists($fallback_file_path)) {
-            ob_start();
-            include $fallback_file_path;
-            $content = ob_get_clean();
-            $loaded_file_path = 'floating-field-content.php (fallback)';
-            if (empty(trim($content))) {
-                $content = ''; // Still empty
-            }
+        if ($is_mobile) {
+            // Mobile content was empty, try desktop
+            $content = get_option('flek90_content_desktop_v5', '');
         } else {
+            // Desktop content was empty, try mobile
+            $content = get_option('flek90_content_mobile_v5', '');
         }
     }
 
-    if (!empty(trim($content))) {
-    } else {
-        // Check if the initial specific file was supposed to exist but was empty, or just not found
-        $main_content_file_to_check = $is_mobile ? 'content-mobile.php' : 'content-desktop.php';
-        if (!file_exists(plugin_dir_path(__FILE__) . $main_content_file_to_check) && !file_exists(plugin_dir_path(__FILE__) . 'floating-field-content.php')) {
-            echo '<div id="flek90-floating-container" style="display:block !important; visibility:visible !important; opacity:1 !important; position:fixed !important; top: 10px; left: 10px; background:red !important; color:white !important; z-index: 100000 !important; padding: 10px !important;"><p>Error: Content files (e.g., ' . esc_html($main_content_file_to_check) . ' or floating-field-content.php) not found.</p></div>';
-            return;
+    // If still no content, display a message or hide (current behavior: display nothing if both are empty)
+    if (empty(trim($content))) {
+        // Optionally, provide a default message if both are empty, or ensure the container doesn't show.
+        // For now, if $content is empty, nothing will be rendered in the field.
+        // This replaces the old error message about missing files.
+        return; // Or set a default message: $content = '<p>No content configured.</p>';
+    }
+
+    // Replace %page_title% placeholder
+    if (strpos($content, '%page_title%') !== false) {
+        $title_to_display = '';
+        if (is_singular()) {
+            $title_to_display = get_the_title();
         } else {
-            $content = '<p style="margin:0; padding:5px;">Floating field content is empty. Please edit the relevant content file (e.g., ' . esc_html($main_content_file_to_check) . ' or floating-field-content.php) to add your desired HTML.</p>';
+            // For non-singular pages, wp_get_document_title() often gives a good generic title.
+            // It includes context like "Category: X" or "Tag: Y" or the site title on home/front-page.
+            $title_to_display = wp_get_document_title();
         }
+        $content = str_replace('%page_title%', esc_html($title_to_display), $content);
     }
 
     $content = do_blocks($content);
