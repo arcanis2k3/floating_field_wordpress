@@ -6,104 +6,112 @@
     --flek90-dark-text: #1A1A1A;
 }
 
-/* FleK90 Menu Styling (Ensure correct admin menu body classes or IDs are used if available) */
-/*
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-name,
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-menu-image::before {
-    color: var(--flek90-light-text);
+/* FleK90 Admin Theme - Black and Gold */
+:root {
+    --aflek90tff-gold: #FFD700; /* Renamed from --flek90-gold */
+    --aflek90tff-dark-bg: #23282D; /* Renamed from --flek90-dark-bg */
+    --aflek90tff-light-text: #E0E0E0; /* Renamed from --flek90-light-text */
+    --aflek90tff-dark-text: #1A1A1A; /* Renamed from --flek90-dark-text */
 }
 
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp-menu-name,
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug:hover .wp-menu-image::before {
-    color: var(--flek90-gold);
+/* FleK90 Menu Styling (Ensure correct admin menu body classes or IDs are used if available) */
+/*
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-menu-image::before {
+    color: var(--aflek90tff-light-text);
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug:hover .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug:hover .wp-menu-image::before {
+    color: var(--aflek90tff-gold);
 }
 */
 /* Current/Active Top Level Menu Item */
 /*
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu,
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current { /* For when top level itself is current */
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu,
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug.current > a.current { /* For when top level itself is current */
 /*
-    background-color: var(--flek90-gold);
-    color: var(--flek90-dark-text);
+    background-color: var(--aflek90tff-gold);
+    color: var(--aflek90tff-dark-text);
 }
 
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image::before,
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug.current > a.current .wp-menu-image::before {
-    color: var(--flek90-dark-text);
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image::before,
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug.current > a.current .wp-menu-image::before {
+    color: var(--aflek90tff-dark-text);
 }
 */
 /* Submenu Items */
 /*
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu a {
-    color: var(--flek90-light-text);
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-submenu a {
+    color: var(--aflek90tff-light-text);
 }
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu a:hover {
-    color: var(--flek90-gold);
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-submenu a:hover {
+    color: var(--aflek90tff-gold);
 }
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu li.current a,
-body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-submenu li.current a:hover {
-    color: var(--flek90-gold);
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-submenu li.current a,
+body.admin-color-fresh #adminmenu #toplevel_page_aflek90tff_main_menu_slug .wp-submenu li.current a:hover {
+    color: var(--aflek90tff-gold);
     font-weight: bold;
 }
 */
 
 /* Apply dark background to FleK90 Admin Pages */
-.flek90-admin-page {
-    background-color: var(--flek90-dark-bg);
-    color: var(--flek90-light-text);
+.aflek90tff-admin-page { /* Renamed from .flek90-admin-page */
+    background-color: var(--aflek90tff-dark-bg);
+    color: var(--aflek90tff-light-text);
     padding: 10px 20px; /* Add some padding */
     border-radius: 4px; /* Optional: rounded corners for the content area */
 }
-.flek90-admin-page h1,
-.flek90-admin-page h2,
-.flek90-admin-page h3,
-.flek90-admin-page h4,
-.flek90-admin-page h5,
-.flek90-admin-page h6 {
-    color: var(--flek90-gold);
+.aflek90tff-admin-page h1,
+.aflek90tff-admin-page h2,
+.aflek90tff-admin-page h3,
+.aflek90tff-admin-page h4,
+.aflek90tff-admin-page h5,
+.aflek90tff-admin-page h6 {
+    color: var(--aflek90tff-gold);
 }
-.flek90-admin-page p,
-.flek90-admin-page .description,
-.flek90-admin-page label {
-    color: var(--flek90-light-text);
+.aflek90tff-admin-page p,
+.aflek90tff-admin-page .description,
+.aflek90tff-admin-page label {
+    color: var(--aflek90tff-light-text);
 }
-.flek90-admin-page .form-table th {
-    color: var(--flek90-light-text);
+.aflek90tff-admin-page .form-table th {
+    color: var(--aflek90tff-light-text);
 }
-.flek90-admin-page .button-primary {
-    background: var(--flek90-gold) !important;
-    border-color: var(--flek90-gold) !important;
-    color: var(--flek90-dark-text) !important;
+.aflek90tff-admin-page .button-primary {
+    background: var(--aflek90tff-gold) !important;
+    border-color: var(--aflek90tff-gold) !important;
+    color: var(--aflek90tff-dark-text) !important;
     box-shadow: none !important;
     text-shadow: none !important;
 }
-.flek90-admin-page .button-primary:hover,
-.flek90-admin-page .button-primary:focus {
+.aflek90tff-admin-page .button-primary:hover,
+.aflek90tff-admin-page .button-primary:focus {
     background: #e6c300 !important; /* Darker gold */
     border-color: #cca700 !important; /* Slightly darker border */
-    color: var(--flek90-dark-text) !important;
+    color: var(--aflek90tff-dark-text) !important;
 }
-.flek90-admin-page input[type="text"],
-.flek90-admin-page input[type="number"],
-.flek90-admin-page textarea {
+.aflek90tff-admin-page input[type="text"],
+.aflek90tff-admin-page input[type="number"],
+.aflek90tff-admin-page textarea {
     background-color: #333940; /* Darker input background */
-    color: var(--flek90-light-text);
+    color: var(--aflek90tff-light-text);
     border: 1px solid #555;
     padding: 6px 10px; /* Consistent padding */
     border-radius: 3px; /* Consistent border radius */
 }
-.flek90-admin-page input[type="text"]:focus,
-.flek90-admin-page input[type="number"]:focus,
-.flek90-admin-page textarea:focus,
-.flek90-admin-page select:focus { /* Added select:focus here */
-    border-color: var(--flek90-gold);
-    box-shadow: 0 0 0 1px var(--flek90-gold);
+.aflek90tff-admin-page input[type="text"]:focus,
+.aflek90tff-admin-page input[type="number"]:focus,
+.aflek90tff-admin-page textarea:focus,
+.aflek90tff-admin-page select:focus { /* Added select:focus here */
+    border-color: var(--aflek90tff-gold);
+    box-shadow: 0 0 0 1px var(--aflek90tff-gold);
 }
 
 /* Ensure select elements are clearly styled within the dark theme */
-.flek90-admin-page select {
+.aflek90tff-admin-page select {
     background-color: #333940; /* Was #2E3338 */
-    color: #FFFFFF; /* Was var(--flek90-light-text) */
+    color: #FFFFFF; /* Was var(--aflek90tff-light-text) */
     border: 1px solid #555;
     padding: 8px 12px; /* Slightly increased padding */
     border-radius: 3px;
@@ -113,25 +121,25 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
 
 /* Styling for options within the select dropdown (browser dependent) */
 /* This is often not very customizable with CSS alone for all browsers */
-.flek90-admin-page select option {
+.aflek90tff-admin-page select option {
     background-color: #2A2F34; /* Darker than the select box background */
-    color: #FFFFFF; /* Was var(--flek90-light-text) */
+    color: #FFFFFF; /* Was var(--aflek90tff-light-text) */
     padding: 4px 8px; /* Add some padding to options if possible (browser dependent) */
 }
 
-.flek90-admin-page hr {
+.aflek90tff-admin-page hr {
     border-color: #444; /* Darker hr */
 }
 
 /* Styles for Screenshot Gallery on Plugin Details Page */
-.flek90-admin-page .flek90-screenshots {
+.aflek90tff-admin-page .aflek90tff-screenshots { /* Renamed */
     display: flex;
     flex-wrap: wrap;
     gap: 20px; /* Space between screenshot items */
     margin-top: 15px;
     margin-bottom: 20px;
 }
-.flek90-admin-page .flek90-screenshot {
+.aflek90tff-admin-page .aflek90tff-screenshot { /* Renamed */
     flex: 1 1 300px; /* Allows items to grow/shrink, with a base width around 300px */
     border: 1px solid #444; /* Darker border, fitting the dark theme */
     padding: 15px;
@@ -140,29 +148,29 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
     text-align: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.flek90-admin-page .flek90-screenshot img {
+.aflek90tff-admin-page .aflek90tff-screenshot img {
     max-width: 100%;
     height: auto;
     border: 1px solid #555; /* Border around the image itself */
     margin-bottom: 10px;
 }
-.flek90-admin-page .flek90-screenshot p { /* Caption style */
+.aflek90tff-admin-page .aflek90tff-screenshot p { /* Caption style */
     font-size: 0.9em;
-    color: var(--flek90-light-text); /* Uses the light text color from the theme */
+    color: var(--aflek90tff-light-text); /* Uses the light text color from the theme */
     margin-top: 5px;
     margin-bottom: 0;
 }
 
 /* Styles for Admin Tabs within FleK90 Admin Pages */
-.flek90-admin-page .nav-tab-wrapper {
-    border-bottom: 1px solid var(--flek90-gold); /* Gold underline for the tab bar */
+.aflek90tff-admin-page .nav-tab-wrapper {
+    border-bottom: 1px solid var(--aflek90tff-gold); /* Gold underline for the tab bar */
     padding-left: 0; /* Align with content if needed */
     margin-bottom: 0; /* WordPress default is often 0, ensure it for clean look */
 }
 
-.flek90-admin-page .nav-tab {
+.aflek90tff-admin-page .nav-tab {
     background-color: #383f47; /* Dark background for inactive tabs, slightly lighter than page */
-    color: var(--flek90-light-text); /* Light text for inactive tabs */
+    color: var(--aflek90tff-light-text); /* Light text for inactive tabs */
     border: 1px solid #444; /* Border for inactive tabs */
     border-bottom: none; /* Remove bottom border for inactive tabs as wrapper has it */
     margin-right: 5px;
@@ -175,25 +183,25 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
     transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out; /* Smooth transition */
 }
 
-.flek90-admin-page .nav-tab:hover,
-.flek90-admin-page .nav-tab:focus {
+.aflek90tff-admin-page .nav-tab:hover,
+.aflek90tff-admin-page .nav-tab:focus {
     background-color: #4a525a; /* Lighter background on hover/focus for inactive tabs */
-    color: var(--flek90-gold); /* Gold text on hover/focus */
+    color: var(--aflek90tff-gold); /* Gold text on hover/focus */
     border-color: #555; /* Slightly lighter border on hover */
     border-bottom: none;
 }
 
-.flek90-admin-page .nav-tab.nav-tab-active,
-.flek90-admin-page .nav-tab.nav-tab-active:hover,
-.flek90-admin-page .nav-tab.nav-tab-active:focus {
-    background-color: var(--flek90-gold); /* Gold background for the active tab */
-    color: var(--flek90-dark-text); /* Dark text for the active tab */
-    border-color: var(--flek90-gold) var(--flek90-gold) var(--flek90-gold); /* Gold border all around */
+.aflek90tff-admin-page .nav-tab.nav-tab-active,
+.aflek90tff-admin-page .nav-tab.nav-tab-active:hover,
+.aflek90tff-admin-page .nav-tab.nav-tab-active:focus {
+    background-color: var(--aflek90tff-gold); /* Gold background for the active tab */
+    color: var(--aflek90tff-dark-text); /* Dark text for the active tab */
+    border-color: var(--aflek90tff-gold) var(--aflek90tff-gold) var(--aflek90tff-gold); /* Gold border all around */
     /* To make the active tab appear "connected" to the content below,
        its bottom border is often set to the content area's background or made transparent.
        However, since the wrapper has the gold line, we make the active tab's bottom border also gold.
        If the content area below tabs has a different background, this might need adjustment.
-       Given .flek90-admin-page has var(--flek90-dark-bg), this should be fine.
+       Given .aflek90tff-admin-page has var(--aflek90tff-dark-bg), this should be fine.
     */
     font-weight: bold; /* Active tab text is bold */
 }
@@ -201,13 +209,13 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
 /* Ensure the tab content div (if explicitly styled) has some space from the tabs */
 /* The PHP added inline style padding-top: 20px to a .tab-content div, which is good. */
 /* If .tab-content class is used for the div wrapping conditional content:
-.flek90-admin-page .tab-content {
+.aflek90tff-admin-page .tab-content {
     padding-top: 20px;
 }
 */
 
 /* Styling for Code Example in Admin Settings Page */
-.flek90-admin-page pre {
+.aflek90tff-admin-page pre {
     background-color: #1E1E1E; /* A common dark IDE background color, slightly different from page bg */
     color: #D4D4D4; /* Light gray text, common for dark themes */
     padding: 15px;
@@ -223,7 +231,7 @@ body.admin-color-fresh #adminmenu #toplevel_page_flek90_main_menu_slug .wp-subme
     display: block; /* Ensure it takes block-level for overflow-x to work as expected */
 }
 
-.flek90-admin-page pre code {
+.aflek90tff-admin-page pre code {
     /* Most styling is on the <pre> tag.
        The <code> tag itself might not need much if <pre> handles font and color.
        However, you can ensure font family inheritance or specific color if needed. */
