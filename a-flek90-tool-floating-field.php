@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content.
-Version: 5.6
+Version: 6.0
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -10,7 +10,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
 Requires PHP: 7.0
 Tested up to: 6.8
-Stable tag: 5.0.1
+Stable tag: 6.0
 */
 
 // Exit if accessed directly
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class A_FleK90_Tool_Floating_Field {
-    private $plugin_version = '5.6';
+    private $plugin_version = '6.0';
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
     private $new_prefix = 'aflek90tff';
 

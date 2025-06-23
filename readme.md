@@ -4,7 +4,7 @@ Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
 Tested up to: 6.8.1
-Stable tag: 5.6
+Stable tag: 6.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -109,6 +109,14 @@ Content for the floating field is managed via textareas in the admin settings pa
 - Tested up to: 6.8.1
 
 == Changelog ==
+
+= 6.0 =
+* Security & Standards: Addressed WordPress Plugin Review feedback to enhance security and coding standards.
+* Prefixing: Implemented a unique prefix `aflek90tff_` for all plugin options, CSS IDs/classes, admin page slugs, and nonce names to prevent conflicts with other plugins and themes.
+* Data Migration: Added a one-time migration routine to seamlessly transfer existing user settings from old option names to the new prefixed names.
+* Text Domain: Removed the `load_plugin_textdomain()` call, now relying on WordPress.org's standard mechanism for loading translations (for WordPress 4.6+).
+* Sanitization & Escaping: Reviewed and ensured all user inputs are properly sanitized upon saving and all outputs are correctly escaped, particularly for frontend content display and inline CSS generation, adhering to the "escape late" principle.
+* Code Refinements: Updated asset file names (CSS, JS) and their enqueue calls to align with the new prefix. Minor code adjustments for clarity and adherence to best practices.
 
 = 5.6 =
 * Feature: Content textareas now pre-fill with comprehensive examples on first use, including HTML structure, a %page_title% tag, and placeholder shortcodes.
