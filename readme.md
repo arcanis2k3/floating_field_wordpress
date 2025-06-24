@@ -111,6 +111,10 @@ Content for the floating field is managed via textareas in the admin settings pa
 == Changelog ==
 
 = 5.6 =
+* Fix: Addressed WordPress.org review feedback for plugin guidelines compliance.
+* Fix: Removed `load_plugin_textdomain()` call; localization is now handled by WordPress.org.
+* Fix: Updated internal programmatic prefixes (options, hooks, CSS, JS, class name, etc.) to `aftff_` for improved uniqueness and to prevent conflicts.
+* Fix: Corrected saving mechanism for separate Custom CSS for Desktop and Mobile settings.
 * Feature: Content textareas now pre-fill with comprehensive examples on first use, including HTML structure, a %page_title% tag, and placeholder shortcodes.
 * Feature: Implemented dynamic tag replacement for %page_title% to display the current page/post title.
 * Feature: Added separate Custom CSS textarea fields for Desktop and Mobile views, replacing the single Custom CSS field.
