@@ -2,7 +2,7 @@
 /*
 Plugin Name: A FleK90 Tool Floating Field
 Description: Adds a fixed-position floating field on the front-end with customizable content.
-Version: 5.6
+Version: 5.7
 Author: FleK90
 Author URI: https://flek90.aureusz.com
 License: GPL-2.0+
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 
 // Initialize the plugin
 class AFTFF_Floating_Field_Plugin {
-    private $plugin_version = '5.6';
+    private $plugin_version = '5.7';
     private $settings_page_hook_suffix; // Hook suffix for the main settings page (now tabbed)
 
     public function __construct() {
