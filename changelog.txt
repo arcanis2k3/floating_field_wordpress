@@ -1,4 +1,6 @@
 == Changelog ==
+= 5.7 =
+* Changed: Plugin options now use "aftff" prefix
 
 = 5.4 - 2025-06-12 =
 * Enhancement: Updated the 'About' tab in the admin settings page with new example images.

@@ -64,7 +64,18 @@ class A_FleK90_Tool_Floating_Field {
         ];
     }
 
+    /**
+     * Sanitizes and validates the position setting.
+     * Ensures the input is one of the allowed position keys.
+     * Returns the valid input or a default value ('top-center') if invalid.
+     *
+     * @param string $input The position value from user input.
+     * @return string The sanitized and validated position string.
+     */
     public static function sanitize_position_setting($input) {
+        // $input is expected to be unslashed at this point.
+        // Validates against a predefined list of allowed values (keys of get_position_choices).
+        // This acts as both sanitization (by restricting to known safe values) and validation.
         return in_array($input, array_keys(self::get_position_choices()), true) ? $input : 'top-center';
     }
 
@@ -88,8 +99,6 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function add_admin_menu() {
-        // add_options_page('Floating Field Settings', 'Floating Field Settings', 'manage_options', 'flek90-floating-field-settings', [$this, 'render_admin_page']);
-
         // Add the new top-level "FleK90" menu
         add_menu_page(
             __( 'FleK90 Tools', 'a-flek90-tool-floating-field' ), // Page title
@@ -135,16 +144,15 @@ class A_FleK90_Tool_Floating_Field {
         // Determine active tab, default to 'settings'
         $active_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : 'settings';
 
-
         // Settings saving logic - only if on settings tab and form submitted
         if ($active_tab === 'settings' && isset($_POST[$this->new_prefix . '_save_settings']) && check_admin_referer($this->new_prefix . '_save_settings_action', $this->new_prefix . '_save_settings_nonce')) {
             update_option($this->new_prefix . '_enable_on_desktop_v5', isset($_POST[$this->new_prefix . '_enable_on_desktop_v5']) ? '1' : '0');
             update_option($this->new_prefix . '_enable_on_mobile_v5', isset($_POST[$this->new_prefix . '_enable_on_mobile_v5']) ? '1' : '0');
             if (isset($_POST[$this->new_prefix . '_desktop_position_v5'])) { update_option($this->new_prefix . '_desktop_position_v5', self::sanitize_position_setting(wp_unslash($_POST[$this->new_prefix . '_desktop_position_v5']))); }
             if (isset($_POST[$this->new_prefix . '_mobile_position_v5'])) { update_option($this->new_prefix . '_mobile_position_v5', self::sanitize_position_setting(wp_unslash($_POST[$this->new_prefix . '_mobile_position_v5']))); }
-            if (isset($_POST[$this->new_prefix . '_background_color_v5'])) { update_option($this->new_prefix . '_background_color_v5', sanitize_hex_color(wp_unslash($_POST[$this->new_prefix . '_background_color_v5'])));}
-            if (isset($_POST[$this->new_prefix . '_font_size_v5'])) { update_option($this->new_prefix . '_font_size_v5', absint(wp_unslash($_POST[$this->new_prefix . '_font_size_v5'])));}
-            if (isset($_POST[$this->new_prefix . '_field_width_v5'])) { update_option($this->new_prefix . '_field_width_v5', absint(wp_unslash($_POST[$this->new_prefix . '_field_width_v5'])));}
+            if (isset($_POST[$this->new_prefix . '_background_color_v5'])) { update_option($this->new_prefix . '_background_color_v5', sanitize_hex_color(wp_unslash($_POST[$this->new_prefix . '_background_color_v5']))); }
+            if (isset($_POST[$this->new_prefix . '_font_size_v5'])) { update_option($this->new_prefix . '_font_size_v5', absint(wp_unslash($_POST[$this->new_prefix . '_font_size_v5']))); }
+            if (isset($_POST[$this->new_prefix . '_field_width_v5'])) { update_option($this->new_prefix . '_field_width_v5', absint(wp_unslash($_POST[$this->new_prefix . '_field_width_v5']))); }
             if (isset($_POST[$this->new_prefix . '_field_width_unit_v5'])) {
                 $allowed_units = ['px', '%', 'rem', 'em', 'vw'];
                 $submitted_unit = sanitize_text_field(wp_unslash($_POST[$this->new_prefix . '_field_width_unit_v5']));
@@ -156,16 +164,12 @@ class A_FleK90_Tool_Floating_Field {
             }
             if (isset($_POST[$this->new_prefix . '_content_desktop_v5'])) { update_option($this->new_prefix . '_content_desktop_v5', wp_kses_post(wp_unslash($_POST[$this->new_prefix . '_content_desktop_v5']))); }
             if (isset($_POST[$this->new_prefix . '_content_mobile_v5'])) { update_option($this->new_prefix . '_content_mobile_v5', wp_kses_post(wp_unslash($_POST[$this->new_prefix . '_content_mobile_v5']))); }
-            // The 'flek90_custom_css_v5' option is part of the old options to be deleted, not a current setting.
-            // Current custom CSS options are flek90_custom_css_desktop_v5 and flek90_custom_css_mobile_v5
             if (isset($_POST[$this->new_prefix . '_custom_css_desktop_v5'])) { update_option($this->new_prefix . '_custom_css_desktop_v5', wp_strip_all_tags(wp_unslash($_POST[$this->new_prefix . '_custom_css_desktop_v5']))); }
             if (isset($_POST[$this->new_prefix . '_custom_css_mobile_v5'])) { update_option($this->new_prefix . '_custom_css_mobile_v5', wp_strip_all_tags(wp_unslash($_POST[$this->new_prefix . '_custom_css_mobile_v5']))); }
             if (isset($_POST[$this->new_prefix . '_prioritize_custom_css_v5'])) { update_option($this->new_prefix . '_prioritize_custom_css_v5', '1'); } else { update_option($this->new_prefix . '_prioritize_custom_css_v5', '0'); }
 
-
-            // Old option deletion logic (can be moved to migration, but keeping here ensures cleanup on save if migration fails or is missed)
-            // These are very old option names, not the ones being migrated by `migrate_old_options`
-            if (get_option('flek90_ff_customizer_settings') !== false) { // This is an old, unrelated option name
+            // Old option deletion logic
+            if (get_option('flek90_ff_customizer_settings') !== false) {
                 delete_option('flek90_ff_customizer_settings');
             }
             $old_options_to_delete_on_save = ['flek90_enable_field', 'flek90_mobile_only', 'flek90_field_content', 'flek90_background_color', 'flek90_font_size', 'flek90_custom_css'];
@@ -175,7 +179,7 @@ class A_FleK90_Tool_Floating_Field {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__('Settings saved successfully!', 'a-flek90-tool-floating-field') . '</p></div>';
         }
         ?>
-        <div class="wrap"> <!-- Removed flek90-admin-page class from here -->
+        <div class="wrap">
             <h1><?php esc_html_e('A FleK90 Tool Floating Field', 'a-flek90-tool-floating-field'); ?> - v<?php echo esc_html($plugin_version_display); ?></h1>
 
             <h2 class="nav-tab-wrapper">
@@ -187,168 +191,166 @@ class A_FleK90_Tool_Floating_Field {
                 </a>
             </h2>
 
-            <div class="<?php echo esc_attr($this->new_prefix); ?>-admin-page"> <!-- Added aflek90tff-admin-page wrapper here -->
+            <div class="<?php echo esc_attr($this->new_prefix); ?>-admin-page">
                 <div class="tab-content" style="padding-top: 20px;">
                     <?php if ($active_tab === 'settings') : ?>
                         <?php
                         // Retrieve settings for the form
-                    $enable_on_desktop_v5 = get_option($this->new_prefix . '_enable_on_desktop_v5', '1');
-                    $enable_on_mobile_v5 = get_option($this->new_prefix . '_enable_on_mobile_v5', '1');
-                    $desktop_position_v5 = get_option($this->new_prefix . '_desktop_position_v5', 'top-center');
-                    $mobile_position_v5 = get_option($this->new_prefix . '_mobile_position_v5', 'top-center');
-                    $background_color_v5 = get_option($this->new_prefix . '_background_color_v5', '#0073aa');
-                    $font_size_v5 = get_option($this->new_prefix . '_font_size_v5', '24');
-                    $field_width_v5 = get_option($this->new_prefix . '_field_width_v5', '280'); // Default to 280px
-                    $field_width_unit_v5 = get_option($this->new_prefix . '_field_width_unit_v5', 'px'); // Default to 'px'
-                    // $custom_css_v5 = get_option($this->new_prefix . '_custom_css_v5', ''); // This specific option is not used in the form below.
-                    $pos_choices = self::get_position_choices();
+                        $enable_on_desktop_v5 = get_option($this->new_prefix . '_enable_on_desktop_v5', '1');
+                        $enable_on_mobile_v5 = get_option($this->new_prefix . '_enable_on_mobile_v5', '1');
+                        $desktop_position_v5 = get_option($this->new_prefix . '_desktop_position_v5', 'top-center');
+                        $mobile_position_v5 = get_option($this->new_prefix . '_mobile_position_v5', 'top-center');
+                        $background_color_v5 = get_option($this->new_prefix . '_background_color_v5', '#0073aa');
+                        $font_size_v5 = get_option($this->new_prefix . '_font_size_v5', '24');
+                        $field_width_v5 = get_option($this->new_prefix . '_field_width_v5', '280');
+                        $field_width_unit_v5 = get_option($this->new_prefix . '_field_width_unit_v5', 'px');
+                        $pos_choices = self::get_position_choices();
 
-                    // Define default content examples
-                    $default_desktop_content_example = '<div style="padding: 10px; text-align: center;">' . "\n" .
-                                                       '  <h2>Page: %page_title%</h2>' . "\n" .
-                                                       '  <p>This is an example of desktop content.</p>' . "\n" .
-                                                       '  <p>Current year via shortcode: [current_year_example_shortcode]</p>' . "\n" .
-                                                       '  <p>Try another shortcode: [my_contact_form_shortcode]</p>' . "\n" .
-                                                       '  <p><a href="#">Learn More</a></p>' . "\n" .
-                                                       '</div>';
+                        // Define default content examples
+                        $default_desktop_content_example = '<div style="padding: 10px; text-align: center;">' . "\n" .
+                                                          '  <h2>Page: %page_title%</h2>' . "\n" .
+                                                          '  <p>This is an example of desktop content.</p>' . "\n" .
+                                                          '  <p>Current year via shortcode: [current_year_example_shortcode]</p>' . "\n" .
+                                                          '  <p>Try another shortcode: [my_contact_form_shortcode]</p>' . "\n" .
+                                                          '  <p><a href="#">Learn More</a></p>' . "\n" .
+                                                          '</div>';
 
-                    $default_mobile_content_example = '<div style="padding: 8px; text-align: center; border: 1px solid lightblue;">' . "\n" .
-                                                      '  <h3>Mobile: %page_title%</h3>' . "\n" .
-                                                      '  <p>Mobile content example.</p>' . "\n" .
-                                                      '  <p>Shortcode: [my_contact_form_shortcode]</p>' . "\n" .
-                                                      '</div>';
-                    ?>
-                    <form method="post" action="?page=<?php echo esc_attr($this->new_prefix); ?>_floating_field_settings_slug&tab=settings">
-                        <?php wp_nonce_field($this->new_prefix . '_save_settings_action', $this->new_prefix . '_save_settings_nonce'); ?>
-                        <table class="form-table">
-                            <tr valign="top"><td colspan="2"><h3><?php esc_html_e('Display Control', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5"><?php esc_html_e('Enable on Desktop', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5" value="1" <?php checked($enable_on_desktop_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on desktop devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5"><?php esc_html_e('Enable on Mobile', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5" value="1" <?php checked($enable_on_mobile_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on mobile devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                        $default_mobile_content_example = '<div style="padding: 8px; text-align: center; border: 1px solid lightblue;">' . "\n" .
+                                                         '  <h3>Mobile: %page_title%</h3>' . "\n" .
+                                                         '  <p>Mobile content example.</p>' . "\n" .
+                                                         '  <p>Shortcode: [my_contact_form_shortcode]</p>' . "\n" .
+                                                         '</div>';
+                        ?>
+                        <form method="post" action="?page=<?php echo esc_attr($this->new_prefix); ?>_floating_field_settings_slug&tab=settings">
+                            <?php wp_nonce_field($this->new_prefix . '_save_settings_action', $this->new_prefix . '_save_settings_nonce'); ?>
+                            <table class="form-table">
+                                <tr valign="top"><td colspan="2"><h3><?php esc_html_e('Display Control', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5"><?php esc_html_e('Enable on Desktop', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_enable_on_desktop_v5" value="1" <?php checked($enable_on_desktop_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on desktop devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5"><?php esc_html_e('Enable on Mobile', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_enable_on_mobile_v5" value="1" <?php checked($enable_on_mobile_v5, '1'); ?>><p class="description"><?php esc_html_e('Show the floating field on mobile devices.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
 
-                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Content Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5"><?php esc_html_e('Desktop Content', 'a-flek90-tool-floating-field'); ?></label>
-                                </th>
-                                <td>
-                                    <textarea id="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_content_desktop_v5', $default_desktop_content_example)); ?></textarea>
-                                    <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [current_year_example_shortcode] or [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
-                            <tr valign="top">
-                                <th scope="row">
-                                    <label for="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5"><?php esc_html_e('Mobile Content', 'a-flek90-tool-floating-field'); ?></label>
-                                </th>
-                                <td>
-                                    <textarea id="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_content_mobile_v5', $default_mobile_content_example)); ?></textarea>
-                                    <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
-                            <?php // The tr below was intentionally left empty after removing the outdated instructions ?>
-                            <tr valign="top"><td colspan="2" style="padding-top: 0;"></td></tr>
+                                <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Content Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5"><?php esc_html_e('Desktop Content', 'a-flek90-tool-floating-field'); ?></label>
+                                    </th>
+                                    <td>
+                                        <textarea id="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_content_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_content_desktop_v5', $default_desktop_content_example)); ?></textarea>
+                                        <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [current_year_example_shortcode] or [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row">
+                                        <label for="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5"><?php esc_html_e('Mobile Content', 'a-flek90-tool-floating-field'); ?></label>
+                                    </th>
+                                    <td>
+                                        <textarea id="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_content_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_content_mobile_v5', $default_mobile_content_example)); ?></textarea>
+                                        <p class="description"><?php esc_html_e('Enter your HTML content. Use %page_title% to display the current page/post title. For dynamic PHP-like functionality, use or create WordPress shortcodes (e.g., [your_shortcode]). The example shows basic HTML, the page title tag, and a placeholder for a shortcode. Note: You would need to define shortcodes like [my_contact_form_shortcode] in your theme or another plugin for them to work.', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
+                                <tr valign="top"><td colspan="2" style="padding-top: 0;"></td></tr>
 
-                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Position Settings (Simplified)', 'a-flek90-tool-floating-field'); ?></h3><p class="description"><?php esc_html_e('Select a general position. Offsets are no longer configured on this page.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5"><?php esc_html_e('Desktop Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5" name="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($desktop_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5"><?php esc_html_e('Mobile Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5" name="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($mobile_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
+                                <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Position Settings (Simplified)', 'a-flek90-tool-floating-field'); ?></h3><p class="description"><?php esc_html_e('Select a general position. Offsets are no longer configured on this page.', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5"><?php esc_html_e('Desktop Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5" name="<?php echo esc_attr($this->new_prefix); ?>_desktop_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($desktop_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5"><?php esc_html_e('Mobile Position', 'a-flek90-tool-floating-field'); ?></label></th><td><select id="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5" name="<?php echo esc_attr($this->new_prefix); ?>_mobile_position_v5"><?php foreach ($pos_choices as $value => $label) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($mobile_position_v5, $value); ?>><?php echo esc_html($label); ?></option><?php endforeach; ?></select></td></tr>
 
-                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Appearance Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5"><?php esc_html_e('Background Color', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="text" id="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5" name="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5" value="<?php echo esc_attr($background_color_v5); ?>" class="<?php echo esc_attr($this->new_prefix); ?>-color-picker-field"><p class="description"><?php esc_html_e('Select background color (default: blue).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
-                            <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5"><?php esc_html_e('Font Size (px)', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="number" id="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5" name="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5" value="<?php echo esc_attr($font_size_v5); ?>" min="12" max="48" step="1"><p class="description"><?php esc_html_e('Set font size (12–48px, default: 24px).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
-                            <tr>
-                                <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5"><?php esc_html_e('Field Width', 'a-flek90-tool-floating-field'); ?></label></th>
-                                <td style="display: flex; align-items: center; gap: 10px;">
-                                    <input type="number" id="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5" name="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5" value="<?php echo esc_attr($field_width_v5); ?>" min="10" max="1000" step="1" style="width: 80px;">
-                                    <select id="<?php echo esc_attr($this->new_prefix); ?>_field_width_unit_v5" name="<?php echo esc_attr($this->new_prefix); ?>_field_width_unit_v5" style="flex-shrink: 0;">
-                                        <?php
-                                        $units = ['px', '%', 'rem', 'em', 'vw'];
-                                        foreach ($units as $unit) {
-                                            echo '<option value="' . esc_attr($unit) . '" ' . selected($field_width_unit_v5, $unit, false) . '>' . esc_html($unit) . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                    <p class="description" style="margin-left: 10px;"><?php esc_html_e('Set field width and unit (e.g., 280px, 50%, 15rem). Note: % and vw are relative to viewport width.', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
+                                <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Appearance Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5"><?php esc_html_e('Background Color', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="text" id="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5" name="<?php echo esc_attr($this->new_prefix); ?>_background_color_v5" value="<?php echo esc_attr($background_color_v5); ?>" class="<?php echo esc_attr($this->new_prefix); ?>-color-picker-field"><p class="description"><?php esc_html_e('Select background color (default: blue).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                                <tr><th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5"><?php esc_html_e('Font Size (px)', 'a-flek90-tool-floating-field'); ?></label></th><td><input type="number" id="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5" name="<?php echo esc_attr($this->new_prefix); ?>_font_size_v5" value="<?php echo esc_attr($font_size_v5); ?>" min="12" max="48" step="1"><p class="description"><?php esc_html_e('Set font size (12–48px, default: 24px).', 'a-flek90-tool-floating-field'); ?></p></td></tr>
+                                <tr>
+                                    <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5"><?php esc_html_e('Field Width', 'a-flek90-tool-floating-field'); ?></label></th>
+                                    <td style="display: flex; align-items: center; gap: 10px;">
+                                        <input type="number" id="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5" name="<?php echo esc_attr($this->new_prefix); ?>_field_width_v5" value="<?php echo esc_attr($field_width_v5); ?>" min="10" max="1000" step="1" style="width: 80px;">
+                                        <select id="<?php echo esc_attr($this->new_prefix); ?>_field_width_unit_v5" name="<?php echo esc_attr($this->new_prefix); ?>_field_width_unit_v5" style="flex-shrink: 0;">
+                                            <?php
+                                            $units = ['px', '%', 'rem', 'em', 'vw'];
+                                            foreach ($units as $unit) {
+                                                echo '<option value="' . esc_attr($unit) . '" ' . selected($field_width_unit_v5, $unit, false) . '>' . esc_html($unit) . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                        <p class="description" style="margin-left: 10px;"><?php esc_html_e('Set field width and unit (e.g., 280px, 50%, 15rem). Note: % and vw are relative to viewport width.', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
 
-                            <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Custom CSS Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
-                            <tr valign="top">
-                                <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5"><?php esc_html_e('Custom CSS for Desktop', 'a-flek90-tool-floating-field'); ?></label></th>
-                                <td>
-                                    <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_desktop_v5', '')); ?></textarea>
-                                    <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for desktop views. Example: #' . esc_attr($this->new_prefix) . '-floating-container { border: 2px solid blue !important; }', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
-                            <tr valign="top">
-                                <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5"><?php esc_html_e('Custom CSS for Mobile', 'a-flek90-tool-floating-field'); ?></label></th>
-                                <td>
-                                    <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_mobile_v5', '')); ?></textarea>
-                                    <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for mobile views (typically within a max-width: 768px media query). Example: #' . esc_attr($this->new_prefix) . '-floating-container { font-size: 12px !important; }', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
-                            <tr valign="top">
-                                <th scope="row"><?php esc_html_e('CSS Override', 'a-flek90-tool-floating-field'); ?></th>
-                                <td>
-                                    <input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5" name="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5" value="1" <?php checked(get_option($this->new_prefix . '_prioritize_custom_css_v5', '0'), '1'); ?> />
-                                    <label for="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5"><?php esc_html_e('Prioritize Custom CSS for Styles', 'a-flek90-tool-floating-field'); ?></label>
-                                    <p class="description"><?php esc_html_e('If checked, your Custom CSS for Desktop/Mobile will take full control over appearance (background, font size, width). The plugin\'s specific settings for these will be ignored, allowing your CSS to prevail.', 'a-flek90-tool-floating-field'); ?></p>
-                                </td>
-                            </tr>
-                        </table>
-                        <p class="submit"><input type="submit" name="<?php echo esc_attr($this->new_prefix); ?>_save_settings" class="button button-primary" value="<?php esc_attr_e('Save Settings', 'a-flek90-tool-floating-field'); ?>"></p>
-                    </form>
+                                <tr valign="top"><td colspan="2"><hr><h3><?php esc_html_e('Custom CSS Settings', 'a-flek90-tool-floating-field'); ?></h3></td></tr>
+                                <tr valign="top">
+                                    <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5"><?php esc_html_e('Custom CSS for Desktop', 'a-flek90-tool-floating-field'); ?></label></th>
+                                    <td>
+                                        <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_desktop_v5', '')); ?></textarea>
+                                        <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for desktop views. Example: #' . esc_attr($this->new_prefix) . '-floating-container { border: 2px solid blue !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5"><?php esc_html_e('Custom CSS for Mobile', 'a-flek90-tool-floating-field'); ?></label></th>
+                                    <td>
+                                        <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_mobile_v5', '')); ?></textarea>
+                                        <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for mobile views (typically within a max-width: 768px media query). Example: #' . esc_attr($this->new_prefix) . '-floating-container { font-size: 12px !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
+                                <tr valign="top">
+                                    <th scope="row"><?php esc_html_e('CSS Override', 'a-flek90-tool-floating-field'); ?></th>
+                                    <td>
+                                        <input type="checkbox" id="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5" name="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5" value="1" <?php checked(get_option($this->new_prefix . '_prioritize_custom_css_v5', '0'), '1'); ?> />
+                                        <label for="<?php echo esc_attr($this->new_prefix); ?>_prioritize_custom_css_v5"><?php esc_html_e('Prioritize Custom CSS for Styles', 'a-flek90-tool-floating-field'); ?></label>
+                                        <p class="description"><?php esc_html_e('If checked, your Custom CSS for Desktop/Mobile will take full control over appearance (background, font size, width). The plugin\'s specific settings for these will be ignored, allowing your CSS to prevail.', 'a-flek90-tool-floating-field'); ?></p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p class="submit"><input type="submit" name="<?php echo esc_attr($this->new_prefix); ?>_save_settings" class="button button-primary" value="<?php esc_attr_e('Save Settings', 'a-flek90-tool-floating-field'); ?>"></p>
+                        </form>
 
-                <?php elseif ($active_tab === 'about') : ?>
-                    <?php
-                    // Content for the "About" tab
-                    $assets_url = plugin_dir_url(__FILE__) . 'assets/';
-                    ?>
-                    <h3><?php esc_html_e('About This Plugin', 'a-flek90-tool-floating-field'); ?></h3>
-                    <p><?php esc_html_e('This plugin gives the option to create a customizable responsive floating field. Different for desktop and mobile.', 'a-flek90-tool-floating-field'); ?></p>
+                    <?php elseif ($active_tab === 'about') : ?>
+                        <?php
+                        // Content for the "About" tab
+                        $assets_url = plugin_dir_url(__FILE__) . 'assets/';
+                        ?>
+                        <h3><?php esc_html_e('About This Plugin', 'a-flek90-tool-floating-field'); ?></h3>
+                        <p><?php esc_html_e('This plugin gives the option to create a customizable responsive floating field. Different for desktop and mobile.', 'a-flek90-tool-floating-field'); ?></p>
 
-                    <h3><?php esc_html_e('Key Features', 'a-flek90-tool-floating-field'); ?></h3>
-                    <ul>
-                        <li><?php esc_html_e('Customize content via PHP files (`content-desktop.php`, `content-mobile.php`, `floating-field-content.php`).', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Separate content for desktop & mobile.', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Multiple field positions (e.g., top-center, bottom-right).', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Customizable background color & font size.', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Separate enable/disable for desktop & mobile.', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Add custom CSS for advanced styling.', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Quick settings link in plugin list.', 'a-flek90-tool-floating-field'); ?></li>
-                        <li><?php esc_html_e('Themed admin interface for FleK90 tools.', 'a-flek90-tool-floating-field'); ?></li>
-                    </ul>
+                        <h3><?php esc_html_e('Key Features', 'a-flek90-tool-floating-field'); ?></h3>
+                        <ul>
+                            <li><?php esc_html_e('Customize content via PHP files (`content-desktop.php`, `content-mobile.php`, `floating-field-content.php`).', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Separate content for desktop & mobile.', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Multiple field positions (e.g., top-center, bottom-right).', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Customizable background color & font size.', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Separate enable/disable for desktop & mobile.', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Add custom CSS for advanced styling.', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Quick settings link in plugin list.', 'a-flek90-tool-floating-field'); ?></li>
+                            <li><?php esc_html_e('Themed admin interface for FleK90 tools.', 'a-flek90-tool-floating-field'); ?></li>
+                        </ul>
 
-                    <h3><?php esc_html_e('Screenshots', 'a-flek90-tool-floating-field'); ?></h3>
-                    <p><em><?php esc_html_e('Note: Screenshot images (floating_field_example.jpg, floating_field_example2.jpg, Floating_field_admin_menu.jpg) need to be placed in the plugin\'s assets/images/ directory.', 'a-flek90-tool-floating-field'); ?></em></p>
-                    <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshots">
-                        <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/floating_field_example.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 1', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('Example 1: Floating field in action.', 'a-flek90-tool-floating-field'); ?></em></p>
+                        <h3><?php esc_html_e('Screenshots', 'a-flek90-tool-floating-field'); ?></h3>
+                        <p><em><?php esc_html_e('Note: Screenshot images (floating_field_example.jpg, floating_field_example2.jpg, Floating_field_admin_menu.jpg) need to be placed in the plugin\'s assets/images/ directory.', 'a-flek90-tool-floating-field'); ?></em></p>
+                        <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshots">
+                            <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
+                                <img src="<?php echo esc_url($assets_url . 'images/floating_field_example.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 1', 'a-flek90-tool-floating-field'); ?>">
+                                <p><em><?php esc_html_e('Example 1: Floating field in action.', 'a-flek90-tool-floating-field'); ?></em></p>
+                            </div>
+                            <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
+                                <img src="<?php echo esc_url($assets_url . 'images/floating_field_example2.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 2', 'a-flek90-tool-floating-field'); ?>">
+                                <p><em><?php esc_html_e('Example 2: Another view of the floating field.', 'a-flek90-tool-floating-field'); ?></em></p>
+                            </div>
+                            <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
+                                <img src="<?php echo esc_url($assets_url . 'images/Floating_field_admin_menu.jpg'); ?>" alt="<?php esc_attr_e('Screenshot 4: Admin Menu Structure', 'a-flek90-tool-floating-field'); ?>">
+                                <p><em><?php esc_html_e('The AFTFF Tools admin menu and Floating Field submenu.', 'a-flek90-tool-floating-field'); ?></em></p>
+                            </div>
                         </div>
-                        <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/floating_field_example2.jpg'); ?>" alt="<?php esc_attr_e('Floating Field Example 2', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('Example 2: Another view of the floating field.', 'a-flek90-tool-floating-field'); ?></em></p>
-                        </div>
-                        <div class="<?php echo esc_attr($this->new_prefix); ?>-screenshot">
-                            <img src="<?php echo esc_url($assets_url . 'images/Floating_field_admin_menu.jpg'); ?>" alt="<?php esc_attr_e('Screenshot 4: Admin Menu Structure', 'a-flek90-tool-floating-field'); ?>">
-                            <p><em><?php esc_html_e('The FleK90 Tools admin menu and Floating Field submenu.', 'a-flek90-tool-floating-field'); ?></em></p>
-                        </div>
-                    </div>
 
-                    <hr style="margin-top: 30px; margin-bottom: 20px;">
-                    <p><?php
-                        printf(
-                            wp_kses(
-                                /* translators: %s: URL to plugin author FleK90. */
-                                __( 'This plugin is developed and maintained by <a href="%s" target="_blank">FleK90</a>.', 'a-flek90-tool-floating-field' ),
-                                [ 'a' => [ 'href' => true, 'target' => true ] ]
-                            ),
-                            esc_url('https://flek90.aureusz.com')
-                        );
-                    ?></p>
+                        <hr style="margin-top: 30px; margin-bottom: 20px;">
+                        <p><?php
+                            printf(
+                                wp_kses(
+                                    /* translators: %s: URL to plugin author FleK90. */
+                                    __( 'This plugin is developed and maintained by <a href="%s" target="_blank">FleK90</a>.', 'a-flek90-tool-floating-field' ),
+                                    [ 'a' => [ 'href' => true, 'target' => true ] ]
+                                ),
+                                esc_url('https://flek90.aureusz.com')
+                            );
+                        ?></p>
 
-                <?php endif; ?>
+                    <?php endif; ?>
                 </div> <!-- end .tab-content -->
-            </div> <!-- end .<?php echo esc_attr($this->new_prefix); ?>-admin-page -->
+            </div> <!-- end .aflek90tff-admin-page -->
         </div> <!-- end .wrap -->
         <?php
     }
@@ -362,26 +364,23 @@ class A_FleK90_Tool_Floating_Field {
         $old_options_map = [
             'flek90_enable_on_desktop_v5'     => $this->new_prefix . '_enable_on_desktop_v5',
             'flek90_enable_on_mobile_v5'      => $this->new_prefix . '_enable_on_mobile_v5',
-            'flek90_desktop_position_v5'    => $this->new_prefix . '_desktop_position_v5',
-            'flek90_mobile_position_v5'     => $this->new_prefix . '_mobile_position_v5',
-            'flek90_background_color_v5'    => $this->new_prefix . '_background_color_v5',
-            'flek90_font_size_v5'           => $this->new_prefix . '_font_size_v5',
-            'flek90_field_width_v5'         => $this->new_prefix . '_field_width_v5',
-            'flek90_field_width_unit_v5'    => $this->new_prefix . '_field_width_unit_v5',
-            'flek90_content_desktop_v5'     => $this->new_prefix . '_content_desktop_v5',
-            'flek90_content_mobile_v5'      => $this->new_prefix . '_content_mobile_v5',
-            'flek90_custom_css_desktop_v5'  => $this->new_prefix . '_custom_css_desktop_v5',
-            'flek90_custom_css_mobile_v5'   => $this->new_prefix . '_custom_css_mobile_v5',
+            'flek90_desktop_position_v5'      => $this->new_prefix . '_desktop_position_v5',
+            'flek90_mobile_position_v5'       => $this->new_prefix . '_mobile_position_v5',
+            'flek90_background_color_v5'      => $this->new_prefix . '_background_color_v5',
+            'flek90_font_size_v5'             => $this->new_prefix . '_font_size_v5',
+            'flek90_field_width_v5'           => $this->new_prefix . '_field_width_v5',
+            'flek90_field_width_unit_v5'      => $this->new_prefix . '_field_width_unit_v5',
+            'flek90_content_desktop_v5'       => $this->new_prefix . '_content_desktop_v5',
+            'flek90_content_mobile_v5'        => $this->new_prefix . '_content_mobile_v5',
+            'flek90_custom_css_desktop_v5'    => $this->new_prefix . '_custom_css_desktop_v5',
+            'flek90_custom_css_mobile_v5'     => $this->new_prefix . '_custom_css_mobile_v5',
             'flek90_prioritize_custom_css_v5' => $this->new_prefix . '_prioritize_custom_css_v5',
         ];
 
         foreach ($old_options_map as $old_option_name => $new_option_name) {
             $old_value = get_option($old_option_name);
-            // Only migrate if old value exists and new value doesn't yet, to avoid overwriting new settings
             if ($old_value !== false && get_option($new_option_name) === false) {
                 update_option($new_option_name, $old_value);
-                // Decide whether to delete old options. For safety, can be left for a while or deleted.
-                // delete_option($old_option_name);
             }
         }
 
@@ -389,8 +388,6 @@ class A_FleK90_Tool_Floating_Field {
     }
 
     public function sanitize_content($input) {
-        // Sanitize content using WordPress VIP standards for outputting HTML
-        // Allows common HTML tags and attributes for formatting.
         $allowed_html = [
             'a'      => ['href' => true, 'title' => true, 'target' => true, 'rel' => true],
             'br'     => [],
@@ -403,12 +400,8 @@ class A_FleK90_Tool_Floating_Field {
             'span'   => ['class' => true, 'style' => true],
             'div'    => ['class' => true, 'style' => true],
             'img'    => ['src' => true, 'alt' => true, 'width' => true, 'height' => true, 'class' => true, 'style' => true],
-            // Add other tags as needed, e.g., h1-h6, blockquote, etc.
-            // Be restrictive by default.
         ];
-        // For attributes like 'style', consider more specific sanitization if possible,
-        // or ensure that the input source is trusted. wp_kses_post is generally safer.
-        return wp_kses_post($input); // wp_kses_post is a good general sanitizer for post content.
+        return wp_kses_post($input);
     }
 
     public function enqueue_scripts() {
@@ -481,139 +474,100 @@ class A_FleK90_Tool_Floating_Field {
         $custom_css_desktop_v5 = get_option($this->new_prefix . '_custom_css_desktop_v5', '');
         $trimmed_custom_css_desktop = trim($custom_css_desktop_v5);
         if (!empty($trimmed_custom_css_desktop)) {
-            $css .= "
-
-/* Custom CSS for Desktop from Plugin Settings */
-" . $trimmed_custom_css_desktop;
+            $css .= "\n\n/* Custom CSS for Desktop from Plugin Settings */\n" . $trimmed_custom_css_desktop;
         }
 
         // Add Mobile Custom CSS (within the media query)
         $custom_css_mobile_v5 = get_option($this->new_prefix . '_custom_css_mobile_v5', '');
         $trimmed_custom_css_mobile = trim($custom_css_mobile_v5);
         if (!empty($trimmed_custom_css_mobile)) {
-            // Check if the media query part is already in $css, if not, add it.
-            // This is a simplified check; robustly parsing CSS is complex.
-            // For this plugin, we assume the media query structure is consistent.
             $media_query_start = "@media (max-width: 768px) {";
             if (strpos($css, $media_query_start) !== false) {
-                // Inject mobile CSS before the last closing brace of the media query
-                // This is a bit fragile. A more robust solution might involve structured CSS management.
                 $css_parts = explode($media_query_start, $css, 2);
                 if (isset($css_parts[1])) {
                     $main_css_part = $css_parts[0];
                     $media_query_content_part = $css_parts[1];
-
-                    // Find the last '}' in the media query content
                     $last_brace_pos = strrpos($media_query_content_part, '}');
                     if ($last_brace_pos !== false) {
                         $before_last_brace = substr($media_query_content_part, 0, $last_brace_pos);
-                        $after_last_brace = substr($media_query_content_part, $last_brace_pos); // should be '}'
-
-                        $css = $main_css_part . $media_query_start . $before_last_brace . "
-
-/* Custom CSS for Mobile from Plugin Settings */
-" . $trimmed_custom_css_mobile . $after_last_brace;
+                        $after_last_brace = substr($media_query_content_part, $last_brace_pos);
+                        $css = $main_css_part . $media_query_start . $before_last_brace . "\n\n/* Custom CSS for Mobile from Plugin Settings */\n" . $trimmed_custom_css_mobile . $after_last_brace;
                     } else {
-                         // Fallback: append if structure is unexpected
-                         $css .= "
-@media (max-width: 768px) {
-/* Custom CSS for Mobile from Plugin Settings (fallback append) */
-" . $trimmed_custom_css_mobile . "
-}";
+                        $css .= "\n@media (max-width: 768px) {\n/* Custom CSS for Mobile from Plugin Settings (fallback append) */\n" . $trimmed_custom_css_mobile . "\n}";
                     }
                 }
             } else {
-                // If the base media query wasn't there for some reason, add it with the mobile CSS
-                $css .= "
-@media (max-width: 768px) {
-/* Custom CSS for Mobile from Plugin Settings */
-" . $trimmed_custom_css_mobile . "
-}";
+                $css .= "\n@media (max-width: 768px) {\n/* Custom CSS for Mobile from Plugin Settings */\n" . $trimmed_custom_css_mobile . "\n}";
             }
         }
         wp_add_inline_style($this->new_prefix . '-floating-field-inline', $css);
     }
 
-public function render_floating_field() {
+    public function render_floating_field() {
+        $is_mobile = wp_is_mobile();
+        $enabled_on_desktop = get_option($this->new_prefix . '_enable_on_desktop_v5', '1');
+        $enabled_on_mobile = get_option($this->new_prefix . '_enable_on_mobile_v5', '1');
 
-    $is_mobile = wp_is_mobile();
-    $enabled_on_desktop = get_option($this->new_prefix . '_enable_on_desktop_v5', '1');
-    $enabled_on_mobile = get_option($this->new_prefix . '_enable_on_mobile_v5', '1');
+        if (($is_mobile && $enabled_on_mobile !== '1') || (!$is_mobile && $enabled_on_desktop !== '1')) {
+            return;
+        }
 
-    if (($is_mobile && $enabled_on_mobile !== '1') || (!$is_mobile && $enabled_on_desktop !== '1')) {
-        return;
-    }
+        if ($enabled_on_desktop !== '1' && $enabled_on_mobile !== '1') {
+            return;
+        }
 
-    if ($enabled_on_desktop !== '1' && $enabled_on_mobile !== '1') {
-         return;
-    }
+        $content = '';
 
-    $content = '';
-
-    if ($is_mobile) {
-        $content = get_option($this->new_prefix . '_content_mobile_v5', '');
-    } else {
-        $content = get_option($this->new_prefix . '_content_desktop_v5', '');
-    }
-
-    // If device-specific content is empty, try to fall back to the other device's content.
-    // This is a change from direct file editing, where a specific fallback file was used.
-    // Now, if mobile content is empty, it might use desktop content if available, and vice-versa.
-    // This behavior might need further refinement based on desired plugin logic.
-    if (empty(trim($content))) {
         if ($is_mobile) {
-            // Mobile content was empty, try desktop
-            $content = get_option($this->new_prefix . '_content_desktop_v5', '');
-        } else {
-            // Desktop content was empty, try mobile
             $content = get_option($this->new_prefix . '_content_mobile_v5', '');
-        }
-    }
-
-    // If still no content, display a message or hide (current behavior: display nothing if both are empty)
-    if (empty(trim($content))) {
-        // Optionally, provide a default message if both are empty, or ensure the container doesn't show.
-        // For now, if $content is empty, nothing will be rendered in the field.
-        // This replaces the old error message about missing files.
-        return; // Or set a default message: $content = '<p>No content configured.</p>';
-    }
-
-    // Replace %page_title% placeholder
-    if (strpos($content, '%page_title%') !== false) {
-        $title_to_display = '';
-        if (is_singular()) {
-            $title_to_display = get_the_title();
         } else {
-            // For non-singular pages, wp_get_document_title() often gives a good generic title.
-            // It includes context like "Category: X" or "Tag: Y" or the site title on home/front-page.
-            $title_to_display = wp_get_document_title();
+            $content = get_option($this->new_prefix . '_content_desktop_v5', '');
         }
-        $content = str_replace('%page_title%', esc_html($title_to_display), $content);
+
+        // If device-specific content is empty, try to fall back to the other device's content.
+        if (empty(trim($content))) {
+            if ($is_mobile) {
+                $content = get_option($this->new_prefix . '_content_desktop_v5', '');
+            } else {
+                $content = get_option($this->new_prefix . '_content_mobile_v5', '');
+            }
+        }
+
+        // If still no content, display nothing
+        if (empty(trim($content))) {
+            return;
+        }
+
+        // Replace %page_title% placeholder
+        if (strpos($content, '%page_title%') !== false) {
+            $title_to_display = '';
+            if (is_singular()) {
+                $title_to_display = get_the_title();
+            } else {
+                $title_to_display = wp_get_document_title();
+            }
+            $content = str_replace('%page_title%', esc_html($title_to_display), $content);
+        }
+
+        $content = do_blocks($content);
+        $content = do_shortcode($content);
+        $content = $this->sanitize_content($content);
+        ?>
+        <div id="<?php echo esc_attr($this->new_prefix); ?>-floating-container">
+            <div id="<?php echo esc_attr($this->new_prefix); ?>-field-content"><?php echo $content; ?></div>
+        </div>
+        <?php
     }
 
-    $content = do_blocks($content);
-    $content = do_shortcode($content);
-    // $content = $this->sanitize_content($content); // Sanitization will happen at echo
-
-
-    ?>
-    <div id="<?php echo esc_attr($this->new_prefix); ?>-floating-container">
-        <div id="<?php echo esc_attr($this->new_prefix); ?>-field-content"><?php echo $this->sanitize_content($content); ?></div>
-    </div>
-    <?php
-}
-    public function add_plugin_row_meta($links, $file) { /* ... */ return $links;}
+    public function add_plugin_row_meta($links, $file) { /* ... */ return $links; }
     public function display_admin_notice() { /* ... */ }
     public function handle_notice_dismissal() { /* ... */ }
-    private function is_plugin_activated() { /* ... */ return true;}
+    private function is_plugin_activated() { /* ... */ return true; }
 
-    // Combined admin assets enqueuing
     public function enqueue_admin_assets($hook_suffix) {
-
         $is_aflek90tff_admin_page = false;
-        // Check for the main FleK90 Tools dashboard page or the unified Settings/About page.
         if ($hook_suffix === 'toplevel_page_' . $this->new_prefix . '_main_menu_slug' ||
-            $hook_suffix === $this->settings_page_hook_suffix ) {
+            $hook_suffix === $this->settings_page_hook_suffix) {
             $is_aflek90tff_admin_page = true;
         }
 
@@ -625,7 +579,6 @@ public function render_floating_field() {
                 $this->plugin_version
             );
 
-            // Conditionally enqueue color picker scripts only on the settings page
             if ($this->settings_page_hook_suffix == $hook_suffix) {
                 wp_enqueue_style('wp-color-picker');
                 wp_enqueue_script(
@@ -636,7 +589,6 @@ public function render_floating_field() {
                     true
                 );
             }
-        } else {
         }
     }
 
@@ -644,19 +596,12 @@ public function render_floating_field() {
         $settings_slug = $this->new_prefix . '_floating_field_settings_slug';
         $settings_url = admin_url('admin.php?page=' . $settings_slug);
         $settings_link_html = '<a href="' . esc_url($settings_url) . '">' . __('Settings', 'a-flek90-tool-floating-field') . '</a>';
-
-        // Add the settings link before other links like "Deactivate" or "Edit".
-        // A common way is to merge it, or add it to the beginning or specific key.
-        // Using array_merge to add it to the beginning is simple.
         $new_links = ['settings' => $settings_link_html];
         $links = array_merge($new_links, $links);
-
         return $links;
     }
-    // Removed render_plugin_details_page_html() as its content is now in render_admin_page() 'about' tab
 }
+
 try { new A_FleK90_Tool_Floating_Field(); } catch (Exception $e) {
-    // Note: $this->plugin_version is not available in this static context if class instantiation fails.
-    // Consider logging a generic version or fetching it differently if needed here.
 }
 ?>

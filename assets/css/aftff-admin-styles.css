@@ -1,0 +1,235 @@
+/* AFTFF Admin Theme - Black and Gold */
+:root {
+    --aftff-gold: #FFD700;
+    --aftff-dark-bg: #23282D;
+    --aftff-light-text: #E0E0E0;
+    --aftff-dark-text: #1A1A1A;
+}
+
+/* AFTFF Menu Styling (Ensure correct admin menu body classes or IDs are used if available) */
+/*
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-menu-image::before {
+    color: var(--aftff-light-text);
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug:hover .wp-menu-name,
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug:hover .wp-menu-image::before {
+    color: var(--aftff-gold);
+}
+*/
+/* Current/Active Top Level Menu Item */
+/*
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu,
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug.current > a.current { /* For when top level itself is current */
+/*
+    background-color: var(--aftff-gold);
+    color: var(--aftff-dark-text);
+}
+
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug.wp-has-current-submenu > a.wp-has-current-submenu .wp-menu-image::before,
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug.current > a.current .wp-menu-image::before {
+    color: var(--aftff-dark-text);
+}
+*/
+/* Submenu Items */
+/*
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-submenu a {
+    color: var(--aftff-light-text);
+}
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-submenu a:hover {
+    color: var(--aftff-gold);
+}
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-submenu li.current a,
+body.admin-color-fresh #adminmenu #toplevel_page_aftff_main_menu_slug .wp-submenu li.current a:hover {
+    color: var(--aftff-gold);
+    font-weight: bold;
+}
+*/
+
+/* Apply dark background to AFTFF Admin Pages */
+.aftff-admin-page {
+    background-color: var(--aftff-dark-bg);
+    color: var(--aftff-light-text);
+    padding: 10px 20px; /* Add some padding */
+    border-radius: 4px; /* Optional: rounded corners for the content area */
+}
+.aftff-admin-page h1,
+.aftff-admin-page h2,
+.aftff-admin-page h3,
+.aftff-admin-page h4,
+.aftff-admin-page h5,
+.aftff-admin-page h6 {
+    color: var(--aftff-gold);
+}
+.aftff-admin-page p,
+.aftff-admin-page .description,
+.aftff-admin-page label {
+    color: var(--aftff-light-text);
+}
+.aftff-admin-page .form-table th {
+    color: var(--aftff-light-text);
+}
+.aftff-admin-page .button-primary {
+    background: var(--aftff-gold) !important;
+    border-color: var(--aftff-gold) !important;
+    color: var(--aftff-dark-text) !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+.aftff-admin-page .button-primary:hover,
+.aftff-admin-page .button-primary:focus {
+    background: #e6c300 !important; /* Darker gold */
+    border-color: #cca700 !important; /* Slightly darker border */
+    color: var(--aftff-dark-text) !important;
+}
+.aftff-admin-page input[type="text"],
+.aftff-admin-page input[type="number"],
+.aftff-admin-page textarea {
+    background-color: #333940; /* Darker input background */
+    color: var(--aftff-light-text);
+    border: 1px solid #555;
+    padding: 6px 10px; /* Consistent padding */
+    border-radius: 3px; /* Consistent border radius */
+}
+.aftff-admin-page input[type="text"]:focus,
+.aftff-admin-page input[type="number"]:focus,
+.aftff-admin-page textarea:focus,
+.aftff-admin-page select:focus { /* Added select:focus here */
+    border-color: var(--aftff-gold);
+    box-shadow: 0 0 0 1px var(--aftff-gold);
+}
+
+/* Ensure select elements are clearly styled within the dark theme */
+.aftff-admin-page select {
+    background-color: #333940; /* Was #2E3338 */
+    color: #FFFFFF; /* Was var(--aftff-light-text) */
+    border: 1px solid #555;
+    padding: 8px 12px; /* Slightly increased padding */
+    border-radius: 3px;
+    height: auto;
+    line-height: normal;
+}
+
+/* Styling for options within the select dropdown (browser dependent) */
+/* This is often not very customizable with CSS alone for all browsers */
+.aftff-admin-page select option {
+    background-color: #2A2F34; /* Darker than the select box background */
+    color: #FFFFFF; /* Was var(--aftff-light-text) */
+    padding: 4px 8px; /* Add some padding to options if possible (browser dependent) */
+}
+
+.aftff-admin-page hr {
+    border-color: #444; /* Darker hr */
+}
+
+/* Styles for Screenshot Gallery on Plugin Details Page */
+.aftff-admin-page .aftff-screenshots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between screenshot items */
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+.aftff-admin-page .aftff-screenshot {
+    flex: 1 1 300px; /* Allows items to grow/shrink, with a base width around 300px */
+    border: 1px solid #444; /* Darker border, fitting the dark theme */
+    padding: 15px;
+    background-color: #333940; /* Background for the screenshot box, slightly lighter than page bg */
+    border-radius: 4px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.aftff-admin-page .aftff-screenshot img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #555; /* Border around the image itself */
+    margin-bottom: 10px;
+}
+.aftff-admin-page .aftff-screenshot p { /* Caption style */
+    font-size: 0.9em;
+    color: var(--aftff-light-text); /* Uses the light text color from the theme */
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+/* Styles for Admin Tabs within AFTFF Admin Pages */
+.aftff-admin-page .nav-tab-wrapper {
+    border-bottom: 1px solid var(--aftff-gold); /* Gold underline for the tab bar */
+    padding-left: 0; /* Align with content if needed */
+    margin-bottom: 0; /* WordPress default is often 0, ensure it for clean look */
+}
+
+.aftff-admin-page .nav-tab {
+    background-color: #383f47; /* Dark background for inactive tabs, slightly lighter than page */
+    color: var(--aftff-light-text); /* Light text for inactive tabs */
+    border: 1px solid #444; /* Border for inactive tabs */
+    border-bottom: none; /* Remove bottom border for inactive tabs as wrapper has it */
+    margin-right: 5px;
+    padding: 8px 16px; /* Standard WordPress tab padding */
+    font-size: 14px;
+    font-weight: normal; /* Ensure inactive tabs are not bold */
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    line-height: 1.5; /* Ensure text is vertically centered */
+    transition: background-color 0.1s ease-in-out, color 0.1s ease-in-out; /* Smooth transition */
+}
+
+.aftff-admin-page .nav-tab:hover,
+.aftff-admin-page .nav-tab:focus {
+    background-color: #4a525a; /* Lighter background on hover/focus for inactive tabs */
+    color: var(--aftff-gold); /* Gold text on hover/focus */
+    border-color: #555; /* Slightly lighter border on hover */
+    border-bottom: none;
+}
+
+.aftff-admin-page .nav-tab.nav-tab-active,
+.aftff-admin-page .nav-tab.nav-tab-active:hover,
+.aftff-admin-page .nav-tab.nav-tab-active:focus {
+    background-color: var(--aftff-gold); /* Gold background for the active tab */
+    color: var(--aftff-dark-text); /* Dark text for the active tab */
+    border-color: var(--aftff-gold) var(--aftff-gold) var(--aftff-gold); /* Gold border all around */
+    /* To make the active tab appear "connected" to the content below,
+       its bottom border is often set to the content area's background or made transparent.
+       However, since the wrapper has the gold line, we make the active tab's bottom border also gold.
+       If the content area below tabs has a different background, this might need adjustment.
+       Given .aftff-admin-page has var(--aftff-dark-bg), this should be fine.
+    */
+    font-weight: bold; /* Active tab text is bold */
+}
+
+/* Ensure the tab content div (if explicitly styled) has some space from the tabs */
+/* The PHP added inline style padding-top: 20px to a .tab-content div, which is good. */
+/* If .tab-content class is used for the div wrapping conditional content:
+.aftff-admin-page .tab-content {
+    padding-top: 20px;
+}
+*/
+
+/* Styling for Code Example in Admin Settings Page */
+.aftff-admin-page pre {
+    background-color: #1E1E1E; /* A common dark IDE background color, slightly different from page bg */
+    color: #D4D4D4; /* Light gray text, common for dark themes */
+    padding: 15px;
+    border: 1px solid #555; /* A border to define the pre block */
+    border-radius: 4px;
+    overflow-x: auto; /* Add horizontal scroll if content is too wide */
+    white-space: pre; /* Preserve whitespace and newlines */
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace; /* Monospaced font stack */
+    font-size: 13px; /* Slightly smaller for code */
+    line-height: 1.5;
+    margin-top: 5px; /* Space above the pre block */
+    margin-bottom: 15px; /* Space below the pre block */
+    display: block; /* Ensure it takes block-level for overflow-x to work as expected */
+}
+
+.aftff-admin-page pre code {
+    /* Most styling is on the <pre> tag.
+       The <code> tag itself might not need much if <pre> handles font and color.
+       However, you can ensure font family inheritance or specific color if needed. */
+    font-family: inherit; /* Inherit monospace font from pre */
+    background: none; /* Ensure no conflicting background from other generic code styles */
+    padding: 0; /* Reset padding if any from generic code styles */
+    color: inherit; /* Inherit text color from pre */
+    display: inline; /* Code tag should be inline within pre */
+}

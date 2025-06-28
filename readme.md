@@ -4,14 +4,16 @@ Donate link: https://flek90.aureusz.com/
 Tags: floating field, fixed field, custom content, notification bar, admin settings
 Requires at least: 5.0
 Tested up to: 6.8.1
+
 Stable tag: 6.0
+
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Highly customizable floating field with admin-page settings for content (including %page_title% tag and default examples), positioning, appearance, and separate desktop/mobile custom CSS with an override option.
 
-**A FleK90 Tool Floating Field (Version 5.6)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including content (with dynamic tags and default examples), appearance, positioning, and custom CSS (separate for desktop/mobile with an override option), are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
+**A FleK90 Tool Floating Field (Version 5.7)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including content (with dynamic tags and default examples), appearance, positioning, and custom CSS (separate for desktop/mobile with an override option), are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
 
 Content for the floating field is managed via textareas in the admin settings page (**FleK90 > Floating Field > Settings > Content Settings**). These textareas support HTML, shortcodes, and a special `%page_title%` tag for displaying the current page/post title. Default example content is provided on first use. Positioning uses a 9-point system. Separate custom CSS fields for desktop and mobile allow for fine-tuned styling, and a "Prioritize Custom CSS" option lets custom styles take full precedence over plugin-generated appearance styles.
 
@@ -119,6 +121,10 @@ Content for the floating field is managed via textareas in the admin settings pa
 * Code Refinements: Updated asset file names (CSS, JS) and their enqueue calls to align with the new prefix. Minor code adjustments for clarity and adherence to best practices.
 
 = 5.6 =
+* Fix: Addressed WordPress.org review feedback for plugin guidelines compliance.
+* Fix: Removed `load_plugin_textdomain()` call; localization is now handled by WordPress.org.
+* Fix: Updated internal programmatic prefixes (options, hooks, CSS, JS, class name, etc.) to `aftff_` for improved uniqueness and to prevent conflicts.
+* Fix: Corrected saving mechanism for separate Custom CSS for Desktop and Mobile settings.
 * Feature: Content textareas now pre-fill with comprehensive examples on first use, including HTML structure, a %page_title% tag, and placeholder shortcodes.
 * Feature: Implemented dynamic tag replacement for %page_title% to display the current page/post title.
 * Feature: Added separate Custom CSS textarea fields for Desktop and Mobile views, replacing the single Custom CSS field.
