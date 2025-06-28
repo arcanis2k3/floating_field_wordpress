@@ -11,7 +11,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Highly customizable floating field with admin-page settings for content (including %page_title% tag and default examples), positioning, appearance, and separate desktop/mobile custom CSS with an override option.
 
-**A FleK90 Tool Floating Field (Version 5.6)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including content (with dynamic tags and default examples), appearance, positioning, and custom CSS (separate for desktop/mobile with an override option), are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
+**A FleK90 Tool Floating Field (Version 5.7)** is a lightweight WordPress plugin. It adds a fixed-position floating field to your website's front-end. All settings, including content (with dynamic tags and default examples), appearance, positioning, and custom CSS (separate for desktop/mobile with an override option), are managed on the plugin's admin page (**FleK90 > Floating Field Settings**).
 
 Content for the floating field is managed via textareas in the admin settings page (**FleK90 > Floating Field > Settings > Content Settings**). These textareas support HTML, shortcodes, and a special `%page_title%` tag for displaying the current page/post title. Default example content is provided on first use. Positioning uses a 9-point system. Separate custom CSS fields for desktop and mobile allow for fine-tuned styling, and a "Prioritize Custom CSS" option lets custom styles take full precedence over plugin-generated appearance styles.
 
