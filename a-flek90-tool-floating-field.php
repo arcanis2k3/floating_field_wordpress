@@ -277,14 +277,14 @@ class A_FleK90_Tool_Floating_Field {
                                     <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5"><?php esc_html_e('Custom CSS for Desktop', 'a-flek90-tool-floating-field'); ?></label></th>
                                     <td>
                                         <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_desktop_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_desktop_v5', '')); ?></textarea>
-                                        <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for desktop views. Example: #' . esc_attr($this->new_prefix) . '-floating-container { border: 2px solid blue !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                        <p class="description"><?php printf(esc_html__('Add custom CSS rules to be applied for desktop views. Example: #%s-floating-container { border: 2px solid blue !important; }', 'a-flek90-tool-floating-field'), esc_attr($this->new_prefix)); ?></p>
                                     </td>
                                 </tr>
                                 <tr valign="top">
                                     <th scope="row"><label for="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5"><?php esc_html_e('Custom CSS for Mobile', 'a-flek90-tool-floating-field'); ?></label></th>
                                     <td>
                                         <textarea id="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" name="<?php echo esc_attr($this->new_prefix); ?>_custom_css_mobile_v5" rows="10" cols="50" class="large-text code"><?php echo esc_textarea(get_option($this->new_prefix . '_custom_css_mobile_v5', '')); ?></textarea>
-                                        <p class="description"><?php esc_html_e('Add custom CSS rules to be applied for mobile views (typically within a max-width: 768px media query). Example: #' . esc_attr($this->new_prefix) . '-floating-container { font-size: 12px !important; }', 'a-flek90-tool-floating-field'); ?></p>
+                                        <p class="description"><?php printf(esc_html__('Add custom CSS rules to be applied for mobile views (typically within a max-width: 768px media query). Example: #%s-floating-container { font-size: 12px !important; }', 'a-flek90-tool-floating-field'), esc_attr($this->new_prefix)); ?></p>
                                     </td>
                                 </tr>
                                 <tr valign="top">
